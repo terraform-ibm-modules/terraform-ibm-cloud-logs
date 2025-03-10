@@ -7,32 +7,32 @@
 #   - Include all relevant outputs from the modules being called in the example
 #
 
-output "account_id" {
-  description = "An alpha-numeric value identifying the account ID."
-  value       = module.cos.account_id
+output "crn" {
+  value       = module.cloud_logs.crn
+  description = "The id of the provisioned Cloud Logs instance."
 }
 
 output "guid" {
-  description = "The GUID of the resource instance."
-  value       = module.cos.account_id
+  value       = module.cloud_logs.guid
+  description = "The guid of the provisioned Cloud Logs instance."
 }
 
-output "id" {
-  description = "The unique identifier of the resource instance."
-  value       = module.cos.id
-}
-
-output "crn" {
-  description = "The CRN of the resource instance."
-  value       = module.cos.crn
-}
-
-output "resource_group_name" {
-  description = "Resource group name."
-  value       = module.resource_group.resource_group_name
+output "name" {
+  value       = module.cloud_logs.name
+  description = "The name of the provisioned Cloud Logs instance."
 }
 
 output "resource_group_id" {
-  description = "Resource group ID."
-  value       = module.resource_group.resource_group_id
+  value       = module.cloud_logs.resource_group_id
+  description = "The resource group where Cloud Logs instance resides."
+}
+
+output "ingress_endpoint" {
+  value       = module.cloud_logs.ingress_endpoint
+  description = "The public ingress endpoint of the provisioned Cloud Logs instance."
+}
+
+output "ingress_private_endpoint" {
+  value       = module.cloud_logs.ingress_private_endpoint
+  description = "The private ingress endpoint of the provisioned Cloud Logs instance."
 }
