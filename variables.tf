@@ -117,7 +117,7 @@ variable "service_endpoints" {
 # Event Notification
 ##############################################################################
 
-variable "existing_en_instances" {
+variable "existing_event_notifications_instances" {
   type = list(object({
     en_instance_id      = string
     en_region           = string

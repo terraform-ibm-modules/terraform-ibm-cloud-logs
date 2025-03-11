@@ -1,6 +1,6 @@
 output "crn" {
   value       = ibm_resource_instance.cloud_logs.id
-  description = "The id of the provisioned Cloud Logs instance."
+  description = "The CRN of the provisioned Cloud Logs instance."
 }
 
 output "guid" {

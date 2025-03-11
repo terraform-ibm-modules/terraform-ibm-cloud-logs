@@ -92,7 +92,7 @@ resource "time_sleep" "wait_for_cos_authorization_policy" {
 
 # Create IAM Authorization Policies to allow Cloud Logs to access event notification
 resource "ibm_iam_authorization_policy" "en_policy" {
-  for_each                    = { for idx, en in var.existing_en_instances : idx => en if !en.skip_en_auth_policy }
+  for_each                    = { for idx, en in var.existing_event_notifications_instances : idx => en if !en.skip_en_auth_policy }
   source_service_name         = "logs"
   source_resource_instance_id = ibm_resource_instance.cloud_logs.guid
   target_service_name         = "event-notifications"
@@ -108,7 +108,7 @@ resource "time_sleep" "wait_for_en_authorization_policy" {
 
 resource "ibm_logs_outgoing_webhook" "en_integration" {
   depends_on  = [time_sleep.wait_for_en_authorization_policy]
-  for_each    = { for idx, en in var.existing_en_instances : idx => en }
+  for_each    = { for idx, en in var.existing_event_notifications_instances : idx => en }
   instance_id = ibm_resource_instance.cloud_logs.guid
   region      = var.region
   name        = each.value.en_integration_name == null ? "${local.instance_name}-en-integration-${each.key}" : each.value.en_integration_name

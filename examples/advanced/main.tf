@@ -159,7 +159,7 @@ module "cloud_logs" {
       rule_type_id = "start_with"
     }]
   }]
-  existing_en_instances = [{
+  existing_event_notifications_instances = [{
     en_instance_id      = module.event_notification_1.guid
     en_region           = var.region
     en_integration_name = "${var.prefix}-en-1"
