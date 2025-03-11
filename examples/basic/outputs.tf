@@ -43,7 +43,7 @@ output "cos_crn" {
 }
 
 output "logs_bucket_crn" {
-  value       = module.buckets.buckets[local.logs_bucket_name].crn
+  value       = module.buckets.buckets[local.logs_bucket_name].bucket_crn
   description = "The id of the provisioned Cloud Object Storage bucket for logs."
 }
 
@@ -53,7 +53,7 @@ output "logs_bucket_name" {
 }
 
 output "metrics_bucket_crn" {
-  value       = module.buckets.buckets[local.metrics_bucket_name].crn
+  value       = module.buckets.buckets[local.metrics_bucket_name].bucket_crn
   description = "The id of the provisioned Cloud Object Storage bucket for metrics."
 }
 
