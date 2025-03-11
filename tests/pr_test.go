@@ -2,6 +2,7 @@
 package test
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,12 +16,22 @@ const resourceGroup = "geretain-test-resources"
 const advancedExampleDir = "examples/advanced"
 const basicExampleDir = "examples/basic"
 
+// Since Event Notifications is used in example, need to use a region it supports
+var validRegions = []string{
+	"au-syd",
+	"eu-de",
+	"eu-es",
+	"eu-gb",
+	"us-south",
+}
+
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  dir,
 		Prefix:        prefix,
 		ResourceGroup: resourceGroup,
+		Region:        validRegions[rand.Intn(len(validRegions))],
 	})
 	return options
 }
