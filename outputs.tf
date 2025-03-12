@@ -1,30 +1,34 @@
-########################################################################################################################
-# Outputs
-########################################################################################################################
-
-#
-# Developer tips:
-#   - Below are some good practise sample outputs
-#   - They should be updated for outputs applicable to the module being added
-#   - Use variable validation when possible
-#
-
-output "account_id" {
-  description = "An alpha-numeric value identifying the account ID."
-  value       = ibm_resource_instance.cos_instance.account_id
+output "crn" {
+  value       = ibm_resource_instance.cloud_logs.id
+  description = "The CRN of the provisioned Cloud Logs instance."
 }
 
 output "guid" {
-  description = "The GUID of the resource instance."
-  value       = ibm_resource_instance.cos_instance.account_id
+  value       = ibm_resource_instance.cloud_logs.guid
+  description = "The guid of the provisioned Cloud Logs instance."
 }
 
-output "id" {
-  description = "The unique identifier of the resource instance."
-  value       = ibm_resource_instance.cos_instance.id
+output "name" {
+  value       = ibm_resource_instance.cloud_logs.name
+  description = "The name of the provisioned Cloud Logs instance."
 }
 
-output "crn" {
-  description = "The CRN of the resource instance."
-  value       = ibm_resource_instance.cos_instance.crn
+output "resource_group_id" {
+  value       = ibm_resource_instance.cloud_logs.resource_group_id
+  description = "The resource group where Cloud Logs instance resides."
+}
+
+output "ingress_endpoint" {
+  value       = ibm_resource_instance.cloud_logs.extensions.external_ingress
+  description = "The public ingress endpoint of the provisioned Cloud Logs instance."
+}
+
+output "ingress_private_endpoint" {
+  value       = ibm_resource_instance.cloud_logs.extensions.external_ingress_private
+  description = "The private ingress endpoint of the provisioned Cloud Logs instance."
+}
+
+output "logs_policies_details" {
+  value       = length(var.policies) > 0 ? ibm_logs_policy.logs_policies : null
+  description = "The details of the Cloud logs policies created."
 }

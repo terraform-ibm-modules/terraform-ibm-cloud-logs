@@ -1,162 +1,145 @@
-<!-- Update this title with a descriptive name. Use sentence case. -->
-# Terraform modules template project
+# IBM Cloud Logs module
 
-<!--
-Update status and "latest release" badges:
-  1. For the status options, see https://terraform-ibm-modules.github.io/documentation/#/badge-status
-  2. Update the "latest release" badge to point to the correct module's repo. Replace "terraform-ibm-module-template" in two places.
--->
-[![Incubating (Not yet consumable)](https://img.shields.io/badge/status-Incubating%20(Not%20yet%20consumable)-red)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
-[![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-cloud-logs?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/releases/latest)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+This module supports configuring an IBM Cloud Logs instance, log routing tenants to enable platform logs and cloud logs policies.
 
-<!--
-Add a description of modules in this repo.
-Expand on the repo short description in the .github/settings.yml file.
+## Usage
 
-For information, see "Module names and descriptions" at
-https://terraform-ibm-modules.github.io/documentation/#/implementation-guidelines?id=module-names-and-descriptions
--->
-
-TODO: Replace this with a description of the modules in this repo.
-
-
-<!-- The following content is automatically populated by the pre-commit hook -->
-<!-- BEGIN OVERVIEW HOOK -->
-## Overview
-* [terraform-ibm-cloud-logs](#terraform-ibm-cloud-logs)
-* [Examples](./examples)
-    * [Advanced example](./examples/advanced)
-    * [Basic example](./examples/basic)
-* [Contributing](#contributing)
-<!-- END OVERVIEW HOOK -->
-
-
-<!--
-If this repo contains any reference architectures, uncomment the heading below and link to them.
-(Usually in the `/reference-architectures` directory.)
-See "Reference architecture" in the public documentation at
-https://terraform-ibm-modules.github.io/documentation/#/implementation-guidelines?id=reference-architecture
--->
-<!-- ## Reference architectures -->
-
-
-<!-- Replace this heading with the name of the root level module (the repo name) -->
-## terraform-ibm-cloud-logs
-
-### Usage
-
-<!--
-Add an example of the use of the module in the following code block.
-
-Use real values instead of "var.<var_name>" or other placeholder values
-unless real values don't help users know what to change.
--->
+To provision Cloud Logs instance
 
 ```hcl
+# Locals
+locals {
+  region      = "us-south"
+}
+
+# Required providers
 terraform {
-  required_version = ">= 1.9.0"
+  required_version = ">= 1.0.0"
   required_providers {
     ibm = {
-      source  = "IBM-Cloud/ibm"
-      version = "X.Y.Z"  # Lock into a provider version that satisfies the module constraints
+      source  = "ibm-cloud/ibm"
+      version = "X.Y.Z" # lock into a supported provider version
     }
   }
 }
-
-locals {
-    region = "us-south"
-}
-
 provider "ibm" {
-  ibmcloud_api_key = "XXXXXXXXXX"  # replace with apikey value
+  ibmcloud_api_key = XXXXXXXXXXXX  # pragma: allowlist secret
   region           = local.region
 }
 
-module "module_template" {
-  source            = "terraform-ibm-modules/<replace>/ibm"
+# IBM Cloud Logs
+module "cloud_logs" {
+  source            = "terraform-ibm-modules/observability-instances/ibm//modules/cloud_logs"
   version           = "X.Y.Z" # Replace "X.Y.Z" with a release version to lock into a specific release
+  resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
   region            = local.region
-  name              = "instance-name"
-  resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX" # Replace with the actual ID of resource group to use
+  data_storage = {
+    # logs and metrics buckets must be different
+    logs_data = {
+      enabled         = true
+      bucket_crn      = "crn:v1:bluemix:public:cloud-object-storage:global:a/......"
+      bucket_endpoint = "s3.direct.us-south.cloud-object-storage.appdomain.cloud"
+    },
+    metrics_data = {
+      enabled         = true
+      bucket_crn      = "crn:v1:bluemix:public:cloud-object-storage:global:a/......"
+      bucket_endpoint = "s3.direct.us-south.cloud-object-storage.appdomain.cloud"
+    }
+  }
+  # Create policies
+  policies = [{
+    logs_policy_name        = "logs_policy_name"
+    logs_policy_priority    = "type_medium"
+    application_rule = [{
+      name         = "test-system-app"
+      rule_type_id = "start_with"
+    }]
+    subsystem_rule = [{
+      name         = "test-sub-system"
+      rule_type_id = "start_with"
+    }]
+    log_rules = [{
+      severities = ["info", "debug"]
+    }]
+  }]
 }
 ```
 
-### Required access policies
+### Required IAM access policies
 
-<!-- PERMISSIONS REQUIRED TO RUN MODULE
-If this module requires permissions, uncomment the following block and update
-the sample permissions, following the format.
-Replace the 'Sample IBM Cloud' service and roles with applicable values.
-The required information can usually be found in the services official
-IBM Cloud documentation.
-To view all available service permissions, you can go in the
-console at Manage > Access (IAM) > Access groups and click into an existing group
-(or create a new one) and in the 'Access' tab click 'Assign access'.
--->
-
-<!--
-You need the following permissions to run this module:
+You need the following permissions to run this module.
 
 - Service
     - **Resource group only**
         - `Viewer` access on the specific resource group
-    - **Sample IBM Cloud** service
+    - **Cloud Logs**
         - `Editor` platform access
         - `Manager` service access
--->
+    - **IBM Cloud Logs Routing** (Required if creating tenants, which are required to enable platform logs)
+        - `Editor` platform access
+        - `Manager` service access
+    - **Tagging service** (Required if attaching access tags to the ICL instance)
+        - `Editor` platform access
 
-<!-- NO PERMISSIONS FOR MODULE
-If no permissions are required for the module, uncomment the following
-statement instead the previous block.
--->
-
-<!-- No permissions are needed to run this module.-->
-
-
-<!-- The following content is automatically populated by the pre-commit hook -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.71.2, < 2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.76.1, < 2.0.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5.1, < 4.0.0 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9.1, < 1.0.0 |
 
 ### Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_cos_bucket_crn_parser"></a> [cos\_bucket\_crn\_parser](#module\_cos\_bucket\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
 
 ### Resources
 
 | Name | Type |
 |------|------|
-| [ibm_resource_instance.cos_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
+| [ibm_iam_authorization_policy.cos_policy](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
+| [ibm_iam_authorization_policy.en_policy](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
+| [ibm_iam_authorization_policy.logs_routing_policy](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
+| [ibm_logs_outgoing_webhook.en_integration](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/logs_outgoing_webhook) | resource |
+| [ibm_logs_policy.logs_policies](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/logs_policy) | resource |
+| [ibm_logs_router_tenant.logs_router_tenant_instances](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/logs_router_tenant) | resource |
+| [ibm_resource_instance.cloud_logs](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/resource_instance) | resource |
+| [ibm_resource_tag.cloud_logs_tag](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/resource_tag) | resource |
+| [random_string.random_tenant_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
+| [time_sleep.wait_for_cos_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [time_sleep.wait_for_en_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_name"></a> [name](#input\_name) | A descriptive name used to identify the resource instance. | `string` | n/a | yes |
-| <a name="input_plan"></a> [plan](#input\_plan) | The name of the plan type supported by service. | `string` | `"standard"` | no |
-| <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The ID of the resource group where you want to create the service. | `string` | n/a | yes |
-| <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | List of resource tag to associate with the instance. | `list(string)` | `[]` | no |
+| <a name="input_access_tags"></a> [access\_tags](#input\_access\_tags) | A list of access tags to apply to the IBM Cloud Logs instance created by the module. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial. | `list(string)` | `[]` | no |
+| <a name="input_data_storage"></a> [data\_storage](#input\_data\_storage) | A logs data bucket and a metrics bucket in IBM Cloud Object Storage to store your IBM Cloud Logs data for long term storage, search, analysis and alerting. | <pre>object({<br/>    logs_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    metrics_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    }<br/>  )</pre> | <pre>{<br/>  "logs_data": null,<br/>  "metrics_data": null<br/>}</pre> | no |
+| <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    en_instance_id      = string<br/>    en_region           = string<br/>    en_integration_name = optional(string)<br/>    skip_en_auth_policy = optional(bool, false)<br/>  }))</pre> | `[]` | no |
+| <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | The name of the IBM Cloud Logs instance to create. Defaults to 'cloud-logs-<region>' | `string` | `null` | no |
+| <a name="input_logs_routing_tenant_regions"></a> [logs\_routing\_tenant\_regions](#input\_logs\_routing\_tenant\_regions) | Pass a list of regions to create a tenant for that is targetted to the Cloud Logs instance created by this module. To manage platform logs that are generated by IBM Cloud® services in a region of IBM Cloud, you must create a tenant in each region that you operate. Leave the list empty if you don't want to create any tenants. NOTE: You can only have 1 tenant per region in an account. | `list(any)` | `[]` | no |
+| <a name="input_plan"></a> [plan](#input\_plan) | The IBM Cloud Logs plan to provision. Available: standard | `string` | `"standard"` | no |
+| <a name="input_policies"></a> [policies](#input\_policies) | Configuration of Cloud Logs policies. | <pre>list(object({<br/>    logs_policy_name        = string<br/>    logs_policy_description = optional(string, null)<br/>    logs_policy_priority    = string<br/>    application_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    subsystem_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    log_rules = optional(list(object({<br/>      severities = list(string)<br/>    })))<br/>    archive_retention = optional(list(object({<br/>      id = string<br/>    })))<br/>  }))</pre> | `[]` | no |
+| <a name="input_region"></a> [region](#input\_region) | The IBM Cloud region where Cloud logs instance will be created. | `string` | `"us-south"` | no |
+| <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The id of the IBM Cloud resource group where the instance will be created. | `string` | `null` | no |
+| <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | Tags associated with the IBM Cloud Logs instance (Optional, array of strings). | `list(string)` | `[]` | no |
+| <a name="input_retention_period"></a> [retention\_period](#input\_retention\_period) | The number of days IBM Cloud Logs will retain the logs data in Priority insights. Allowed values: 7, 14, 30, 60, 90. | `number` | `7` | no |
+| <a name="input_service_endpoints"></a> [service\_endpoints](#input\_service\_endpoints) | The type of the service endpoint that will be set for the IBM Cloud Logs instance. Allowed values: public-and-private. | `string` | `"public-and-private"` | no |
+| <a name="input_skip_logs_routing_auth_policy"></a> [skip\_logs\_routing\_auth\_policy](#input\_skip\_logs\_routing\_auth\_policy) | Whether to create an IAM authorization policy that permits the Logs Routing server 'Sender' access to the IBM Cloud Logs instance created by this module. | `bool` | `false` | no |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_account_id"></a> [account\_id](#output\_account\_id) | An alpha-numeric value identifying the account ID. |
-| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the resource instance. |
-| <a name="output_guid"></a> [guid](#output\_guid) | The GUID of the resource instance. |
-| <a name="output_id"></a> [id](#output\_id) | The unique identifier of the resource instance. |
+| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the provisioned Cloud Logs instance. |
+| <a name="output_guid"></a> [guid](#output\_guid) | The guid of the provisioned Cloud Logs instance. |
+| <a name="output_ingress_endpoint"></a> [ingress\_endpoint](#output\_ingress\_endpoint) | The public ingress endpoint of the provisioned Cloud Logs instance. |
+| <a name="output_ingress_private_endpoint"></a> [ingress\_private\_endpoint](#output\_ingress\_private\_endpoint) | The private ingress endpoint of the provisioned Cloud Logs instance. |
+| <a name="output_logs_policies_details"></a> [logs\_policies\_details](#output\_logs\_policies\_details) | The details of the Cloud logs policies created. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the provisioned Cloud Logs instance. |
+| <a name="output_resource_group_id"></a> [resource\_group\_id](#output\_resource\_group\_id) | The resource group where Cloud Logs instance resides. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-<!-- Leave this section as is so that your module has a link to local development environment set-up steps for contributors to follow -->
-## Contributing
-
-You can report issues and request features for this module in GitHub issues in the module repo. See [Report an issue or request a feature](https://github.com/terraform-ibm-modules/.github/blob/main/.github/SUPPORT.md).
-
-To set up your local development environment, see [Local development setup](https://terraform-ibm-modules.github.io/documentation/#/local-dev-setup) in the project documentation.
