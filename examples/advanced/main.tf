@@ -94,6 +94,22 @@ module "buckets" {
       kms_guid                      = module.key_protect.kms_guid
       kms_key_crn                   = module.key_protect.keys["${local.key_ring_name}.${local.key_name}"].crn
       skip_iam_authorization_policy = false
+      cbr_rules = [{
+        description      = "CBR rule for ICL logs bucket"
+        enforcement_mode = "report"
+        account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+        rule_contexts = [{
+          attributes = [
+            {
+              "name" : "endpointType",
+              "value" : "public"
+            },
+            {
+              name  = "networkZoneId"
+              value = module.cbr_zone.zone_id
+          }]
+        }]
+      }]
     },
     {
       bucket_name                   = local.metrics_bucket_name
@@ -103,8 +119,50 @@ module "buckets" {
       kms_guid                      = module.key_protect.kms_guid
       kms_key_crn                   = module.key_protect.keys["${local.key_ring_name}.${local.key_name}"].crn
       skip_iam_authorization_policy = true # Auth policy created in first bucket
+      cbr_rules = [{
+        description      = "CBR rule for ICL metrics bucket"
+        enforcement_mode = "report"
+        account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+        rule_contexts = [{
+          attributes = [
+            {
+              "name" : "endpointType",
+              "value" : "public"
+            },
+            {
+              name  = "networkZoneId"
+              value = module.cbr_zone.zone_id
+          }]
+        }]
+      }]
     }
   ]
+}
+
+##############################################################################
+# Get Cloud Account ID
+##############################################################################
+
+data "ibm_iam_account_settings" "iam_account_settings" {
+}
+
+##############################################################################
+# Create CBR Zone
+##############################################################################
+
+module "cbr_zone" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "1.29.0"
+  name             = "${var.prefix}-icl-zone"
+  zone_description = "CBR Network zone containing ICL"
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  addresses = [{
+    type = "serviceRef",
+    ref = {
+      account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
+      service_name = "logs"
+    }
+  }]
 }
 
 ########################################################################################################################
@@ -168,5 +226,23 @@ module "cloud_logs" {
       en_instance_id      = module.event_notification_2.guid
       en_region           = var.region
       en_integration_name = "${var.prefix}-en-2"
+  }]
+
+  cbr_rules = [{
+    description      = "${var.prefix}-icl access from network zone to access the cloud logs instance."
+    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+    enforcement_mode = "report"
+    rule_contexts = [{
+      attributes = [
+        {
+          "name" : "endpointType",
+          "value" : "private"
+        },
+        {
+          name  = "networkZoneId"
+          value = module.cbr_zone.zone_id
+        }
+      ]
+    }]
   }]
 }
