@@ -16,18 +16,7 @@ variable "existing_resource_group_name" {
 variable "prefix" {
   type        = string
   description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
-  default     = "icl-da"
-}
-
-variable "provider_visibility" {
-  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
-  type        = string
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
-    error_message = "Invalid visibility option. Allowed values are 'public', 'private', or 'public-and-private'."
-  }
+  default     = "icl-secure-da"
 }
 
 variable "region" {
@@ -39,12 +28,6 @@ variable "region" {
 ########################################################################################################################
 # Cloud Logs
 ########################################################################################################################
-
-variable "existing_cloud_logs_crn" {
-  type        = string
-  default     = null
-  description = "The CRN of an existing Cloud Logs instance. If not supplied, a new instance will be created."
-}
 
 variable "cloud_logs_instance_name" {
   type        = string
@@ -84,54 +67,6 @@ variable "existing_cos_instance_crn" {
   description = "The CRN of an existing Object Storage instance."
 }
 
-variable "existing_logs_cos_bucket_name" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The name of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. If not specified, a bucket is created."
-}
-
-variable "existing_metrics_cos_bucket_name" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The name of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. If not specified, a bucket is created."
-}
-
-variable "existing_logs_cos_bucket_region" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The region of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. This must be specified if providing `existing_logs_bucket_name`."
-}
-
-variable "existing_metrics_cos_bucket_region" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The region of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. This must be specified if providing `existing_metrics_bucket_name`."
-}
-
-variable "existing_logs_cos_bucket_type" {
-  type        = string
-  default     = "region_location"
-  description = "The type of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. This must be specified if providing `existing_logs_bucket_name`."
-  validation {
-    condition     = contains(["single_site_location", "region_location", "cross_region_location"], var.existing_logs_cos_bucket_type)
-    error_message = "The specified existing_logs_cos_bucket_type is not a valid selection! Options are single_site_location, region_location, or cross_region_location."
-  }
-}
-
-variable "existing_metrics_cos_bucket_type" {
-  type        = string
-  default     = "region_location"
-  description = "The type of an existing bucket inside the existing Object Storage instance to use for Cloud Logs. This must be specified if providing `existing_metrics_bucket_name`."
-  validation {
-    condition     = contains(["single_site_location", "region_location", "cross_region_location"], var.existing_metrics_cos_bucket_type)
-    error_message = "The specified existing_metrics_cos_bucket_type is not a valid selection! Options are single_site_location, region_location, or cross_region_location."
-  }
-}
-
 variable "new_logs_cos_bucket_name" {
   type        = string
   nullable    = true
@@ -146,23 +81,12 @@ variable "new_metrics_cos_bucket_name" {
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs."
 }
 
-variable "management_endpoint_type_for_bucket" {
-  description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`m `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network."
-  type        = string
-  default     = "private"
-  validation {
-    condition     = contains(["public", "private", "direct"], var.management_endpoint_type_for_bucket)
-    error_message = "The specified management_endpoint_type_for_bucket is not a valid selection!"
-  }
-}
-
 ########################################################################################################################
 # KMS
 ########################################################################################################################
 
 variable "existing_kms_instance_crn" {
   type        = string
-  default     = null
   description = "The CRN of the existing KMS instance (Hyper Protect Crypto Services or Key Protect)."
 }
 
@@ -170,16 +94,6 @@ variable "existing_kms_key_crn" {
   type        = string
   default     = null
   description = "The CRN of an existing KMS key to use to encrypt the Cloud Logs Object Storage bucket. If no value is set for this variable and bucket encryption is desired, specify a value for the `existing_kms_instance_crn` variable to create a key ring and key."
-}
-
-variable "kms_endpoint_type" {
-  type        = string
-  description = "The endpoint for communicating with the KMS instance. Possible values: `public`, `private.`"
-  default     = "private"
-  validation {
-    condition     = can(regex("public|private", var.kms_endpoint_type))
-    error_message = "The kms_endpoint_type value must be 'public' or 'private'."
-  }
 }
 
 variable "kms_key_ring_name" {

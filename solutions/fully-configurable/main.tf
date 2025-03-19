@@ -28,12 +28,12 @@ module "cloud_logs" {
   version                                = "1.0.0"
   resource_group_id                      = module.resource_group.resource_group_id
   region                                 = var.region
-  instance_name                          = var.instance_name
-  plan                                   = var.plan
-  resource_tags                          = var.resource_tags
-  access_tags                            = var.access_tags
-  retention_period                       = var.retention_period
-  service_endpoints                      = var.service_endpoints
+  instance_name                          = var.cloud_logs_instance_name
+  plan                                   = "standard" # not a variable because there is only one option
+  resource_tags                          = var.cloud_logs_resource_tags
+  access_tags                            = var.cloud_logs_access_tags
+  retention_period                       = var.cloud_logs_retention_period
+  service_endpoints                      = "public-and-private" # not a variable because there is only one option
   existing_event_notifications_instances = var.existing_event_notifications_instances
   data_storage = {
     logs_data = {
@@ -49,7 +49,7 @@ module "cloud_logs" {
   }
   logs_routing_tenant_regions   = var.logs_routing_tenant_regions
   skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
-  policies                      = var.policies
+  policies                      = var.logs_policies
 }
 
 #######################################################################################################################
@@ -70,8 +70,8 @@ locals {
 
   logs_bucket_name    = try("${local.prefix}-${var.new_logs_cos_bucket_name}", var.new_logs_cos_bucket_name)
   metrics_bucket_name = try("${local.prefix}-${var.new_metrics_cos_bucket_name}", var.new_metrics_cos_bucket_name)
-  key_ring_name       = try("${local.prefix}-${var.key_ring_name}", var.key_ring_name)
-  key_name            = try("${local.prefix}-${var.key_name}", var.key_name)
+  key_ring_name       = try("${local.prefix}-${var.kms_key_ring_name}", var.kms_key_ring_name)
+  key_name            = try("${local.prefix}-${var.kms_key_name}", var.kms_key_name)
   kms_key_crn         = local.kms_encryption_enabled ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
 }
 
