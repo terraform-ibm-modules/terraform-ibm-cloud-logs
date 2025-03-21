@@ -175,7 +175,13 @@ data "ibm_en_destinations" "en_destinations" {
   instance_guid = each.key
 }
 
+resource "time_sleep" "wait_for_cloud_logs" {
+  depends_on      = [module.cloud_logs]
+  create_duration = "60s"
+}
+
 resource "ibm_en_topic" "en_topic" {
+  depends_on    = [time_sleep.wait_for_cloud_logs]
   for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
   instance_guid = each.key
   name          = local.en_topic
