@@ -1,0 +1,504 @@
+{
+    "products": [
+      {
+        "name": "deploy-arch-ibm-cloud-logs",
+        "label": "Cloud automation for Cloud Logs",
+        "product_kind": "solution",
+        "tags": [
+          "ibm_created",
+          "target_terraform",
+          "terraform",
+          "solution"
+        ],
+        "keywords": [
+          "IaC",
+          "infrastructure as code",
+          "terraform",
+          "solution"
+        ],
+        "short_description": "Creates and configures IBM Cloud Logs resources",
+        "long_description": "This architecture supports creating and configuring IBM Cloud Logs resources.",
+        "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/solutions/fully-configurable/README.md",
+        "offering_icon_url": "",
+        "provider_name": "IBM",
+        "features": [
+          {
+            "title": "Cloud Logs",
+            "description": "Creates and configures a Cloud Logs instance."
+          },
+          {
+            "title": "Object Storage buckets for Cloud Logs",
+            "description": "Creates buckets required for the Cloud Logs instance."
+          }
+        ],
+        "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues). Please note this product is not supported via the IBM Cloud Support Center.",
+        "flavors": [
+          {
+            "label": "Fully configurable",
+            "name": "fully-configurable",
+            "install_type": "fullstack",
+            "working_directory": "solutions/fully-configurable",
+            "configuration": [
+              {
+                "key": "ibmcloud_api_key"
+              },
+              {
+                "key": "prefix",
+                "required": true,
+                "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+              },
+              {
+                "key": "existing_resource_group_name",
+                "required": true
+              },
+              {
+                "key": "region"
+              },
+              {
+                "key": "provider_visibility",
+                "options": [
+                  {
+                    "displayname": "private",
+                    "value": "private"
+                  },
+                  {
+                    "displayname": "public",
+                    "value": "public"
+                  },
+                  {
+                    "displayname": "public-and-private",
+                    "value": "public-and-private"
+                  }
+                ]
+              },
+              {
+                "key": "existing_cloud_logs_crn"
+              },
+              {
+                "key": "cloud_logs_instance_name"
+              },
+              {
+                "key": "cloud_logs_resource_tags"
+              },
+              {
+                "key": "cloud_logs_access_tags"
+              },
+              {
+                "key": "cloud_logs_retention_period",
+                "options": [
+                  {
+                    "displayname": "7",
+                    "value": 7
+                  },
+                  {
+                    "displayname": "14",
+                    "value": 14
+                  },
+                  {
+                    "displayname": "30",
+                    "value": 30
+                  },
+                  {
+                    "displayname": "60",
+                    "value": 60
+                  },
+                  {
+                    "displayname": "90",
+                    "value": 90
+                  }
+                ]
+              },
+              {
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_logs_cos_bucket_name"
+              },
+              {
+                "key": "existing_metrics_cos_bucket_name"
+              },
+              {
+                "key": "existing_logs_cos_bucket_region",
+                "options": [
+                  {
+                    "displayname": "Not needed. Creating a new bucket.",
+                    "value": "__NULL__"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Sydney (au-syd)",
+                    "value": "au-syd"
+                  },
+                  {
+                    "displayname": "Sao Paolo (br-sao)",
+                    "value": "br-sao"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "Washington DC (us-east)",
+                    "value": "us-east"
+                  }
+                ]
+              },
+              {
+                "key": "existing_metrics_cos_bucket_region",
+                "options": [
+                  {
+                    "displayname": "Not needed. Creating a new bucket.",
+                    "value": "__NULL__"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Sydney (au-syd)",
+                    "value": "au-syd"
+                  },
+                  {
+                    "displayname": "Sao Paolo (br-sao)",
+                    "value": "br-sao"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "Washington DC (us-east)",
+                    "value": "us-east"
+                  }
+                ]
+              },
+              {
+                "key": "existing_logs_cos_bucket_type",
+                "options": [
+                  {
+                    "displayname": "Single Site",
+                    "value": "single_site_location"
+                  },
+                  {
+                    "displayname": "Regional",
+                    "value": "region_location"
+                  },
+                  {
+                    "displayname": "Cross Region",
+                    "value": "cross_region_location"
+                  }
+                ]
+              },
+              {
+                "key": "existing_metrics_cos_bucket_type",
+                "options": [
+                  {
+                    "displayname": "Single Site",
+                    "value": "single_site_location"
+                  },
+                  {
+                    "displayname": "Regional",
+                    "value": "region_location"
+                  },
+                  {
+                    "displayname": "Cross Region",
+                    "value": "cross_region_location"
+                  }
+                ]
+              },
+              {
+                "key": "new_logs_cos_bucket_name"
+              },
+              {
+                "key": "new_metrics_cos_bucket_name"
+              },
+              {
+                "key": "management_endpoint_type_for_bucket",
+                "options": [
+                  {
+                    "displayname": "Direct",
+                    "value": "direct"
+                  },
+                  {
+                    "displayname": "Private",
+                    "value": "private"
+                  },
+                  {
+                    "displayname": "Public",
+                    "value": "public"
+                  }
+                ]
+              },
+              {
+                "key": "existing_kms_instance_crn"
+              },
+              {
+                "key": "existing_kms_key_crn"
+              },
+              {
+                "key": "kms_endpoint_type",
+                "options": [
+                  {
+                    "displayname": "Public",
+                    "value": "public"
+                  },
+                  {
+                    "displayname": "Private",
+                    "value": "private"
+                  }
+                ]
+              },
+              {
+                "key": "kms_key_ring_name"
+              },
+              {
+                "key": "kms_key_name"
+              },
+              {
+                "key": "existing_event_notifications_instances"
+              },
+              {
+                "key": "event_notifications_email_list"
+              },
+              {
+                "key": "event_notifications_from_email"
+              },
+              {
+                "key": "event_notifications_reply_to_email"
+              },
+              {
+                "key": "logs_routing_tenant_regions"
+              },
+              {
+                "key": "skip_logs_routing_auth_policy"
+              },
+              {
+                "key": "logs_policies"
+              }
+            ],
+            "iam_permissions": [
+              {
+                "service_name": "cloud-object-storage",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager"
+                ]
+              },
+              {
+                "service_name": "kms",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              }
+            ],
+            "architecture": {
+              "descriptions": "This architecture supports creating and configuring a Cloud Logs instance.",
+              "features": [
+                {
+                  "title": "Creates a Cloud Logs instance",
+                  "description": "Creates and configures a Cloud Logs instance."
+                },
+                {
+                  "title": "Creates Object Storage buckets",
+                  "description": "Creates Object Storage buckets required for the Cloud Logs instance."
+                }
+              ],
+              "diagrams": [
+                {
+                  "diagram": {
+                    "caption": "Cloud Logs",
+                    "url": "",
+                    "type": "image/svg+xml"
+                  },
+                  "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                }
+              ]
+            }
+          },
+          {
+            "label": "Security-enforced",
+            "name": "security-enforced",
+            "install_type": "fullstack",
+            "working_directory": "solutions/security-enforced",
+            "configuration": [
+              {
+                "key": "ibmcloud_api_key"
+              },
+              {
+                "key": "prefix",
+                "required": true,
+                "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+              },
+              {
+                "key": "existing_resource_group_name",
+                "required": true
+              },
+              {
+                "key": "region"
+              },
+              {
+                "key": "cloud_logs_instance_name"
+              },
+              {
+                "key": "cloud_logs_resource_tags"
+              },
+              {
+                "key": "cloud_logs_access_tags"
+              },
+              {
+                "key": "cloud_logs_retention_period",
+                "options": [
+                  {
+                    "displayname": "7",
+                    "value": 7
+                  },
+                  {
+                    "displayname": "14",
+                    "value": 14
+                  },
+                  {
+                    "displayname": "30",
+                    "value": 30
+                  },
+                  {
+                    "displayname": "60",
+                    "value": 60
+                  },
+                  {
+                    "displayname": "90",
+                    "value": 90
+                  }
+                ]
+              },
+              {
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "new_logs_cos_bucket_name"
+              },
+              {
+                "key": "new_metrics_cos_bucket_name"
+              },
+              {
+                "key": "existing_kms_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_kms_key_crn"
+              },
+              {
+                "key": "kms_key_ring_name"
+              },
+              {
+                "key": "kms_key_name"
+              },
+              {
+                "key": "existing_event_notifications_instances"
+              },
+              {
+                "key": "event_notifications_email_list"
+              },
+              {
+                "key": "event_notifications_from_email"
+              },
+              {
+                "key": "event_notifications_reply_to_email"
+              },
+              {
+                "key": "skip_logs_routing_auth_policy"
+              },
+              {
+                "key": "logs_routing_tenant_regions"
+              },
+              {
+                "key": "logs_policies"
+              }
+            ],
+            "iam_permissions": [
+              {
+                "service_name": "cloud-object-storage",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager"
+                ]
+              },
+              {
+                "service_name": "kms",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              }
+            ],
+            "architecture": {
+              "descriptions": "This architecture supports creating and configuring a Cloud Logs instance.",
+              "features": [
+                {
+                  "title": "Creates a Cloud Logs instance",
+                  "description": "Creates and configures a Cloud Logs instance."
+                },
+                {
+                  "title": "Creates Object Storage buckets",
+                  "description": "Creates Object Storage buckets required for the Cloud Logs instance."
+                }
+              ],
+              "diagrams": [
+                {
+                  "diagram": {
+                    "caption": "Cloud Logs",
+                    "url": "",
+                    "type": "image/svg+xml"
+                  },
+                  "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
