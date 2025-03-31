@@ -10,8 +10,8 @@ module "security_enforced" {
   cloud_logs_access_tags                 = var.cloud_logs_access_tags
   cloud_logs_retention_period            = var.cloud_logs_retention_period
   existing_cos_instance_crn              = var.existing_cos_instance_crn
-  new_logs_cos_bucket_name               = var.new_logs_cos_bucket_name
-  new_metrics_cos_bucket_name            = var.new_metrics_cos_bucket_name
+  logs_cos_bucket_name                   = var.logs_cos_bucket_name
+  metrics_cos_bucket_name                = var.metrics_cos_bucket_name
   management_endpoint_type_for_bucket    = "private"
   existing_kms_instance_crn              = var.existing_kms_instance_crn
   existing_kms_key_crn                   = var.existing_kms_key_crn
@@ -19,9 +19,6 @@ module "security_enforced" {
   cloud_log_storage_key_ring             = var.cloud_log_storage_key_ring
   cloud_log_storage_key                  = var.cloud_log_storage_key
   existing_event_notifications_instances = var.existing_event_notifications_instances
-  event_notifications_from_email         = var.event_notifications_from_email
-  event_notifications_reply_to_email     = var.event_notifications_reply_to_email
-  event_notifications_email_list         = var.event_notifications_email_list
   skip_logs_routing_auth_policy          = var.skip_logs_routing_auth_policy
   logs_routing_tenant_regions            = var.logs_routing_tenant_regions
   logs_policies                          = var.logs_policies

@@ -67,14 +67,14 @@ variable "existing_cos_instance_crn" {
   description = "The CRN of an existing Object Storage instance."
 }
 
-variable "new_logs_cos_bucket_name" {
+variable "logs_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-logs-bucket"
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs."
 }
 
-variable "new_metrics_cos_bucket_name" {
+variable "metrics_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-metrics-bucket"
@@ -118,27 +118,12 @@ variable "existing_event_notifications_instances" {
     en_region           = string
     en_integration_name = optional(string)
     skip_en_auth_policy = optional(bool, false)
+    from_email          = optional(string, "cloudlogsalert@ibm.com")
+    reply_to_email      = optional(string, "no-reply@ibm.com")
+    email_list          = optional(list(string), [])
   }))
   default     = []
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
-}
-
-variable "event_notifications_from_email" {
-  type        = string
-  description = "The `from` email address used in any Security and Compliance Center events coming via Event Notifications."
-  default     = "compliancealert@ibm.com"
-}
-
-variable "event_notifications_reply_to_email" {
-  type        = string
-  description = "The `reply_to` email address used in any Security and Compliance Center events coming via Event Notifications."
-  default     = "no-reply@ibm.com"
-}
-
-variable "event_notifications_email_list" {
-  type        = list(string)
-  description = "The list of email addresses to notify when Security and Compliance Center triggers an event."
-  default     = []
 }
 
 ##############################################################################

@@ -132,148 +132,10 @@
                 ]
               },
               {
-                "key": "existing_logs_cos_bucket_name"
+                "key": "logs_cos_bucket_name"
               },
               {
-                "key": "existing_metrics_cos_bucket_name"
-              },
-              {
-                "key": "existing_logs_cos_bucket_region",
-                "options": [
-                  {
-                    "displayname": "Not needed. Creating a new bucket.",
-                    "value": "__NULL__"
-                  },
-                  {
-                    "displayname": "Dallas (us-south)",
-                    "value": "us-south"
-                  },
-                  {
-                    "displayname": "Sydney (au-syd)",
-                    "value": "au-syd"
-                  },
-                  {
-                    "displayname": "Sao Paolo (br-sao)",
-                    "value": "br-sao"
-                  },
-                  {
-                    "displayname": "Toronto (ca-tor)",
-                    "value": "ca-tor"
-                  },
-                  {
-                    "displayname": "Frankfurt (eu-de)",
-                    "value": "eu-de"
-                  },
-                  {
-                    "displayname": "London (eu-gb)",
-                    "value": "eu-gb"
-                  },
-                  {
-                    "displayname": "Madrid (eu-es)",
-                    "value": "eu-es"
-                  },
-                  {
-                    "displayname": "Osaka (jp-osa)",
-                    "value": "jp-osa"
-                  },
-                  {
-                    "displayname": "Tokyo (jp-tok)",
-                    "value": "jp-tok"
-                  },
-                  {
-                    "displayname": "Washington DC (us-east)",
-                    "value": "us-east"
-                  }
-                ]
-              },
-              {
-                "key": "existing_metrics_cos_bucket_region",
-                "options": [
-                  {
-                    "displayname": "Not needed. Creating a new bucket.",
-                    "value": "__NULL__"
-                  },
-                  {
-                    "displayname": "Dallas (us-south)",
-                    "value": "us-south"
-                  },
-                  {
-                    "displayname": "Sydney (au-syd)",
-                    "value": "au-syd"
-                  },
-                  {
-                    "displayname": "Sao Paolo (br-sao)",
-                    "value": "br-sao"
-                  },
-                  {
-                    "displayname": "Toronto (ca-tor)",
-                    "value": "ca-tor"
-                  },
-                  {
-                    "displayname": "Frankfurt (eu-de)",
-                    "value": "eu-de"
-                  },
-                  {
-                    "displayname": "London (eu-gb)",
-                    "value": "eu-gb"
-                  },
-                  {
-                    "displayname": "Madrid (eu-es)",
-                    "value": "eu-es"
-                  },
-                  {
-                    "displayname": "Osaka (jp-osa)",
-                    "value": "jp-osa"
-                  },
-                  {
-                    "displayname": "Tokyo (jp-tok)",
-                    "value": "jp-tok"
-                  },
-                  {
-                    "displayname": "Washington DC (us-east)",
-                    "value": "us-east"
-                  }
-                ]
-              },
-              {
-                "key": "existing_logs_cos_bucket_type",
-                "options": [
-                  {
-                    "displayname": "Single Site",
-                    "value": "single_site_location"
-                  },
-                  {
-                    "displayname": "Regional",
-                    "value": "region_location"
-                  },
-                  {
-                    "displayname": "Cross Region",
-                    "value": "cross_region_location"
-                  }
-                ]
-              },
-              {
-                "key": "existing_metrics_cos_bucket_type",
-                "options": [
-                  {
-                    "displayname": "Single Site",
-                    "value": "single_site_location"
-                  },
-                  {
-                    "displayname": "Regional",
-                    "value": "region_location"
-                  },
-                  {
-                    "displayname": "Cross Region",
-                    "value": "cross_region_location"
-                  }
-                ]
-              },
-              {
-                "key": "new_logs_cos_bucket_name"
-              },
-              {
-                "key": "new_metrics_cos_bucket_name"
+                "key": "metrics_cos_bucket_name"
               },
               {
                 "key": "management_endpoint_type_for_bucket",
@@ -319,15 +181,6 @@
               },
               {
                 "key": "existing_event_notifications_instances"
-              },
-              {
-                "key": "event_notifications_email_list"
-              },
-              {
-                "key": "event_notifications_from_email"
-              },
-              {
-                "key": "event_notifications_reply_to_email"
               },
               {
                 "key": "logs_routing_tenant_regions"
@@ -456,10 +309,10 @@
                 ]
               },
               {
-                "key": "new_logs_cos_bucket_name"
+                "key": "logs_cos_bucket_name"
               },
               {
-                "key": "new_metrics_cos_bucket_name"
+                "key": "metrics_cos_bucket_name"
               },
               {
                 "key": "existing_kms_key_crn"
@@ -472,15 +325,6 @@
               },
               {
                 "key": "existing_event_notifications_instances"
-              },
-              {
-                "key": "event_notifications_email_list"
-              },
-              {
-                "key": "event_notifications_from_email"
-              },
-              {
-                "key": "event_notifications_reply_to_email"
               },
               {
                 "key": "skip_logs_routing_auth_policy"

@@ -34,22 +34,22 @@ output "cloud_logs_logs_policies_details" {
 
 output "logs_bucket_crn" {
   description = "Logs Cloud Object Storage bucket CRN"
-  value       = local.create_buckets ? module.buckets[0].buckets[local.logs_bucket_name].bucket_crn : null
+  value       = module.buckets[0].buckets[local.logs_bucket_name].bucket_crn
 }
 
 output "metrics_bucket_crn" {
   description = "Metrics Cloud Object Storage bucket CRN"
-  value       = local.create_buckets ? module.buckets[0].buckets[local.metrics_bucket_name].bucket_crn : null
+  value       = module.buckets[0].buckets[local.metrics_bucket_name].bucket_crn
 }
 
 output "logs_bucket_name" {
   description = "Logs Cloud Object Storage bucket name"
-  value       = local.create_buckets ? local.logs_bucket_name : null
+  value       = local.logs_bucket_name
 }
 
 output "metrics_bucket_name" {
   description = "Metrics Cloud Object Storage bucket name"
-  value       = local.create_buckets ? local.metrics_bucket_name : null
+  value       = local.metrics_bucket_name
 }
 
 output "kms_key_crn" {

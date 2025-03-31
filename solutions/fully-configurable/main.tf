@@ -13,13 +13,9 @@ module "resource_group" {
 #######################################################################################################################
 
 locals {
-  prefix                  = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
-  logs_bucket_crn         = var.existing_logs_cos_bucket_name == null ? module.buckets[0].buckets[local.logs_bucket_name].bucket_crn : data.ibm_cos_bucket.existing_logs_bucket[0].crn
-  metrics_bucket_crn      = var.existing_metrics_cos_bucket_name == null ? module.buckets[0].buckets[local.metrics_bucket_name].bucket_crn : data.ibm_cos_bucket.existing_metrics_bucket[0].crn
-  logs_bucket_endpoint    = var.existing_logs_cos_bucket_name == null ? module.buckets[0].buckets[local.logs_bucket_name].s3_endpoint_direct : data.ibm_cos_bucket.existing_logs_bucket[0].s3_endpoint_direct
-  metrics_bucket_endpoint = var.existing_metrics_cos_bucket_name == null ? module.buckets[0].buckets[local.metrics_bucket_name].s3_endpoint_direct : data.ibm_cos_bucket.existing_metrics_bucket[0].s3_endpoint_direct
-  create_cloud_logs       = var.existing_cloud_logs_crn == null
-  cloud_logs_crn          = local.create_cloud_logs ? module.cloud_logs[0].crn : var.existing_cloud_logs_crn
+  prefix            = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
+  create_cloud_logs = var.existing_cloud_logs_crn == null
+  cloud_logs_crn    = local.create_cloud_logs ? module.cloud_logs[0].crn : var.existing_cloud_logs_crn
 }
 
 module "cloud_logs" {
@@ -37,13 +33,13 @@ module "cloud_logs" {
   data_storage = {
     logs_data = {
       enabled         = true
-      bucket_crn      = local.logs_bucket_crn
-      bucket_endpoint = local.logs_bucket_endpoint
+      bucket_crn      = module.buckets[0].buckets[local.logs_bucket_name].bucket_crn
+      bucket_endpoint = module.buckets[0].buckets[local.logs_bucket_name].s3_endpoint_direct
     },
     metrics_data = {
       enabled         = true
-      bucket_crn      = local.metrics_bucket_crn
-      bucket_endpoint = local.metrics_bucket_endpoint
+      bucket_crn      = module.buckets[0].buckets[local.metrics_bucket_name].bucket_crn
+      bucket_endpoint = module.buckets[0].buckets[local.metrics_bucket_name].s3_endpoint_direct
     }
   }
   logs_routing_tenant_regions   = var.logs_routing_tenant_regions
@@ -56,26 +52,17 @@ module "cloud_logs" {
 #######################################################################################################################
 
 locals {
-  # tflint-ignore: terraform_unused_declarations
-  pass_two_existing_buckets = (var.existing_logs_cos_bucket_name != null && var.existing_metrics_cos_bucket_name == null) || (var.existing_logs_cos_bucket_name == null && var.existing_metrics_cos_bucket_name != null) ? tobool("If passing in existing buckets, values for both logs and metrics values need to be passed.") : true
-  # tflint-ignore: terraform_unused_declarations
-  pass_all_logs_bucket_information = var.existing_logs_cos_bucket_name != null && var.existing_logs_cos_bucket_region == null ? tobool("If passing a value for 'existing_logs_cos_bucket_name', a value for 'existing_logs_cos_bucket_region' needs to be passed as well.") : true
-  # tflint-ignore: terraform_unused_declarations
-  pass_all_metrics_bucket_information = var.existing_metrics_cos_bucket_name != null && var.existing_metrics_cos_bucket_region == null ? tobool("If passing a value for 'existing_metrics_cos_bucket_name', a value for 'existing_metrics_cos_bucket_region' needs to be passed as well.") : true
-
   kms_encryption_enabled = var.existing_kms_instance_crn != null
-  create_buckets         = local.create_cloud_logs && var.existing_logs_cos_bucket_name == null && var.existing_metrics_cos_bucket_name == null
-  use_kms_module         = local.create_buckets && local.kms_encryption_enabled && var.existing_kms_key_crn == null
+  use_kms_module         = local.kms_encryption_enabled && var.existing_kms_key_crn == null
 
-  logs_bucket_name    = try("${local.prefix}-${var.new_logs_cos_bucket_name}", var.new_logs_cos_bucket_name)
-  metrics_bucket_name = try("${local.prefix}-${var.new_metrics_cos_bucket_name}", var.new_metrics_cos_bucket_name)
+  logs_bucket_name    = try("${local.prefix}-${var.logs_cos_bucket_name}", var.logs_cos_bucket_name)
+  metrics_bucket_name = try("${local.prefix}-${var.metrics_cos_bucket_name}", var.metrics_cos_bucket_name)
   key_ring_name       = try("${local.prefix}-${var.cloud_log_storage_key_ring}", var.cloud_log_storage_key_ring)
   key_name            = try("${local.prefix}-${var.cloud_log_storage_key}", var.cloud_log_storage_key)
   kms_key_crn         = local.kms_encryption_enabled ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
 }
 
 module "buckets" {
-  count   = local.create_buckets ? 1 : 0
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
   version = "8.19.3"
   bucket_configs = [
@@ -99,22 +86,6 @@ module "buckets" {
       skip_iam_authorization_policy       = true
     }
   ]
-}
-
-data "ibm_cos_bucket" "existing_logs_bucket" {
-  count                = local.create_buckets ? 0 : 1
-  bucket_name          = var.existing_logs_cos_bucket_name
-  resource_instance_id = var.existing_cos_instance_crn
-  bucket_region        = var.existing_logs_cos_bucket_region
-  bucket_type          = var.existing_logs_cos_bucket_type
-}
-
-data "ibm_cos_bucket" "existing_metrics_bucket" {
-  count                = local.create_buckets ? 0 : 1
-  bucket_name          = var.existing_metrics_cos_bucket_name
-  resource_instance_id = var.existing_cos_instance_crn
-  bucket_region        = var.existing_metrics_cos_bucket_region
-  bucket_type          = var.existing_metrics_cos_bucket_type
 }
 
 module "existing_kms_crn_parser" {
@@ -163,9 +134,8 @@ module "kms" {
 
 locals {
   # tflint-ignore: terraform_unused_declarations
-  pass_emails = length(var.existing_event_notifications_instances) > 0 && length(var.event_notifications_email_list) == 0 ? tobool("You must pass at least one email address if setting up Event Notifications Integration.") : true
+  # pass_emails = length(var.existing_event_notifications_instances) > 0 && length(var.event_notifications_email_list) == 0 ? tobool("You must pass at least one email address if setting up Event Notifications Integration.") : true
 
-  en_topic              = try("${local.prefix}-Cloud Logs Topic", "Cloud Logs Topic")
   en_subscription_email = try("${local.prefix}-Email for Cloud Logs Subscription", "Email for Cloud Logs Subscription")
 }
 
@@ -183,7 +153,7 @@ resource "ibm_en_topic" "en_topic" {
   depends_on    = [time_sleep.wait_for_cloud_logs]
   for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
   instance_guid = each.key
-  name          = local.en_topic
+  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
   description   = "Topic for Cloud Logs events routing"
   sources {
     id = local.cloud_logs_crn
@@ -203,9 +173,9 @@ resource "ibm_en_subscription_email" "email_subscription" {
   topic_id       = ibm_en_topic.en_topic[each.key].topic_id
   attributes {
     add_notification_payload = true
-    reply_to_mail            = var.event_notifications_reply_to_email
+    reply_to_mail            = each.value["to_email"]
     reply_to_name            = "Cloud Logs Event Notifications Bot"
-    from_name                = var.event_notifications_from_email
-    invited                  = var.event_notifications_email_list
+    from_name                = each.value["from_email"]
+    invited                  = each.value["email_list"]
   }
 }
