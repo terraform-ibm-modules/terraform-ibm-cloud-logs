@@ -24,8 +24,7 @@ locals {
 
 module "cloud_logs" {
   count                                  = local.create_cloud_logs ? 1 : 0
-  source                                 = "terraform-ibm-modules/cloud-logs/ibm"
-  version                                = "1.0.0"
+  source                                 = "../.."
   resource_group_id                      = module.resource_group.resource_group_id
   region                                 = var.region
   instance_name                          = var.cloud_logs_instance_name
@@ -70,8 +69,8 @@ locals {
 
   logs_bucket_name    = try("${local.prefix}-${var.new_logs_cos_bucket_name}", var.new_logs_cos_bucket_name)
   metrics_bucket_name = try("${local.prefix}-${var.new_metrics_cos_bucket_name}", var.new_metrics_cos_bucket_name)
-  key_ring_name       = try("${local.prefix}-${var.kms_key_ring_name}", var.kms_key_ring_name)
-  key_name            = try("${local.prefix}-${var.kms_key_name}", var.kms_key_name)
+  key_ring_name       = try("${local.prefix}-${var.cloud_log_storage_key_ring}", var.cloud_log_storage_key_ring)
+  key_name            = try("${local.prefix}-${var.cloud_log_storage_key}", var.cloud_log_storage_key)
   kms_key_crn         = local.kms_encryption_enabled ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
 }
 
@@ -137,7 +136,7 @@ module "kms" {
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
   version                     = "4.20.0"
   create_key_protect_instance = false
-  region                      = var.region
+  region                      = module.existing_kms_crn_parser[0].region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
   key_ring_endpoint_type      = var.kms_endpoint_type
   key_endpoint_type           = var.kms_endpoint_type

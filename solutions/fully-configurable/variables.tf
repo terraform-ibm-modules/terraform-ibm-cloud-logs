@@ -11,12 +11,12 @@ variable "ibmcloud_api_key" {
 variable "existing_resource_group_name" {
   type        = string
   description = "The name of a new or an existing resource group in which to provision resources to. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "Default"
 }
 
 variable "prefix" {
   type        = string
   description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
-  default     = "icl-da"
 }
 
 variable "provider_visibility" {
@@ -182,13 +182,13 @@ variable "kms_endpoint_type" {
   }
 }
 
-variable "kms_key_ring_name" {
+variable "cloud_log_storage_key_ring" {
   type        = string
   default     = "cos-key-ring"
   description = "The name for the key ring created for the Cloud Logs Object Storage bucket key. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "kms_key_name" {
+variable "cloud_log_storage_key" {
   type        = string
   default     = "cos-key"
   description = "The name for the key created for the Cloud Logs Object Storage bucket. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."

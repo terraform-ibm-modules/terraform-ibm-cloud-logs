@@ -8,17 +8,22 @@
           "ibm_created",
           "target_terraform",
           "terraform",
-          "solution"
+          "solution",
+          "logging_monitoring"
         ],
         "keywords": [
           "IaC",
           "infrastructure as code",
           "terraform",
-          "solution"
+          "solution",
+          "cloud logs",
+          "observability",
+          "logging",
+          "monitoring"
         ],
         "short_description": "Creates and configures IBM Cloud Logs resources",
         "long_description": "This architecture supports creating and configuring IBM Cloud Logs resources.",
-        "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/solutions/fully-configurable/README.md",
+        "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/README.md",
         "offering_icon_url": "",
         "provider_name": "IBM",
         "features": [
@@ -48,11 +53,15 @@
                 "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
               },
               {
-                "key": "existing_resource_group_name",
+                "key": "region",
                 "required": true
               },
               {
-                "key": "region"
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_resource_group_name"
               },
               {
                 "key": "provider_visibility",
@@ -78,10 +87,24 @@
                 "key": "cloud_logs_instance_name"
               },
               {
-                "key": "cloud_logs_resource_tags"
+                "key": "cloud_logs_resource_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
               },
               {
-                "key": "cloud_logs_access_tags"
+                "key": "cloud_logs_access_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
               },
               {
                 "key": "cloud_logs_retention_period",
@@ -107,10 +130,6 @@
                     "value": 90
                   }
                 ]
-              },
-              {
-                "key": "existing_cos_instance_crn",
-                "required": true
               },
               {
                 "key": "existing_logs_cos_bucket_name"
@@ -293,10 +312,10 @@
                 ]
               },
               {
-                "key": "kms_key_ring_name"
+                "key": "cloud_log_storage_key_ring"
               },
               {
-                "key": "kms_key_name"
+                "key": "cloud_log_storage_key"
               },
               {
                 "key": "existing_event_notifications_instances"
@@ -374,20 +393,42 @@
                 "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
               },
               {
-                "key": "existing_resource_group_name",
+                "key": "region",
                 "required": true
               },
               {
-                "key": "region"
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_kms_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_resource_group_name"
               },
               {
                 "key": "cloud_logs_instance_name"
               },
               {
-                "key": "cloud_logs_resource_tags"
+                "key": "cloud_logs_resource_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
               },
               {
-                "key": "cloud_logs_access_tags"
+                "key": "cloud_logs_access_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
               },
               {
                 "key": "cloud_logs_retention_period",
@@ -415,27 +456,19 @@
                 ]
               },
               {
-                "key": "existing_cos_instance_crn",
-                "required": true
-              },
-              {
                 "key": "new_logs_cos_bucket_name"
               },
               {
                 "key": "new_metrics_cos_bucket_name"
               },
               {
-                "key": "existing_kms_instance_crn",
-                "required": true
-              },
-              {
                 "key": "existing_kms_key_crn"
               },
               {
-                "key": "kms_key_ring_name"
+                "key": "cloud_log_storage_key_ring"
               },
               {
-                "key": "kms_key_name"
+                "key": "cloud_log_storage_key"
               },
               {
                 "key": "existing_event_notifications_instances"

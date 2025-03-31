@@ -11,12 +11,12 @@ variable "ibmcloud_api_key" {
 variable "existing_resource_group_name" {
   type        = string
   description = "The name of a new or an existing resource group in which to provision resources to. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "Default"
 }
 
 variable "prefix" {
   type        = string
   description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
-  default     = "icl-secure-da"
 }
 
 variable "region" {
@@ -31,8 +31,8 @@ variable "region" {
 
 variable "cloud_logs_instance_name" {
   type        = string
-  description = "The name of the IBM Cloud Logs instance to create. Defaults to 'cloud-logs-<region>'"
-  default     = null
+  description = "The name of the IBM Cloud Logs instance to create."
+  default     = "cloud-logs"
 }
 
 variable "cloud_logs_resource_tags" {
@@ -96,13 +96,13 @@ variable "existing_kms_key_crn" {
   description = "The CRN of an existing KMS key to use to encrypt the Cloud Logs Object Storage bucket. If no value is set for this variable and bucket encryption is desired, specify a value for the `existing_kms_instance_crn` variable to create a key ring and key."
 }
 
-variable "kms_key_ring_name" {
+variable "cloud_log_storage_key_ring" {
   type        = string
   default     = "cos-key-ring"
   description = "The name for the key ring created for the Cloud Logs Object Storage bucket key. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "kms_key_name" {
+variable "cloud_log_storage_key" {
   type        = string
   default     = "cos-key"
   description = "The name for the key created for the Cloud Logs Object Storage bucket. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
