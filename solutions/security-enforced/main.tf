@@ -1,6 +1,7 @@
 module "security_enforced" {
   source                                 = "../fully-configurable"
   ibmcloud_api_key                       = var.ibmcloud_api_key
+  ibmcloud_kms_api_key                   = var.ibmcloud_kms_api_key
   provider_visibility                    = "private"
   prefix                                 = var.prefix
   region                                 = var.region
@@ -12,7 +13,10 @@ module "security_enforced" {
   existing_cos_instance_crn              = var.existing_cos_instance_crn
   logs_cos_bucket_name                   = var.logs_cos_bucket_name
   metrics_cos_bucket_name                = var.metrics_cos_bucket_name
+  cloud_logs_cos_buckets_class           = var.cloud_logs_cos_buckets_class
   management_endpoint_type_for_bucket    = "private"
+  skip_cos_kms_iam_auth_policy           = var.skip_cos_kms_iam_auth_policy
+  kms_encryption_enabled_bucket          = true
   existing_kms_instance_crn              = var.existing_kms_instance_crn
   existing_kms_key_crn                   = var.existing_kms_key_crn
   kms_endpoint_type                      = "private"

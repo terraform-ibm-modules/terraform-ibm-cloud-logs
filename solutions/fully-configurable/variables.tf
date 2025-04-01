@@ -17,6 +17,16 @@ variable "existing_resource_group_name" {
 variable "prefix" {
   type        = string
   description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
+  nullable    = true
+  validation {
+    condition = (var.prefix == null ? true :
+      alltrue([
+        can(regex("^[a-z]{0,1}[-a-z0-9]{0,14}[a-z0-9]{0,1}$", var.prefix)),
+        length(regexall("^.*--.*", var.prefix)) == 0
+      ])
+    )
+    error_message = "Prefix must begin with a lowercase letter, contain only lowercase letters, numbers, and - characters. Prefixes must end with a lowercase letter or number and be 16 or fewer characters."
+  }
 }
 
 variable "provider_visibility" {
@@ -82,6 +92,11 @@ variable "cloud_logs_retention_period" {
 variable "existing_cos_instance_crn" {
   type        = string
   description = "The CRN of an existing Object Storage instance."
+
+  validation {
+    condition     = var.existing_cos_instance_crn == null ? var.existing_cloud_logs_crn != null : true
+    error_message = "A value must be passed for 'existing_cos_instance_crn' when creating a new instance."
+  }
 }
 
 variable "logs_cos_bucket_name" {
@@ -98,6 +113,16 @@ variable "metrics_cos_bucket_name" {
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs."
 }
 
+variable "cloud_logs_cos_buckets_class" {
+  type        = string
+  default     = "smart"
+  description = "The storage class of the newly provisioned Cloud Logs Object Storage bucket. Possible values: `standard`, `vault`, `cold`, `smart`, `onerate_active`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_cloud_logs_crn` is not provided."
+  validation {
+    condition     = contains(["standard", "vault", "cold", "smart", "onerate_active"], var.cloud_logs_cos_buckets_class)
+    error_message = "Allowed values for cos_bucket_class are \"standard\", \"vault\",\"cold\", \"smart\", or \"onerate_active\"."
+  }
+}
+
 variable "management_endpoint_type_for_bucket" {
   description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`m `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network."
   type        = string
@@ -108,20 +133,86 @@ variable "management_endpoint_type_for_bucket" {
   }
 }
 
+variable "skip_cos_kms_iam_auth_policy" {
+  type        = bool
+  description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account. Applies only if `existing_cloud_logs_crn` is not provided."
+  nullable    = false
+  default     = false
+}
+
 ########################################################################################################################
 # KMS
 ########################################################################################################################
 
+variable "kms_encryption_enabled_bucket" {
+  description = "Set to true to enable KMS encryption on the Object Storage bucket created for the Cloud Logs instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_cloud_logs_crn`."
+  type        = bool
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.kms_encryption_enabled_bucket ? var.existing_cloud_logs_crn == null : true
+    error_message = "'kms_encryption_enabled_bucket' should be false if passing a value for 'existing_cloud_logs_crn' as existing Cloud Logs instance will already have a bucket attached."
+  }
+
+  validation {
+    condition     = var.existing_kms_instance_crn != null ? var.kms_encryption_enabled_bucket : true
+    error_message = "If passing a value for 'existing_kms_instance_crn', you should set 'kms_encryption_enabled_bucket' to true."
+  }
+
+  validation {
+    condition     = var.existing_kms_key_crn != null ? var.kms_encryption_enabled_bucket : true
+    error_message = "If passing a value for 'existing_kms_key_crn', you should set 'kms_encryption_enabled_bucket' to true."
+  }
+
+  validation {
+    condition     = var.kms_encryption_enabled_bucket ? ((var.existing_kms_key_crn != null || var.existing_kms_instance_crn != null) ? true : false) : true
+    error_message = "Either 'existing_kms_key_crn' or 'existing_kms_instance_crn' is required if 'kms_encryption_enabled_bucket' is set to true."
+  }
+}
+
 variable "existing_kms_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of the existing KMS instance (Hyper Protect Crypto Services or Key Protect)."
+  description = "The CRN of an existing KMS instance (Hyper Protect Crypto Services or Key Protect). Used to create a new KMS key unless an existing key is passed using the `existing_Cloud Logs_cos_kms_key_crn` input. If the KMS instance is in different account you must also provide a value for `ibmcloud_kms_api_key`. A value should not be passed passing existing Cloud Logs instance using the `existing_cloud_logs_crn` input."
+
+  validation {
+    condition = anytrue([
+      can(regex("^crn:(.*:){3}(kms|hs-crypto):(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$", var.existing_kms_instance_crn)),
+      var.existing_kms_instance_crn == null,
+    ])
+    error_message = "The provided KMS instance CRN in the input 'existing_kms_instance_crn' in not valid."
+  }
+
+  validation {
+    condition     = var.existing_kms_instance_crn != null ? var.existing_cloud_logs_crn == null : true
+    error_message = "A value should not be passed for 'existing_kms_instance_crn' when passing an existing Cloud Logs instance using the 'existing_cloud_logs_crn' input."
+  }
 }
 
 variable "existing_kms_key_crn" {
   type        = string
   default     = null
   description = "The CRN of an existing KMS key to use to encrypt the Cloud Logs Object Storage bucket. If no value is set for this variable and bucket encryption is desired, specify a value for the `existing_kms_instance_crn` variable to create a key ring and key."
+
+  validation {
+    condition = anytrue([
+      can(regex("^crn:(.*:){3}(kms|hs-crypto):(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}:key:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", var.existing_kms_key_crn)),
+      var.existing_kms_key_crn == null,
+    ])
+    error_message = "The provided KMS key CRN in the input 'existing_kms_key_crn' in not valid."
+  }
+
+  validation {
+    condition     = var.existing_kms_key_crn != null ? var.existing_cloud_logs_crn == null : true
+    error_message = "A value should not be passed for 'existing_kms_key_crn' when passing an existing Cloud Logs instance using the 'existing_cloud_logs_crn' input."
+  }
+
+  validation {
+    condition     = var.existing_kms_key_crn != null ? var.existing_kms_instance_crn == null : true
+    error_message = "A value should not be passed for 'existing_kms_instance_crn' when passing an existing key value using the 'existing_kms_key_crn' input."
+  }
+
 }
 
 variable "kms_endpoint_type" {
@@ -144,6 +235,18 @@ variable "cloud_log_storage_key" {
   type        = string
   default     = "cos-key"
   description = "The name for the key created for the Cloud Logs Object Storage bucket. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+}
+
+variable "ibmcloud_kms_api_key" {
+  type        = string
+  description = "The IBM Cloud API key that can create a root key and key ring in the key management service (KMS) instance. If not specified, the 'ibmcloud_api_key' variable is used. Specify this key if the instance in `existing_kms_instance_crn` is in an account that's different from the Cloud Logs instance. Leave this input empty if the same account owns both instances."
+  sensitive   = true
+  default     = null
+
+  validation {
+    condition     = var.ibmcloud_kms_api_key != null ? var.existing_cloud_logs_crn == null : true
+    error_message = "A value should not be passed for 'ibmcloud_kms_api_key' when passing an existing Cloud Logs instance using the 'existing_cloud_logs_crn' input."
+  }
 }
 
 ##############################################################################

@@ -19,12 +19,14 @@
           "cloud logs",
           "observability",
           "logging",
-          "monitoring"
+          "monitoring",
+          "monitor",
+          "log"
         ],
         "short_description": "Creates and configures IBM Cloud Logs resources",
         "long_description": "This architecture supports creating and configuring IBM Cloud Logs resources.",
         "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/README.md",
-        "offering_icon_url": "",
+        "offering_icon_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/images/observability-icon.svg",
         "provider_name": "IBM",
         "features": [
           {
@@ -138,6 +140,31 @@
                 "key": "metrics_cos_bucket_name"
               },
               {
+                "key": "cloud_logs_cos_buckets_class",
+                "options": [
+                  {
+                    "displayname": "Standard",
+                    "value": "standard"
+                  },
+                  {
+                    "displayname": "Vault",
+                    "value": "vault"
+                  },
+                  {
+                    "displayname": "Cold",
+                    "value": "cold"
+                  },
+                  {
+                    "displayname": "Smart",
+                    "value": "smart"
+                  },
+                  {
+                    "displayname": "One-Rate Active",
+                    "value": "onerate_active"
+                  }
+                ]
+              },
+              {
                 "key": "management_endpoint_type_for_bucket",
                 "options": [
                   {
@@ -153,6 +180,12 @@
                     "value": "public"
                   }
                 ]
+              },
+              {
+                "key": "skip_cos_kms_iam_auth_policy"
+              },
+              {
+                "key": "kms_encryption_enabled_bucket"
               },
               {
                 "key": "existing_kms_instance_crn"
@@ -180,6 +213,9 @@
                 "key": "cloud_log_storage_key"
               },
               {
+                "key": "ibmcloud_kms_api_key"
+              },
+              {
                 "key": "existing_event_notifications_instances"
               },
               {
@@ -193,6 +229,12 @@
               }
             ],
             "iam_permissions": [
+              {
+                "service_name": "logs",
+                "role_crns": [
+                    "crn:v1:bluemix:public:iam::::serviceRole:Manager"
+                ]
+              },
               {
                 "service_name": "cloud-object-storage",
                 "role_crns": [
@@ -223,7 +265,7 @@
                 {
                   "diagram": {
                     "caption": "Cloud Logs",
-                    "url": "",
+                    "url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/reference-architecture/deployable-architecture-cloud-logs.svg",
                     "type": "image/svg+xml"
                   },
                   "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
@@ -315,6 +357,34 @@
                 "key": "metrics_cos_bucket_name"
               },
               {
+                "key": "cloud_logs_cos_buckets_class",
+                "options": [
+                  {
+                    "displayname": "Standard",
+                    "value": "standard"
+                  },
+                  {
+                    "displayname": "Vault",
+                    "value": "vault"
+                  },
+                  {
+                    "displayname": "Cold",
+                    "value": "cold"
+                  },
+                  {
+                    "displayname": "Smart",
+                    "value": "smart"
+                  },
+                  {
+                    "displayname": "One-Rate Active",
+                    "value": "onerate_active"
+                  }
+                ]
+              },
+              {
+                "key": "skip_cos_kms_iam_auth_policy"
+              },
+              {
                 "key": "existing_kms_key_crn"
               },
               {
@@ -322,6 +392,9 @@
               },
               {
                 "key": "cloud_log_storage_key"
+              },
+              {
+                "key": "ibmcloud_kms_api_key"
               },
               {
                 "key": "existing_event_notifications_instances"
@@ -337,6 +410,12 @@
               }
             ],
             "iam_permissions": [
+              {
+                "service_name": "logs",
+                "role_crns": [
+                    "crn:v1:bluemix:public:iam::::serviceRole:Manager"
+                ]
+              },
               {
                 "service_name": "cloud-object-storage",
                 "role_crns": [
@@ -367,7 +446,7 @@
                 {
                   "diagram": {
                     "caption": "Cloud Logs",
-                    "url": "",
+                    "url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/reference-architecture/deployable-architecture-cloud-logs.svg",
                     "type": "image/svg+xml"
                   },
                   "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
