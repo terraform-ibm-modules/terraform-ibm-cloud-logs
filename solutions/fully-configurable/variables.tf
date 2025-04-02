@@ -116,10 +116,10 @@ variable "metrics_cos_bucket_name" {
 variable "cloud_logs_cos_buckets_class" {
   type        = string
   default     = "smart"
-  description = "The storage class of the newly provisioned Cloud Logs Object Storage bucket. Possible values: `standard`, `vault`, `cold`, `smart`, `onerate_active`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_cloud_logs_crn` is not provided."
+  description = "The storage class of the newly provisioned Cloud Logs Object Storage buckets. Possible values: `standard` or `smart`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_cloud_logs_crn` is not provided."
   validation {
-    condition     = contains(["standard", "vault", "cold", "smart", "onerate_active"], var.cloud_logs_cos_buckets_class)
-    error_message = "Allowed values for cos_bucket_class are \"standard\", \"vault\",\"cold\", \"smart\", or \"onerate_active\"."
+    condition     = contains(["standard", "smart"], var.cloud_logs_cos_buckets_class)
+    error_message = "Allowed values for cos_bucket_class are \"standard\" or \"smart\"."
   }
 }
 

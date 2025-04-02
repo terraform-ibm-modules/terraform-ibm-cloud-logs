@@ -33,13 +33,13 @@ module "cloud_logs" {
   data_storage = {
     logs_data = {
       enabled         = true
-      bucket_crn      = module.buckets[0].buckets[local.logs_bucket_name].bucket_crn
-      bucket_endpoint = module.buckets[0].buckets[local.logs_bucket_name].s3_endpoint_direct
+      bucket_crn      = module.buckets.buckets[local.logs_bucket_name].bucket_crn
+      bucket_endpoint = module.buckets.buckets[local.logs_bucket_name].s3_endpoint_direct
     },
     metrics_data = {
       enabled         = true
-      bucket_crn      = module.buckets[0].buckets[local.metrics_bucket_name].bucket_crn
-      bucket_endpoint = module.buckets[0].buckets[local.metrics_bucket_name].s3_endpoint_direct
+      bucket_crn      = module.buckets.buckets[local.metrics_bucket_name].bucket_crn
+      bucket_endpoint = module.buckets.buckets[local.metrics_bucket_name].s3_endpoint_direct
     }
   }
   logs_routing_tenant_regions   = var.logs_routing_tenant_regions
@@ -53,15 +53,14 @@ module "cloud_logs" {
 
 locals {
   use_kms_module    = var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null
-  kms_region        = module.existing_kms_crn_parser[0].region
+  kms_region        = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].region : null
   existing_kms_guid = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
   kms_service_name  = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
   kms_account_id    = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
 
-  cos_region          = module.existing_cos_instance_crn_parser.region
   logs_bucket_name    = try("${local.prefix}-${var.logs_cos_bucket_name}", var.logs_cos_bucket_name)
   metrics_bucket_name = try("${local.prefix}-${var.metrics_cos_bucket_name}", var.metrics_cos_bucket_name)
-  cos_instance_guid   = module.existing_cos_instance_crn_parser[0].service_instance
+  cos_instance_guid   = module.existing_cos_instance_crn_parser.service_instance
 
   key_ring_name = try("${local.prefix}-${var.cloud_log_storage_key_ring}", var.cloud_log_storage_key_ring)
   key_name      = try("${local.prefix}-${var.cloud_log_storage_key}", var.cloud_log_storage_key)
@@ -86,25 +85,25 @@ module "buckets" {
   version    = "8.19.3"
   bucket_configs = [
     {
-      bucket_name                         = local.logs_bucket_name
-      kms_key_crn                         = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
-      kms_guid                            = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
-      kms_encryption_enabled              = var.kms_encryption_enabled_bucket
-      region_location                     = local.cos_region
-      resource_instance_id                = var.existing_cos_instance_crn
-      management_endpoint_type_for_bucket = var.management_endpoint_type_for_bucket
-      storage_class                       = var.cloud_logs_cos_buckets_class
+      bucket_name              = local.logs_bucket_name
+      kms_key_crn              = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
+      kms_guid                 = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_encryption_enabled   = var.kms_encryption_enabled_bucket
+      region_location          = var.region
+      resource_instance_id     = var.existing_cos_instance_crn
+      management_endpoint_type = var.management_endpoint_type_for_bucket
+      storage_class            = var.cloud_logs_cos_buckets_class
     },
     {
-      bucket_name                         = local.metrics_bucket_name
-      kms_key_crn                         = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
-      kms_guid                            = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
-      kms_encryption_enabled              = var.kms_encryption_enabled_bucket
-      region_location                     = local.cos_region
-      resource_instance_id                = var.existing_cos_instance_crn
-      management_endpoint_type_for_bucket = var.management_endpoint_type_for_bucket
-      storage_class                       = var.cloud_logs_cos_buckets_class
-      skip_iam_authorization_policy       = true
+      bucket_name                   = local.metrics_bucket_name
+      kms_key_crn                   = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
+      kms_guid                      = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_encryption_enabled        = var.kms_encryption_enabled_bucket
+      region_location               = var.region
+      resource_instance_id          = var.existing_cos_instance_crn
+      management_endpoint_type      = var.management_endpoint_type_for_bucket
+      storage_class                 = var.cloud_logs_cos_buckets_class
+      skip_iam_authorization_policy = true
     }
   ]
 }
@@ -246,7 +245,7 @@ resource "ibm_en_subscription_email" "email_subscription" {
   topic_id       = ibm_en_topic.en_topic[each.key].topic_id
   attributes {
     add_notification_payload = true
-    reply_to_mail            = each.value["to_email"]
+    reply_to_mail            = each.value["reply_to_email"]
     reply_to_name            = "Cloud Logs Event Notifications Bot"
     from_name                = each.value["from_email"]
     invited                  = each.value["email_list"]

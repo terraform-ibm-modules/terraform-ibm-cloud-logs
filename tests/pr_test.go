@@ -57,7 +57,7 @@ func TestRunFullyConfigurable(t *testing.T) {
 	t.Parallel()
 
 	region := validRegions[rand.Intn(len(validRegions))]
-	prefix := fmt.Sprintf("icl-da-%s", strings.ToLower(random.UniqueId()))
+	prefix := "icl-da"
 
 	// Verify ibmcloud_api_key variable is set
 	checkVariable := "TF_VAR_ibmcloud_api_key"
@@ -87,6 +87,7 @@ func TestRunFullyConfigurable(t *testing.T) {
 		{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
+		{Name: "management_endpoint_type_for_bucket", Value: "public", DataType: "string"},
 	}
 
 	err := options.RunSchematicTest()
@@ -97,7 +98,7 @@ func TestSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
 	var region = validRegions[rand.Intn(len(validRegions))]
-	prefix := fmt.Sprintf("icl-da-secure-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("iclda-sec-%s", strings.ToLower(random.UniqueId()))
 
 	// ------------------------------------------------------------------------------------
 	// Provision COS and EN first
@@ -160,8 +161,8 @@ func TestSecurityEnforced(t *testing.T) {
 			{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 			{Name: "existing_cos_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-			{Name: "existing_event_notifications_instances", Value: terraform.OutputListOfObjects(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
-			{Name: "event_notifications_email_list", Value: []string{"Goldeneye.Development@ibm.com"}, DataType: "list(string)"},
+			{Name: "existing_event_notifications_instances", Value: terraform.OutputJson(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
+			{Name: "management_endpoint_type_for_bucket", Value: "private", DataType: "string"},
 		}
 
 		err := options.RunSchematicTest()
