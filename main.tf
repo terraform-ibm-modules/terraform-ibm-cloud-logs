@@ -222,3 +222,34 @@ resource "ibm_logs_policy" "logs_policies" {
     }
   }
 }
+
+
+##############################################################################
+# CBR
+##############################################################################
+
+module "cbr_rule" {
+  count            = length(var.cbr_rules)
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
+  version          = "1.29.0"
+  rule_description = var.cbr_rules[count.index].description
+  enforcement_mode = var.cbr_rules[count.index].enforcement_mode
+  rule_contexts    = var.cbr_rules[count.index].rule_contexts
+  resources = [{
+    attributes = [
+      {
+        name  = "accountId"
+        value = var.cbr_rules[count.index].account_id
+      },
+      {
+        name  = "serviceName"
+        value = "logs"
+      },
+      {
+        name     = "serviceInstance"
+        value    = ibm_resource_instance.cloud_logs.guid
+        operator = "stringEquals"
+      }
+    ]
+  }]
+}
