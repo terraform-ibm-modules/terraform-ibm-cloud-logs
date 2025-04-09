@@ -8,6 +8,11 @@ output "guid" {
   description = "The guid of the provisioned Cloud Logs instance."
 }
 
+output "account_id" {
+  value       = ibm_resource_instance.cloud_logs.account_id
+  description = "The account id where cloud logs instance is provisioned."
+}
+
 output "name" {
   value       = ibm_resource_instance.cloud_logs.name
   description = "The name of the provisioned Cloud Logs instance."
