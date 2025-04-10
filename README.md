@@ -52,6 +52,7 @@ module "cloud_logs" {
       bucket_endpoint = "s3.direct.us-south.cloud-object-storage.appdomain.cloud"
     }
   }
+
   # Create policies
   policies = [{
     logs_policy_name        = "logs_policy_name"
@@ -67,6 +68,26 @@ module "cloud_logs" {
     log_rules = [{
       severities = ["info", "debug"]
     }]
+  }]
+
+  # CBR
+    # CBR
+  cbr_rules = [{
+    description      = "Rules for cloud logs access"
+    account_id       = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+    enforcement_mode = "report"
+    rule_contexts = [{
+      attributes = [
+        {
+          "name" : "endpointType",
+          "value" : "private"
+        },
+        {
+          name  = "networkZoneId"
+          value = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+        }
+      ]
+      }]
   }]
 }
 ```
@@ -143,6 +164,7 @@ You need the following permissions to run this module.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_account_id"></a> [account\_id](#output\_account\_id) | The account id where cloud logs instance is provisioned. |
 | <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the provisioned Cloud Logs instance. |
 | <a name="output_guid"></a> [guid](#output\_guid) | The guid of the provisioned Cloud Logs instance. |
 | <a name="output_ingress_endpoint"></a> [ingress\_endpoint](#output\_ingress\_endpoint) | The public ingress endpoint of the provisioned Cloud Logs instance. |
