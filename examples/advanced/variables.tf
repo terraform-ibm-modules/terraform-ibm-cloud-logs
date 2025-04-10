@@ -2,29 +2,10 @@
 # Input variables
 ########################################################################################################################
 
-#
-# Module developer tips:
-#   - Examples are references that consumers can use to see how the module can be consumed. They are not designed to be
-#     flexible re-usable solutions for general consumption, so do not expose any more variables here and instead hard
-#     code things in the example main.tf with code comments explaining the different configurations.
-#   - For the same reason as above, do not add default values to the example inputs.
-#
-
 variable "ibmcloud_api_key" {
   type        = string
   description = "The IBM Cloud API Key."
   sensitive   = true
-}
-
-variable "provider_visibility" {
-  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
-  type        = string
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
-    error_message = "Invalid visibility option. Allowed values are 'public', 'private', or 'public-and-private'."
-  }
 }
 
 variable "region" {

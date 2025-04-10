@@ -71,7 +71,6 @@ module "cloud_logs" {
   }]
 
   # CBR
-    # CBR
   cbr_rules = [{
     description      = "Rules for cloud logs access"
     account_id       = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"

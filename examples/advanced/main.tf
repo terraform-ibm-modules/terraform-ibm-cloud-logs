@@ -111,21 +111,6 @@ module "buckets" {
 # Create CBR Zone
 ##############################################################################
 
-module "cbr_zone" {
-  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.29.0"
-  name             = "${var.prefix}-icl-zone"
-  zone_description = "CBR Network zone containing ICL"
-  account_id       = module.cloud_logs.account_id
-  addresses = [{
-    type = "serviceRef",
-    ref = {
-      account_id   = module.cloud_logs.account_id
-      service_name = "logs"
-    }
-  }]
-}
-
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
@@ -200,21 +185,10 @@ module "cloud_logs" {
   }]
 
   cbr_rules = [{
-    description      = "${var.prefix}-icl access from network zone to access the cloud logs instance."
+    description      = "${var.prefix}-icl rules to access the cloud logs instance in schematics network zone"
     account_id       = module.cloud_logs.account_id
     enforcement_mode = "report"
     rule_contexts = [{
-      attributes = [
-        {
-          "name" : "endpointType",
-          "value" : "private"
-        },
-        {
-          name  = "networkZoneId"
-          value = module.cbr_zone.zone_id
-        }
-      ]
-      }, {
       attributes = [
         {
           "name" : "endpointType",
