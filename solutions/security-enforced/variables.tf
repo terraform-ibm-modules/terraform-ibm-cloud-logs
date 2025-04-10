@@ -144,16 +144,16 @@ variable "existing_kms_key_crn" {
   }
 }
 
-variable "cloud_log_storage_key_ring" {
+variable "cloud_logs_cos_key_ring_name" {
   type        = string
-  default     = "cos-key-ring"
-  description = "The name for the key ring created for the Cloud Logs Object Storage bucket key. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "cloud-logs-cos-key-ring"
+  description = "The name for the key ring created for the key used for both of the Cloud Logs Object Storage buckets. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "cloud_log_storage_key" {
+variable "cloud_logs_cos_key_name" {
   type        = string
-  default     = "cos-key"
-  description = "The name for the key created for the Cloud Logs Object Storage bucket. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  default     = "cloud-logs-cos-key"
+  description = "The name for the key created to encrypt both of the Cloud Logs Object Storage buckets. Applies only if encryption is desired and if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
 variable "ibmcloud_kms_api_key" {
@@ -178,7 +178,7 @@ variable "existing_event_notifications_instances" {
     email_list          = optional(list(string), [])
   }))
   default     = []
-  description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
+  description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."
 }
 
 ##############################################################################
@@ -193,7 +193,7 @@ variable "logs_routing_tenant_regions" {
 }
 
 variable "skip_logs_routing_auth_policy" {
-  description = "Whether to create an IAM authorization policy that permits the Logs Routing server 'Sender' access to the IBM Cloud Logs instance created by this module."
+  description = "Whether to create an IAM authorization policy that permits the Logs Routing server 'Sender' access to the IBM Cloud Logs instance created by this Deployable Architecture."
   type        = bool
   default     = false
 }
@@ -230,7 +230,7 @@ variable "logs_policies" {
       id = string
     })))
   }))
-  description = "Configuration of Cloud Logs policies."
+  description = "Configuration of Cloud Logs policies. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."
   default     = []
 
   validation {

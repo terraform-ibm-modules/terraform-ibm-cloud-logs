@@ -20,8 +20,8 @@ module "security_enforced" {
   existing_kms_instance_crn              = var.existing_kms_instance_crn
   existing_kms_key_crn                   = var.existing_kms_key_crn
   kms_endpoint_type                      = "private"
-  cloud_log_storage_key_ring             = var.cloud_log_storage_key_ring
-  cloud_log_storage_key                  = var.cloud_log_storage_key
+  cloud_logs_cos_key_ring_name           = var.cloud_logs_cos_key_ring_name
+  cloud_logs_cos_key_name                = var.cloud_logs_cos_key_name
   existing_event_notifications_instances = var.existing_event_notifications_instances
   skip_logs_routing_auth_policy          = var.skip_logs_routing_auth_policy
   logs_routing_tenant_regions            = var.logs_routing_tenant_regions

@@ -207,10 +207,10 @@
                 ]
               },
               {
-                "key": "cloud_log_storage_key_ring"
+                "key": "cloud_logs_cos_key_ring_name"
               },
               {
-                "key": "cloud_log_storage_key"
+                "key": "cloud_logs_cos_key_name"
               },
               {
                 "key": "ibmcloud_kms_api_key"
@@ -388,10 +388,10 @@
                 "key": "existing_kms_key_crn"
               },
               {
-                "key": "cloud_log_storage_key_ring"
+                "key": "cloud_logs_cos_key_ring_name"
               },
               {
-                "key": "cloud_log_storage_key"
+                "key": "cloud_logs_cos_key_name"
               },
               {
                 "key": "ibmcloud_kms_api_key"

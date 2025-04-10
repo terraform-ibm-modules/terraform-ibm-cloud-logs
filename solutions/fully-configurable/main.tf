@@ -62,8 +62,8 @@ locals {
   metrics_bucket_name = try("${local.prefix}-${var.metrics_cos_bucket_name}", var.metrics_cos_bucket_name)
   cos_instance_guid   = module.existing_cos_instance_crn_parser.service_instance
 
-  key_ring_name = try("${local.prefix}-${var.cloud_log_storage_key_ring}", var.cloud_log_storage_key_ring)
-  key_name      = try("${local.prefix}-${var.cloud_log_storage_key}", var.cloud_log_storage_key)
+  key_ring_name = try("${local.prefix}-${var.cloud_logs_cos_key_ring_name}", var.cloud_logs_cos_key_ring_name)
+  key_name      = try("${local.prefix}-${var.cloud_logs_cos_key_name}", var.cloud_logs_cos_key_name)
   kms_key_crn   = var.kms_encryption_enabled_bucket ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
   kms_key_id    = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
 
