@@ -27,12 +27,17 @@ output "en_crns" {
   value = [
     {
       en_instance_id = module.event_notifications1.guid,
-      en_region      = var.region,
+      en_region      = "us-south",
       email_list     = ["Goldeneye.Development@ibm.com"]
     },
     {
       en_instance_id = module.event_notifications2.guid,
-      en_region      = var.region,
+      en_region      = "eu-gb",
+      email_list     = ["Goldeneye.Development@ibm.com"]
+    },
+    {
+      en_instance_id = module.event_notifications3.guid,
+      en_region      = "au-syd",
       email_list     = ["Goldeneye.Development@ibm.com"]
     }
   ]

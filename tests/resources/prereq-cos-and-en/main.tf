@@ -19,6 +19,16 @@ module "resource_group2" {
 }
 
 ##############################################################################
+# Resource Group 3
+##############################################################################
+
+module "resource_group3" {
+  source              = "terraform-ibm-modules/resource-group/ibm"
+  version             = "1.1.6"
+  resource_group_name = "${var.prefix}-resource-group3"
+}
+
+##############################################################################
 # Create Cloud Object Storage instance
 ##############################################################################
 
@@ -42,7 +52,7 @@ module "event_notifications1" {
   name              = "${var.prefix}-en1"
   tags              = var.resource_tags
   plan              = "lite"
-  region            = var.region
+  region            = "us-south"
 }
 
 ##############################################################################
@@ -56,5 +66,19 @@ module "event_notifications2" {
   name              = "${var.prefix}-en2"
   tags              = var.resource_tags
   plan              = "lite"
-  region            = var.region
+  region            = "eu-gb"
+}
+
+##############################################################################
+# Event Notifications 3
+##############################################################################
+
+module "event_notifications3" {
+  source            = "terraform-ibm-modules/event-notifications/ibm"
+  version           = "1.18.8"
+  resource_group_id = module.resource_group3.resource_group_id
+  name              = "${var.prefix}-en3"
+  tags              = var.resource_tags
+  plan              = "lite"
+  region            = "au-syd"
 }

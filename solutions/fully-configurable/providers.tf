@@ -21,3 +21,38 @@ provider "ibm" {
   region           = var.region
   visibility       = var.provider_visibility
 }
+
+provider "ibm" {
+  alias            = "en-au-syd"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = "au-syd"
+  visibility       = var.provider_visibility
+}
+
+provider "ibm" {
+  alias            = "en-eu-de"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = "eu-de"
+  visibility       = var.provider_visibility
+}
+
+provider "ibm" {
+  alias            = "en-eu-es"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = "eu-es"
+  visibility       = var.provider_visibility
+}
+
+provider "ibm" {
+  alias            = "en-eu-gb"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = "eu-gb"
+  visibility       = var.provider_visibility
+}
+
+provider "ibm" {
+  alias            = "en-us-south"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = "us-south"
+  visibility       = var.provider_visibility
+}

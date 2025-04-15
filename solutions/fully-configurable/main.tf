@@ -204,26 +204,23 @@ module "kms" {
 # Event Notifications
 #######################################################################################################################
 
-locals {
-  # tflint-ignore: terraform_unused_declarations
-  # pass_emails = length(var.existing_event_notifications_instances) > 0 && length(var.event_notifications_email_list) == 0 ? tobool("You must pass at least one email address if setting up Event Notifications Integration.") : true
-
-  en_subscription_email = try("${local.prefix}-Email for Cloud Logs Subscription", "Email for Cloud Logs Subscription")
-}
-
-data "ibm_en_destinations" "en_destinations" {
-  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
-  instance_guid = each.key
-}
-
 resource "time_sleep" "wait_for_cloud_logs" {
   depends_on      = [module.cloud_logs]
   create_duration = "60s"
 }
 
-resource "ibm_en_topic" "en_topic" {
+# au-syd region
+
+data "ibm_en_destinations" "en_destinations_au_syd" {
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "au-syd" }
+  provider      = ibm.en-au-syd
+  instance_guid = each.key
+}
+
+resource "ibm_en_topic" "en_topic_au_syd" {
   depends_on    = [time_sleep.wait_for_cloud_logs]
-  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "au-syd" }
+  provider      = ibm.en-au-syd
   instance_guid = each.key
   name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
   description   = "Topic for Cloud Logs events routing"
@@ -236,13 +233,178 @@ resource "ibm_en_topic" "en_topic" {
   }
 }
 
-resource "ibm_en_subscription_email" "email_subscription" {
-  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
+resource "ibm_en_subscription_email" "email_subscription_au_syd" {
+  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "au-syd" }
+  provider       = ibm.en-au-syd
   instance_guid  = each.key
-  name           = local.en_subscription_email
+  name           = try("${local.prefix}-Email for Cloud Logs Subscription in au-syd", "Email for Cloud Logs Subscription in au-syd")
   description    = "Subscription for Cloud Logs Events"
-  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
-  topic_id       = ibm_en_topic.en_topic[each.key].topic_id
+  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations_au_syd[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
+  topic_id       = ibm_en_topic.en_topic_au_syd[each.key].topic_id
+  attributes {
+    add_notification_payload = true
+    reply_to_mail            = each.value["reply_to_email"]
+    reply_to_name            = "Cloud Logs Event Notifications Bot"
+    from_name                = each.value["from_email"]
+    invited                  = each.value["email_list"]
+  }
+}
+
+# eu-de region
+
+data "ibm_en_destinations" "en_destinations_eu_de" {
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-de" }
+  provider      = ibm.en-eu-de
+  instance_guid = each.key
+}
+
+resource "ibm_en_topic" "en_topic_eu_de" {
+  depends_on    = [time_sleep.wait_for_cloud_logs]
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-de" }
+  provider      = ibm.en-eu-de
+  instance_guid = each.key
+  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
+  description   = "Topic for Cloud Logs events routing"
+  sources {
+    id = local.cloud_logs_crn
+    rules {
+      enabled           = true
+      event_type_filter = "$.*"
+    }
+  }
+}
+
+resource "ibm_en_subscription_email" "email_subscription_eu_de" {
+  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-de" }
+  provider       = ibm.en-eu-de
+  instance_guid  = each.key
+  name           = try("${local.prefix}-Email for Cloud Logs Subscription in eu-de", "Email for Cloud Logs Subscription in eu-de")
+  description    = "Subscription for Cloud Logs Events"
+  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations_eu_de[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
+  topic_id       = ibm_en_topic.en_topic_eu_de[each.key].topic_id
+  attributes {
+    add_notification_payload = true
+    reply_to_mail            = each.value["reply_to_email"]
+    reply_to_name            = "Cloud Logs Event Notifications Bot"
+    from_name                = each.value["from_email"]
+    invited                  = each.value["email_list"]
+  }
+}
+
+# eu-es region
+
+data "ibm_en_destinations" "en_destinations_eu_es" {
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-es" }
+  provider      = ibm.en-eu-es
+  instance_guid = each.key
+}
+
+resource "ibm_en_topic" "en_topic_eu_es" {
+  depends_on    = [time_sleep.wait_for_cloud_logs]
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-es" }
+  provider      = ibm.en-eu-es
+  instance_guid = each.key
+  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
+  description   = "Topic for Cloud Logs events routing"
+  sources {
+    id = local.cloud_logs_crn
+    rules {
+      enabled           = true
+      event_type_filter = "$.*"
+    }
+  }
+}
+
+resource "ibm_en_subscription_email" "email_subscription_eu_es" {
+  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-es" }
+  provider       = ibm.en-eu-es
+  instance_guid  = each.key
+  name           = try("${local.prefix}-Email for Cloud Logs Subscription in eu-es", "Email for Cloud Logs Subscription in eu-es")
+  description    = "Subscription for Cloud Logs Events"
+  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations_eu_es[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
+  topic_id       = ibm_en_topic.en_topic_eu_es[each.key].topic_id
+  attributes {
+    add_notification_payload = true
+    reply_to_mail            = each.value["reply_to_email"]
+    reply_to_name            = "Cloud Logs Event Notifications Bot"
+    from_name                = each.value["from_email"]
+    invited                  = each.value["email_list"]
+  }
+}
+
+# eu-gb region
+
+data "ibm_en_destinations" "en_destinations_eu_gb" {
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-gb" }
+  provider      = ibm.en-eu-gb
+  instance_guid = each.key
+}
+
+resource "ibm_en_topic" "en_topic_eu_gb" {
+  depends_on    = [time_sleep.wait_for_cloud_logs]
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-gb" }
+  provider      = ibm.en-eu-gb
+  instance_guid = each.key
+  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
+  description   = "Topic for Cloud Logs events routing"
+  sources {
+    id = local.cloud_logs_crn
+    rules {
+      enabled           = true
+      event_type_filter = "$.*"
+    }
+  }
+}
+
+resource "ibm_en_subscription_email" "email_subscription_eu_gb" {
+  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "eu-gb" }
+  provider       = ibm.en-eu-gb
+  instance_guid  = each.key
+  name           = try("${local.prefix}-Email for Cloud Logs Subscription in eu-gb", "Email for Cloud Logs Subscription in eu-gb")
+  description    = "Subscription for Cloud Logs Events"
+  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations_eu_gb[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
+  topic_id       = ibm_en_topic.en_topic_eu_gb[each.key].topic_id
+  attributes {
+    add_notification_payload = true
+    reply_to_mail            = each.value["reply_to_email"]
+    reply_to_name            = "Cloud Logs Event Notifications Bot"
+    from_name                = each.value["from_email"]
+    invited                  = each.value["email_list"]
+  }
+}
+
+# us-south region
+
+data "ibm_en_destinations" "en_destinations_us_south" {
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "us-south" }
+  provider      = ibm.en-us-south
+  instance_guid = each.key
+}
+
+resource "ibm_en_topic" "en_topic_us_south" {
+  depends_on    = [time_sleep.wait_for_cloud_logs]
+  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "us-south" }
+  provider      = ibm.en-us-south
+  instance_guid = each.key
+  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
+  description   = "Topic for Cloud Logs events routing"
+  sources {
+    id = local.cloud_logs_crn
+    rules {
+      enabled           = true
+      event_type_filter = "$.*"
+    }
+  }
+}
+
+resource "ibm_en_subscription_email" "email_subscription_us_south" {
+  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance if instance.en_region == "us-south" }
+  provider       = ibm.en-us-south
+  instance_guid  = each.key
+  name           = try("${local.prefix}-Email for Cloud Logs Subscription in us-south", "Email for Cloud Logs Subscription in us-south")
+  description    = "Subscription for Cloud Logs Events"
+  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations_us_south[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
+  topic_id       = ibm_en_topic.en_topic_us_south[each.key].topic_id
   attributes {
     add_notification_payload = true
     reply_to_mail            = each.value["reply_to_email"]

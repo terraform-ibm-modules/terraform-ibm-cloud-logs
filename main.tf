@@ -103,12 +103,12 @@ resource "ibm_iam_authorization_policy" "en_policy" {
 
 resource "time_sleep" "wait_for_en_authorization_policy" {
   depends_on      = [ibm_iam_authorization_policy.en_policy]
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 resource "ibm_logs_outgoing_webhook" "en_integration" {
   depends_on  = [time_sleep.wait_for_en_authorization_policy]
-  for_each    = { for idx, en in var.existing_event_notifications_instances : idx => en }
+  for_each    = { for idx, en in var.existing_event_notifications_instances : "${idx}-${en.en_region}" => en }
   instance_id = ibm_resource_instance.cloud_logs.guid
   region      = var.region
   name        = each.value.en_integration_name == null ? "${local.instance_name}-en-integration-${each.key}" : each.value.en_integration_name
