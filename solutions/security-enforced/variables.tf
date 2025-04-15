@@ -16,7 +16,7 @@ variable "existing_resource_group_name" {
 
 variable "prefix" {
   type        = string
-  description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
+  description = "The prefix to add to all resources that this solution creates. Prefix must begin with a lowercase letter, contain only lowercase letters, numbers, and - characters. Prefixes must end with a lowercase letter or number and be 16 or fewer characters. It also cannot have a `--`. To not use any prefix value, you can set this value to `null` or an empty string."
   nullable    = true
   validation {
     condition = (var.prefix == null ? true :
@@ -53,7 +53,7 @@ variable "cloud_logs_resource_tags" {
 
 variable "cloud_logs_access_tags" {
   type        = list(string)
-  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the module. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
+  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the DA. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
   default     = []
 }
 
@@ -81,14 +81,14 @@ variable "logs_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-logs-bucket"
-  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs."
+  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
 variable "metrics_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-metrics-bucket"
-  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs."
+  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
 variable "cloud_logs_cos_buckets_class" {
@@ -115,6 +115,7 @@ variable "skip_cos_kms_iam_auth_policy" {
 variable "existing_kms_instance_crn" {
   type        = string
   description = "The CRN of the existing KMS instance (Hyper Protect Crypto Services or Key Protect)."
+  default     = null
 
   validation {
     condition = anytrue([
@@ -123,12 +124,17 @@ variable "existing_kms_instance_crn" {
     ])
     error_message = "The provided KMS instance CRN in the input 'existing_kms_instance_crn' in not valid."
   }
+
+  validation {
+    condition     = var.existing_kms_instance_crn == null ? var.existing_kms_instance_crn != null : true
+    error_message = "A value must be passed for either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use existing key) to encrypt the COS bucket."
+  }
 }
 
 variable "existing_kms_key_crn" {
   type        = string
   default     = null
-  description = "The CRN of an existing KMS key to use to encrypt the Cloud Logs Object Storage bucket. If no value is set for this variable and bucket encryption is desired, specify a value for the `existing_kms_instance_crn` variable to create a key ring and key."
+  description = "The CRN of an existing KMS key to use to encrypt both of the Cloud Logs Object Storage buckets. If no value is set for this variable and bucket encryption is desired, specify a value for the `existing_kms_instance_crn` variable to create a key ring and key."
 
   validation {
     condition = anytrue([
@@ -173,9 +179,6 @@ variable "existing_event_notifications_instances" {
     en_region           = string
     en_integration_name = optional(string)
     skip_en_auth_policy = optional(bool, false)
-    from_email          = optional(string, "cloudlogsalert@ibm.com")
-    reply_to_email      = optional(string, "no-reply@ibm.com")
-    email_list          = optional(list(string), [])
   }))
   default     = []
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."

@@ -185,7 +185,7 @@
                 "key": "skip_cos_kms_iam_auth_policy"
               },
               {
-                "key": "kms_encryption_enabled_bucket"
+                "key": "kms_encryption_enabled_buckets"
               },
               {
                 "key": "existing_kms_instance_crn"

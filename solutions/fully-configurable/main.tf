@@ -52,11 +52,11 @@ module "cloud_logs" {
 #######################################################################################################################
 
 locals {
-  use_kms_module    = var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null
-  kms_region        = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].region : null
-  existing_kms_guid = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
-  kms_service_name  = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
-  kms_account_id    = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
+  use_kms_module    = var.kms_encryption_enabled_buckets && var.existing_kms_key_crn == null
+  kms_region        = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].region : null
+  existing_kms_guid = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
+  kms_service_name  = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
+  kms_account_id    = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
 
   logs_bucket_name    = try("${local.prefix}-${var.logs_cos_bucket_name}", var.logs_cos_bucket_name)
   metrics_bucket_name = try("${local.prefix}-${var.metrics_cos_bucket_name}", var.metrics_cos_bucket_name)
@@ -64,7 +64,7 @@ locals {
 
   key_ring_name = try("${local.prefix}-${var.cloud_logs_cos_key_ring_name}", var.cloud_logs_cos_key_ring_name)
   key_name      = try("${local.prefix}-${var.cloud_logs_cos_key_name}", var.cloud_logs_cos_key_name)
-  kms_key_crn   = var.kms_encryption_enabled_bucket ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
+  kms_key_crn   = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
   kms_key_id    = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
 
   create_cross_account_auth_policy = var.existing_cloud_logs_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : true : false
@@ -86,9 +86,9 @@ module "buckets" {
   bucket_configs = [
     {
       bucket_name              = local.logs_bucket_name
-      kms_key_crn              = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
-      kms_guid                 = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
-      kms_encryption_enabled   = var.kms_encryption_enabled_bucket
+      kms_key_crn              = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
+      kms_guid                 = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_encryption_enabled   = var.kms_encryption_enabled_buckets
       region_location          = var.region
       resource_instance_id     = var.existing_cos_instance_crn
       management_endpoint_type = var.management_endpoint_type_for_bucket
@@ -96,9 +96,9 @@ module "buckets" {
     },
     {
       bucket_name                   = local.metrics_bucket_name
-      kms_key_crn                   = var.kms_encryption_enabled_bucket ? local.kms_key_crn : null
-      kms_guid                      = var.kms_encryption_enabled_bucket ? module.existing_kms_crn_parser[0].service_instance : null
-      kms_encryption_enabled        = var.kms_encryption_enabled_bucket
+      kms_key_crn                   = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
+      kms_guid                      = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_encryption_enabled        = var.kms_encryption_enabled_buckets
       region_location               = var.region
       resource_instance_id          = var.existing_cos_instance_crn
       management_endpoint_type      = var.management_endpoint_type_for_bucket
@@ -198,56 +198,4 @@ module "kms" {
       ]
     }
   ]
-}
-
-#######################################################################################################################
-# Event Notifications
-#######################################################################################################################
-
-locals {
-  # tflint-ignore: terraform_unused_declarations
-  # pass_emails = length(var.existing_event_notifications_instances) > 0 && length(var.event_notifications_email_list) == 0 ? tobool("You must pass at least one email address if setting up Event Notifications Integration.") : true
-
-  en_subscription_email = try("${local.prefix}-Email for Cloud Logs Subscription", "Email for Cloud Logs Subscription")
-}
-
-data "ibm_en_destinations" "en_destinations" {
-  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
-  instance_guid = each.key
-}
-
-resource "time_sleep" "wait_for_cloud_logs" {
-  depends_on      = [module.cloud_logs]
-  create_duration = "60s"
-}
-
-resource "ibm_en_topic" "en_topic" {
-  depends_on    = [time_sleep.wait_for_cloud_logs]
-  for_each      = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
-  instance_guid = each.key
-  name          = "Topic for Cloud Logs instance ${module.cloud_logs[0].guid}"
-  description   = "Topic for Cloud Logs events routing"
-  sources {
-    id = local.cloud_logs_crn
-    rules {
-      enabled           = true
-      event_type_filter = "$.*"
-    }
-  }
-}
-
-resource "ibm_en_subscription_email" "email_subscription" {
-  for_each       = { for instance in var.existing_event_notifications_instances : instance.en_instance_id => instance }
-  instance_guid  = each.key
-  name           = local.en_subscription_email
-  description    = "Subscription for Cloud Logs Events"
-  destination_id = [for s in toset(data.ibm_en_destinations.en_destinations[each.key].destinations) : s.id if s.type == "smtp_ibm"][0]
-  topic_id       = ibm_en_topic.en_topic[each.key].topic_id
-  attributes {
-    add_notification_payload = true
-    reply_to_mail            = each.value["reply_to_email"]
-    reply_to_name            = "Cloud Logs Event Notifications Bot"
-    from_name                = each.value["from_email"]
-    invited                  = each.value["email_list"]
-  }
 }
