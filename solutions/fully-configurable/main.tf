@@ -58,12 +58,12 @@ locals {
   kms_service_name  = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
   kms_account_id    = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
 
-  data_bucket_name    = "${local.prefix}-${var.cloud_logs_data_cos_bucket_name}"
-  metrics_bucket_name = "${local.prefix}-${var.cloud_logs_metrics_cos_bucket_name}"
+  data_bucket_name    = "${local.prefix}${var.cloud_logs_data_cos_bucket_name}"
+  metrics_bucket_name = "${local.prefix}${var.cloud_logs_metrics_cos_bucket_name}"
   cos_instance_guid   = module.existing_cos_instance_crn_parser.service_instance
 
-  key_ring_name = "${local.prefix}-${var.cloud_logs_cos_key_ring_name}"
-  key_name      = "${local.prefix}-${var.cloud_logs_cos_key_name}"
+  key_ring_name = "${local.prefix}${var.cloud_logs_cos_key_ring_name}"
+  key_name      = "${local.prefix}${var.cloud_logs_cos_key_name}"
   kms_key_crn   = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
   kms_key_id    = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
 
