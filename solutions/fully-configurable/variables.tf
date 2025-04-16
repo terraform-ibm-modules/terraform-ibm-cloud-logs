@@ -47,45 +47,6 @@ variable "region" {
 }
 
 ########################################################################################################################
-# Cloud Logs
-########################################################################################################################
-
-variable "existing_cloud_logs_crn" {
-  type        = string
-  default     = null
-  description = "The CRN of an existing Cloud Logs instance. If not supplied, a new instance will be created."
-}
-
-variable "cloud_logs_instance_name" {
-  type        = string
-  description = "The name of the IBM Cloud Logs instance to create."
-  default     = "cloud-logs"
-}
-
-variable "cloud_logs_resource_tags" {
-  type        = list(string)
-  description = "Tags associated with the IBM Cloud Logs instance (Optional, array of strings)."
-  default     = []
-}
-
-variable "cloud_logs_access_tags" {
-  type        = list(string)
-  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the DA. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
-  default     = []
-}
-
-variable "cloud_logs_retention_period" {
-  type        = number
-  description = "The number of days IBM Cloud Logs will retain the logs data in Priority insights. Allowed values: 7, 14, 30, 60, 90."
-  default     = 7
-
-  validation {
-    condition     = contains([7, 14, 30, 60, 90], var.cloud_logs_retention_period)
-    error_message = "Valid values 'cloud_logs_retention_period' are: 7, 14, 30, 60, 90"
-  }
-}
-
-########################################################################################################################
 # COS
 ########################################################################################################################
 
@@ -99,14 +60,14 @@ variable "existing_cos_instance_crn" {
   }
 }
 
-variable "logs_cos_bucket_name" {
+variable "cloud_logs_data_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-logs-bucket"
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "metrics_cos_bucket_name" {
+variable "cloud_logs_metrics_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-metrics-bucket"
@@ -123,13 +84,13 @@ variable "cloud_logs_cos_buckets_class" {
   }
 }
 
-variable "management_endpoint_type_for_bucket" {
-  description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`m `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network."
+variable "management_endpoint_type_for_buckets" {
+  description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`, `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network."
   type        = string
   default     = "private"
   validation {
-    condition     = contains(["public", "private", "direct"], var.management_endpoint_type_for_bucket)
-    error_message = "The specified management_endpoint_type_for_bucket is not a valid selection!"
+    condition     = contains(["public", "private", "direct"], var.management_endpoint_type_for_buckets)
+    error_message = "The specified management_endpoint_type_for_buckets is not a valid selection!"
   }
 }
 
@@ -246,6 +207,45 @@ variable "ibmcloud_kms_api_key" {
   validation {
     condition     = var.ibmcloud_kms_api_key != null ? var.existing_cloud_logs_crn == null : true
     error_message = "A value should not be passed for 'ibmcloud_kms_api_key' when passing an existing Cloud Logs instance using the 'existing_cloud_logs_crn' input."
+  }
+}
+
+########################################################################################################################
+# Cloud Logs
+########################################################################################################################
+
+variable "existing_cloud_logs_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Cloud Logs instance. If not supplied, a new instance will be created."
+}
+
+variable "cloud_logs_instance_name" {
+  type        = string
+  description = "The name of the IBM Cloud Logs instance to create."
+  default     = "cloud-logs"
+}
+
+variable "cloud_logs_resource_tags" {
+  type        = list(string)
+  description = "Tags associated with the IBM Cloud Logs instance (Optional, array of strings)."
+  default     = []
+}
+
+variable "cloud_logs_access_tags" {
+  type        = list(string)
+  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the DA. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
+  default     = []
+}
+
+variable "cloud_logs_retention_period" {
+  type        = number
+  description = "The number of days IBM Cloud Logs will retain the logs data in Priority insights. Allowed values: 7, 14, 30, 60, 90."
+  default     = 7
+
+  validation {
+    condition     = contains([7, 14, 30, 60, 90], var.cloud_logs_retention_period)
+    error_message = "Valid values 'cloud_logs_retention_period' are: 7, 14, 30, 60, 90"
   }
 }
 

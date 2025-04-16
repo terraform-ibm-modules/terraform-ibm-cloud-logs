@@ -11,10 +11,10 @@ module "security_enforced" {
   cloud_logs_access_tags                 = var.cloud_logs_access_tags
   cloud_logs_retention_period            = var.cloud_logs_retention_period
   existing_cos_instance_crn              = var.existing_cos_instance_crn
-  logs_cos_bucket_name                   = var.logs_cos_bucket_name
-  metrics_cos_bucket_name                = var.metrics_cos_bucket_name
+  cloud_logs_data_cos_bucket_name        = var.cloud_logs_data_cos_bucket_name
+  cloud_logs_metrics_cos_bucket_name     = var.cloud_logs_metrics_cos_bucket_name
   cloud_logs_cos_buckets_class           = var.cloud_logs_cos_buckets_class
-  management_endpoint_type_for_bucket    = "private"
+  management_endpoint_type_for_buckets   = "private"
   skip_cos_kms_iam_auth_policy           = var.skip_cos_kms_iam_auth_policy
   kms_encryption_enabled_buckets         = true
   existing_kms_instance_crn              = var.existing_kms_instance_crn

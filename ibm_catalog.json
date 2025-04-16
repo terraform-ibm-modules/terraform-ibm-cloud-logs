@@ -19,8 +19,6 @@
           "cloud logs",
           "observability",
           "logging",
-          "monitoring",
-          "monitor",
           "log"
         ],
         "short_description": "Creates and configures IBM Cloud Logs resources",
@@ -51,19 +49,69 @@
               },
               {
                 "key": "prefix",
-                "required": true,
-                "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+                "required": true
               },
               {
                 "key": "region",
-                "required": true
+                "required": true,
+                "options": [
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "BNPP_EU",
+                    "value": "bnpp-eu"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Washington (us-east)",
+                    "value": "us-east"
+                  },
+                  {
+                    "displayname": "Sao Paulo (br-sao)",
+                    "value": "br-sao"
+                  }
+                ]
               },
               {
                 "key": "existing_cos_instance_crn",
                 "required": true
               },
               {
-                "key": "existing_resource_group_name"
+                "key": "existing_resource_group_name",
+                "required": true,
+                "custom_config": {
+                  "type": "resource_group",
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                      "identifier": "rg_name"
+                  }
+                }
               },
               {
                 "key": "provider_visibility",
@@ -81,9 +129,6 @@
                     "value": "public-and-private"
                   }
                 ]
-              },
-              {
-                "key": "existing_cloud_logs_crn"
               },
               {
                 "key": "cloud_logs_instance_name"
@@ -134,10 +179,10 @@
                 ]
               },
               {
-                "key": "logs_cos_bucket_name"
+                "key": "cloud_logs_data_cos_bucket_name"
               },
               {
-                "key": "metrics_cos_bucket_name"
+                "key": "cloud_logs_metrics_cos_bucket_name"
               },
               {
                 "key": "cloud_logs_cos_buckets_class",
@@ -165,7 +210,7 @@
                 ]
               },
               {
-                "key": "management_endpoint_type_for_bucket",
+                "key": "management_endpoint_type_for_buckets",
                 "options": [
                   {
                     "displayname": "Direct",
@@ -226,6 +271,9 @@
               },
               {
                 "key": "logs_policies"
+              },
+              {
+                "key": "existing_cloud_logs_crn"
               }
             ],
             "iam_permissions": [
@@ -284,12 +332,53 @@
               },
               {
                 "key": "prefix",
-                "required": true,
-                "description": "Prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+                "required": true
               },
               {
                 "key": "region",
-                "required": true
+                "required": true,
+                "options": [
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "BNPP_EU",
+                    "value": "bnpp-eu"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Washington (us-east)",
+                    "value": "us-east"
+                  },
+                  {
+                    "displayname": "Sao Paulo (br-sao)",
+                    "value": "br-sao"
+                  }
+                ]
               },
               {
                 "key": "existing_cos_instance_crn",
@@ -300,7 +389,16 @@
                 "required": true
               },
               {
-                "key": "existing_resource_group_name"
+                "key": "existing_resource_group_name",
+                "required": true,
+                "custom_config": {
+                  "type": "resource_group",
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                      "identifier": "rg_name"
+                  }
+                }
               },
               {
                 "key": "cloud_logs_instance_name"
@@ -351,10 +449,10 @@
                 ]
               },
               {
-                "key": "logs_cos_bucket_name"
+                "key": "cloud_logs_data_cos_bucket_name"
               },
               {
-                "key": "metrics_cos_bucket_name"
+                "key": "cloud_logs_metrics_cos_bucket_name"
               },
               {
                 "key": "cloud_logs_cos_buckets_class",

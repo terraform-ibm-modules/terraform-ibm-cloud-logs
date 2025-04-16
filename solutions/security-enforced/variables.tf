@@ -36,39 +36,6 @@ variable "region" {
 }
 
 ########################################################################################################################
-# Cloud Logs
-########################################################################################################################
-
-variable "cloud_logs_instance_name" {
-  type        = string
-  description = "The name of the IBM Cloud Logs instance to create."
-  default     = "cloud-logs"
-}
-
-variable "cloud_logs_resource_tags" {
-  type        = list(string)
-  description = "Tags associated with the IBM Cloud Logs instance (Optional, array of strings)."
-  default     = []
-}
-
-variable "cloud_logs_access_tags" {
-  type        = list(string)
-  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the DA. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
-  default     = []
-}
-
-variable "cloud_logs_retention_period" {
-  type        = number
-  description = "The number of days IBM Cloud Logs will retain the logs data in Priority insights. Allowed values: 7, 14, 30, 60, 90."
-  default     = 7
-
-  validation {
-    condition     = contains([7, 14, 30, 60, 90], var.cloud_logs_retention_period)
-    error_message = "Valid values 'cloud_logs_retention_period' are: 7, 14, 30, 60, 90"
-  }
-}
-
-########################################################################################################################
 # COS
 ########################################################################################################################
 
@@ -77,14 +44,14 @@ variable "existing_cos_instance_crn" {
   description = "The CRN of an existing Object Storage instance."
 }
 
-variable "logs_cos_bucket_name" {
+variable "cloud_logs_data_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-logs-bucket"
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "metrics_cos_bucket_name" {
+variable "cloud_logs_metrics_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-metrics-bucket"
@@ -167,6 +134,39 @@ variable "ibmcloud_kms_api_key" {
   description = "The IBM Cloud API key that can create a root key and key ring in the key management service (KMS) instance. If not specified, the 'ibmcloud_api_key' variable is used. Specify this key if the instance in `existing_kms_instance_crn` is in an account that's different from the Cloud Logs instance. Leave this input empty if the same account owns both instances."
   sensitive   = true
   default     = null
+}
+
+########################################################################################################################
+# Cloud Logs
+########################################################################################################################
+
+variable "cloud_logs_instance_name" {
+  type        = string
+  description = "The name of the IBM Cloud Logs instance to create."
+  default     = "cloud-logs"
+}
+
+variable "cloud_logs_resource_tags" {
+  type        = list(string)
+  description = "Tags associated with the IBM Cloud Logs instance (Optional, array of strings)."
+  default     = []
+}
+
+variable "cloud_logs_access_tags" {
+  type        = list(string)
+  description = "A list of access tags to apply to the IBM Cloud Logs instance created by the DA. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial."
+  default     = []
+}
+
+variable "cloud_logs_retention_period" {
+  type        = number
+  description = "The number of days IBM Cloud Logs will retain the logs data in Priority insights. Allowed values: 7, 14, 30, 60, 90."
+  default     = 7
+
+  validation {
+    condition     = contains([7, 14, 30, 60, 90], var.cloud_logs_retention_period)
+    error_message = "Valid values 'cloud_logs_retention_period' are: 7, 14, 30, 60, 90"
+  }
 }
 
 ##############################################################################
