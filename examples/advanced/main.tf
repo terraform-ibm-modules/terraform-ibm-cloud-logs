@@ -20,11 +20,14 @@ locals {
 }
 
 module "key_protect" {
-  source            = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version           = "4.21.8"
-  resource_group_id = module.resource_group.resource_group_id
-  region            = var.region
-  resource_tags     = var.resource_tags
+  source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
+  version                     = "4.21.8"
+  resource_group_id           = module.resource_group.resource_group_id
+  region                      = var.region
+  resource_tags               = var.resource_tags
+  key_protect_allowed_network = "private-only"
+  key_endpoint_type           = "private"
+  key_ring_endpoint_type      = "private"
   keys = [
     {
       key_ring_name = local.key_ring_name

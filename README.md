@@ -35,7 +35,7 @@ provider "ibm" {
 
 # IBM Cloud Logs
 module "cloud_logs" {
-  source            = "terraform-ibm-modules/cloud_logs/ibm"
+  source            = "terraform-ibm-modules/cloud-logs/ibm"
   version           = "X.Y.Z" # Replace "X.Y.Z" with a release version to lock into a specific release
   resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
   region            = local.region
@@ -96,16 +96,16 @@ module "cloud_logs" {
 You need the following permissions to run this module.
 
 - Service
-    - **Resource group only**
-        - `Viewer` access on the specific resource group
-    - **Cloud Logs**
-        - `Editor` platform access
-        - `Manager` service access
-    - **IBM Cloud Logs Routing** (Required if creating tenants, which are required to enable platform logs)
-        - `Editor` platform access
-        - `Manager` service access
-    - **Tagging service** (Required if attaching access tags to the ICL instance)
-        - `Editor` platform access
+  - **Resource group only**
+    - `Viewer` access on the specific resource group
+  - **Cloud Logs**
+    - `Editor` platform access
+    - `Manager` service access
+  - **IBM Cloud Logs Routing** (Required if creating tenants, which are required to enable platform logs)
+    - `Editor` platform access
+    - `Manager` service access
+  - **Tagging service** (Required if attaching access tags to the ICL instance)
+    - `Editor` platform access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -144,7 +144,7 @@ You need the following permissions to run this module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_tags"></a> [access\_tags](#input\_access\_tags) | A list of access tags to apply to the IBM Cloud Logs instance created by the module. For more information, see https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial. | `list(string)` | `[]` | no |
+| <a name="input_access_tags"></a> [access\_tags](#input\_access\_tags) | A list of access tags to apply to the IBM Cloud Logs instance created by the module. For more information, see <https://cloud.ibm.com/docs/account?topic=account-access-tags-tutorial>. | `list(string)` | `[]` | no |
 | <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of context-based restrictions rules to create | <pre>list(object({<br/>    description = string<br/>    account_id  = string<br/>    rule_contexts = list(object({<br/>      attributes = optional(list(object({<br/>        name  = string<br/>        value = string<br/>    }))) }))<br/>    enforcement_mode = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_data_storage"></a> [data\_storage](#input\_data\_storage) | A logs data bucket and a metrics bucket in IBM Cloud Object Storage to store your IBM Cloud Logs data for long term storage, search, analysis and alerting. | <pre>object({<br/>    logs_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    metrics_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    }<br/>  )</pre> | <pre>{<br/>  "logs_data": null,<br/>  "metrics_data": null<br/>}</pre> | no |
 | <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    en_instance_id      = string<br/>    en_region           = string<br/>    en_integration_name = optional(string)<br/>    skip_en_auth_policy = optional(bool, false)<br/>  }))</pre> | `[]` | no |

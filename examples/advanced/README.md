@@ -9,5 +9,4 @@ Example that configures:
 - Cloud Logs with Event Notifications integration
 - Cloud Logs policies
 - Key Protect instance and root key
-- CBR network zone with the IBM Cloud Logs service as a service reference.
-- CBR rules to protect the targeted services such as IBM Cloud Object Storage.
+- Create a schematics network zone with a rule for context based restrictions
