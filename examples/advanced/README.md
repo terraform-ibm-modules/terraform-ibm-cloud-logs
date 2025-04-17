@@ -9,4 +9,4 @@ Example that configures:
 - Cloud Logs with Event Notifications integration
 - Cloud Logs policies
 - Key Protect instance and root key
-- Create a schematics network zone with a rule for context based restrictions
+- A context-based restriction (CBR) rule to only allow cloud logs to be accessible from schematics
