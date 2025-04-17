@@ -188,7 +188,7 @@ module "cloud_logs" {
   }]
 
   cbr_rules = [{
-    description      = "${var.prefix}-icl rules to access the cloud logs instance in schematics network zone"
+    description      = "${var.prefix}-icl access only from schematics"
     account_id       = module.cloud_logs.account_id
     enforcement_mode = "report"
     rule_contexts = [{
