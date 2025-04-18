@@ -20,11 +20,14 @@ locals {
 }
 
 module "key_protect" {
-  source            = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version           = "4.21.8"
-  resource_group_id = module.resource_group.resource_group_id
-  region            = var.region
-  resource_tags     = var.resource_tags
+  source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
+  version                     = "4.21.8"
+  resource_group_id           = module.resource_group.resource_group_id
+  region                      = var.region
+  resource_tags               = var.resource_tags
+  key_protect_allowed_network = "private-only"
+  key_endpoint_type           = "private"
+  key_ring_endpoint_type      = "private"
   keys = [
     {
       key_ring_name = local.key_ring_name
@@ -107,15 +110,29 @@ module "buckets" {
   ]
 }
 
+##############################################################################
+# Create CBR Zone
+##############################################################################
+
+# A network zone with service reference to schematics
+module "cbr_schematics_zone" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "1.29.0"
+  name             = "${var.prefix}-schematics-network-zone"
+  zone_description = "CBR Network zone for schematics"
+  account_id       = module.cloud_logs.account_id
+  addresses = [{
+    type = "serviceRef"
+    ref = {
+      account_id   = module.cloud_logs.account_id
+      service_name = "schematics"
+    }
+  }]
+}
+
 ########################################################################################################################
 # Cloud Logs
 ########################################################################################################################
-
-#
-# Developer tips:
-#   - Call the local module / modules in the example to show how they can be consumed
-#   - include the actual module source as a code comment like below so consumers know how to consume from correct location
-#
 
 locals {
   cloud_logs_instance_name = "${var.prefix}-cloud-logs"
@@ -168,5 +185,23 @@ module "cloud_logs" {
       en_instance_id      = module.event_notification_2.guid
       en_region           = var.region
       en_integration_name = "${var.prefix}-en-2"
+  }]
+
+  cbr_rules = [{
+    description      = "${var.prefix}-icl access only from schematics"
+    account_id       = module.cloud_logs.account_id
+    enforcement_mode = "report"
+    rule_contexts = [{
+      attributes = [
+        {
+          "name" : "endpointType",
+          "value" : "private"
+        },
+        {
+          name  = "networkZoneId"
+          value = module.cbr_schematics_zone.zone_id
+        }
+      ]
+    }]
   }]
 }
