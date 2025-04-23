@@ -58,6 +58,8 @@ func TestRunAdvancedExampleInSchematics(t *testing.T) {
 		Prefix:  "icl-adv",
 		TarIncludePatterns: []string{
 			"*.tf",
+			"modules/logs_policy" + "/*.tf",
+			"modules/webhook" + "/*.tf",
 			advancedExampleDir + "/*.tf",
 		},
 		ResourceGroup:          resourceGroup,
@@ -88,6 +90,8 @@ func TestRunUpgradeExampleInSchematics(t *testing.T) {
 		Prefix:  "icl-adv-upg",
 		TarIncludePatterns: []string{
 			"*.tf",
+			"modules/logs_policy" + "/*.tf",
+			"modules/webhook" + "/*.tf",
 			advancedExampleDir + "/*.tf",
 		},
 		ResourceGroup:          resourceGroup,
