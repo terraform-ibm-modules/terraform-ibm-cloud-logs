@@ -13,19 +13,19 @@ module "logs_policies" {
   cloud_logs_instance_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
   cloud_logs_region = "us-south"
   # Create policies
-    policies = [{
+  policies = [{
         logs_policy_name     = "logs-policy-1"
         logs_policy_priority = "type_low"
         application_rule = [{
-        name         = "test-system-app"
-        rule_type_id = "start_with"
+            name         = "test-system-app"
+            rule_type_id = "start_with"
         }]
         log_rules = [{
-        severities = ["info", "debug"]
+            severities = ["info", "debug"]
         }]
         subsystem_rule = [{
-        name         = "test-sub-system"
-        rule_type_id = "start_with"
+            name         = "test-sub-system"
+            rule_type_id = "start_with"
         }]
     }]
 }
@@ -56,7 +56,7 @@ No modules.
 | <a name="input_cloud_logs_instance_id"></a> [cloud\_logs\_instance\_id](#input\_cloud\_logs\_instance\_id) | The guid of the cloud logs instance. | `string` | n/a | yes |
 | <a name="input_cloud_logs_region"></a> [cloud\_logs\_region](#input\_cloud\_logs\_region) | The region of cloud logs instance. | `string` | n/a | yes |
 | <a name="input_cloud_logs_service_endpoints"></a> [cloud\_logs\_service\_endpoints](#input\_cloud\_logs\_service\_endpoints) | The type of the service endpoint that will be set for the IBM Cloud Logs instance. Allowed values: public-and-private. | `string` | n/a | yes |
-| <a name="input_policies"></a> [policies](#input\_policies) | Configuration of Cloud Logs policies. | <pre>list(object({<br>    logs_policy_name        = string<br>    logs_policy_description = optional(string, null)<br>    logs_policy_priority    = string<br>    application_rule = optional(list(object({<br>      name         = string<br>      rule_type_id = string<br>    })))<br>    subsystem_rule = optional(list(object({<br>      name         = string<br>      rule_type_id = string<br>    })))<br>    log_rules = optional(list(object({<br>      severities = list(string)<br>    })))<br>    archive_retention = optional(list(object({<br>      id = string<br>    })))<br>  }))</pre> | `[]` | no |
+| <a name="input_policies"></a> [policies](#input\_policies) | Configuration of Cloud Logs policies. | <pre>list(object({<br/>    logs_policy_name        = string<br/>    logs_policy_description = optional(string, null)<br/>    logs_policy_priority    = string<br/>    application_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    subsystem_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    log_rules = optional(list(object({<br/>      severities = list(string)<br/>    })))<br/>    archive_retention = optional(list(object({<br/>      id = string<br/>    })))<br/>  }))</pre> | `[]` | no |
 
 ### Outputs
 
