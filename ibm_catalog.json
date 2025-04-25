@@ -76,10 +76,6 @@
                     "value": "jp-tok"
                   },
                   {
-                    "displayname": "BNPP_EU",
-                    "value": "bnpp-eu"
-                  },
-                  {
                     "displayname": "Frankfurt (eu-de)",
                     "value": "eu-de"
                   },
@@ -124,6 +120,10 @@
                       "identifier": "rg_name"
                   }
                 }
+              },
+              {
+                "key": "logs_routing_tenant_regions",
+                "required": true
               },
               {
                 "key": "provider_visibility",
@@ -264,9 +264,6 @@
                 "key": "existing_event_notifications_instances"
               },
               {
-                "key": "logs_routing_tenant_regions"
-              },
-              {
                 "key": "skip_logs_routing_auth_policy"
               },
               {
@@ -274,6 +271,12 @@
               },
               {
                 "key": "existing_cloud_logs_crn"
+              },
+              {
+                "key":"existing_monitoring_crn"
+              },
+              {
+                "key":"cloud_logs_cbr_rules"
               }
             ],
             "iam_permissions": [
@@ -411,10 +414,6 @@
                     "value": "jp-tok"
                   },
                   {
-                    "displayname": "BNPP_EU",
-                    "value": "bnpp-eu"
-                  },
-                  {
                     "displayname": "Frankfurt (eu-de)",
                     "value": "eu-de"
                   },
@@ -463,6 +462,10 @@
                       "identifier": "rg_name"
                   }
                 }
+              },
+              {
+                "key": "logs_routing_tenant_regions",
+                "required": true
               },
               {
                 "key": "cloud_logs_instance_name"
@@ -565,10 +568,13 @@
                 "key": "skip_logs_routing_auth_policy"
               },
               {
-                "key": "logs_routing_tenant_regions"
+                "key": "logs_policies"
               },
               {
-                "key": "logs_policies"
+                "key":"existing_monitoring_crn"
+              },
+              {
+                "key":"cloud_logs_cbr_rules"
               }
             ],
             "iam_permissions": [

@@ -16,6 +16,7 @@ module "security_enforced" {
   cloud_logs_cos_buckets_class           = var.cloud_logs_cos_buckets_class
   management_endpoint_type_for_buckets   = "private"
   skip_cos_kms_iam_auth_policy           = var.skip_cos_kms_iam_auth_policy
+  existing_monitoring_crn                = var.existing_monitoring_crn
   kms_encryption_enabled_buckets         = true
   existing_kms_instance_crn              = var.existing_kms_instance_crn
   existing_kms_key_crn                   = var.existing_kms_key_crn
@@ -26,4 +27,5 @@ module "security_enforced" {
   skip_logs_routing_auth_policy          = var.skip_logs_routing_auth_policy
   logs_routing_tenant_regions            = var.logs_routing_tenant_regions
   logs_policies                          = var.logs_policies
+  cloud_logs_cbr_rules                   = var.cloud_logs_cbr_rules
 }

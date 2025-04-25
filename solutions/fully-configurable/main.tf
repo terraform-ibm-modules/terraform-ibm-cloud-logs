@@ -30,6 +30,7 @@ module "cloud_logs" {
   retention_period                       = var.cloud_logs_retention_period
   service_endpoints                      = "public-and-private" # not a variable because there is only one option
   existing_event_notifications_instances = var.existing_event_notifications_instances
+  cbr_rules                              = var.cloud_logs_cbr_rules
   data_storage = {
     logs_data = {
       enabled         = true
@@ -93,6 +94,17 @@ module "buckets" {
       resource_instance_id     = var.existing_cos_instance_crn
       management_endpoint_type = var.management_endpoint_type_for_buckets
       storage_class            = var.cloud_logs_cos_buckets_class
+      force_delete             = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
+      activity_tracking = {
+        read_data_events  = true
+        write_data_events = true
+        management_events = true
+      }
+      metrics_monitoring = {
+        usage_metrics_enabled   = true
+        request_metrics_enabled = true
+        metrics_monitoring_crn  = var.existing_monitoring_crn
+      }
     },
     {
       bucket_name                   = local.metrics_bucket_name
@@ -104,6 +116,17 @@ module "buckets" {
       management_endpoint_type      = var.management_endpoint_type_for_buckets
       storage_class                 = var.cloud_logs_cos_buckets_class
       skip_iam_authorization_policy = true
+      force_delete                  = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
+      activity_tracking = {
+        read_data_events  = true
+        write_data_events = true
+        management_events = true
+      }
+      metrics_monitoring = {
+        usage_metrics_enabled   = true
+        request_metrics_enabled = true
+        metrics_monitoring_crn  = var.existing_monitoring_crn
+      }
     }
   ]
 }

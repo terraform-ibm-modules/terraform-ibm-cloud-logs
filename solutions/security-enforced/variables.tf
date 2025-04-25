@@ -75,6 +75,13 @@ variable "skip_cos_kms_iam_auth_policy" {
   default     = false
 }
 
+variable "existing_monitoring_crn" {
+  type        = string
+  nullable    = true
+  default     = null
+  description = "The CRN of an IBM Cloud Monitoring instance to to send Cloud Logs buckets metrics to. If no value passed, metrics are sent to the instance associated to the container's location unless otherwise specified in the Metrics Router service configuration. Applies only if `existing_cloud_logs_crn` is not provided."
+}
+
 ########################################################################################################################
 # KMS
 ########################################################################################################################
@@ -320,4 +327,28 @@ variable "logs_policies" {
     )])
     error_message = "The id of the archive_retention does not meet the required criteria."
   }
+}
+
+##############################################################
+# Context-based restriction (CBR)
+##############################################################
+
+variable "cloud_logs_cbr_rules" {
+  type = list(object({
+    description = string
+    account_id  = string
+    rule_contexts = list(object({
+      attributes = optional(list(object({
+        name  = string
+        value = string
+    }))) }))
+    enforcement_mode = string
+    operations = optional(list(object({
+      api_types = list(object({
+        api_type_id = string
+      }))
+    })))
+  }))
+  description = "(Optional, list) List of context-based restrictions rules to create. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."
+  default     = []
 }

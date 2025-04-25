@@ -27,7 +27,7 @@ The `cloud_logs_existing_en_instances` input variable allows you to provide a li
 ### Example Event Notification Instance Configuration
 
 ```hcl
-cloud_logs_existing_en_instances = [
+[
   {
     instance_crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
     integration_name    = "custom-logging-en-integration"
@@ -69,7 +69,7 @@ The `cloud_logs_policies` input variable allows you to provide a list of policie
 ### Example cloud_logs_policies
 
 ```hcl
-cloud_logs_policies = [
+[
   {
     logs_policy_name     = "logs-policy-1"
     logs_policy_description = "Send info and debug logs of the application (name starts with `test-system-app`) and the subsytem (name starts with `test-sub-system`) logs to Store nad search pipeline"
@@ -116,10 +116,65 @@ The `cloud_log_data_bucket_retention_policy` input variable allows you to provid
 ### Example cloud_log_data_bucket_retention_policy
 
 ```hcl
-cloud_log_data_bucket_retention_policy = {
+{
     default   = 90
     maximum   = 350
     minimum   = 90
     permanent = false
 }
+```
+
+## Configuring Context-Based Restrictions (CBRs) <a name="cloud_logs_cbr_rules"></a>
+
+The `cloud_logs_cbr_rules` input variable allows you to provide a rule for the target service to enforce access restrictions for the service based on the context of access requests. Contexts are criteria that include the network location of access requests, the endpoint type from where the request is sent, etc.
+
+- Variable name: `cloud_logs_cbr_rules`.
+- Type: A list of objects. Allows only one object representing a rule for the target service
+- Default value: An empty list (`[]`).
+
+### Options for cloud_logs_cbr_rules
+
+  - `description` (required): The description of the rule to create.
+  - `account_id` (required): The IBM Cloud Account ID
+  - `rule_contexts` (required): (List) The contexts the rule applies to
+      - `attributes` (optional): (List) Individual context attributes
+        - `name` (required): The attribute name.
+        - `value`(required): The attribute value.
+
+  - `enforcement_mode` (required): The rule enforcement mode can have the following values:
+      - `enabled` - The restrictions are enforced and reported. This is the default.
+      - `disabled` - The restrictions are disabled. Nothing is enforced or reported.
+      - `report` - The restrictions are evaluated and reported, but not enforced.
+  - `operations` (optional): The operations this rule applies to
+    - `api_types`(required): (List) The API types this rule applies to.
+        - `api_type_id`(required): The API type ID
+
+
+### Example Rule For Context-Based Restrictions Configuration
+
+```hcl
+[
+  {
+    "description"     : "Cloud Logs Instance can be accessed from xyz"
+    "account_id"      : "defc0df06b644a9cabc6e44f55b3880s."
+    "rule_contexts"   : [{
+      "attributes"  : [
+        {
+          "name" : "endpointType",
+          "value" : "private"
+        },
+        {
+          "name"  : "networkZoneId"
+          "value" : "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
+        }
+      ]
+    }]
+    "enforcement_mode" : "enabled"
+    "operations" : [{
+      "api_types" : [{
+        "api_type_id" : "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+      }]
+    }]
+  }
+]
 ```
