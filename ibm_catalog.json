@@ -1,0 +1,692 @@
+{
+    "products": [
+      {
+        "name": "deploy-arch-ibm-cloud-logs",
+        "label": "Cloud automation for Cloud Logs",
+        "product_kind": "solution",
+        "tags": [
+          "ibm_created",
+          "target_terraform",
+          "terraform",
+          "solution",
+          "logging_monitoring"
+        ],
+        "keywords": [
+          "IaC",
+          "infrastructure as code",
+          "terraform",
+          "solution",
+          "cloud logs",
+          "observability",
+          "logging",
+          "log"
+        ],
+        "short_description": "Creates and configures IBM Cloud Logs resources",
+        "long_description": "This architecture supports creating and configuring [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs) resources. IBM® Cloud Logs is a scalable logging service that persists logs and provides users with capabilities for querying, tailing, and visualizing logs. \n  Logs are comprised of events that are typically human-readable and have different formats, for example, unstructured text, JSON, delimiter-separated values, key-value pairs, and so on. The IBM Cloud Logs service can manage general purpose application logs, platform logs, or structured audit events. IBM Cloud Logs can be used with logs from both IBM Cloud services and customer applications.",
+        "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/README.md",
+        "offering_icon_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/images/observability-icon.svg",
+        "provider_name": "IBM",
+        "features": [
+          {
+            "title": "Cloud Logs",
+            "description": "Creates and configures a Cloud Logs instance."
+          },
+          {
+            "title": "Object Storage buckets for Cloud Logs",
+            "description": "Creates buckets required for the Cloud Logs instance."
+          },
+          {
+            "title": "KMS encryption",
+            "description": "Supports creating a new key, or using an existing one to encrypt the Object Storage bucket."
+          },
+          {
+            "title": "Event Notification Integration for Cloud Logs",
+            "description": "Integrates existing Event Notifications instances with the Cloud Logs instance."
+          },
+          {
+            "title": "Cloud Logs Policies",
+            "description": "Creates and configures policies for the Cloud Logs instance."
+          }
+        ],
+        "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues). Please note this product is not supported via the IBM Cloud Support Center.",
+        "flavors": [
+          {
+            "label": "Fully configurable",
+            "name": "fully-configurable",
+            "install_type": "fullstack",
+            "working_directory": "solutions/fully-configurable",
+            "configuration": [
+              {
+                "key": "ibmcloud_api_key"
+              },
+              {
+                "key": "prefix",
+                "required": true
+              },
+              {
+                "key": "region",
+                "required": true,
+                "options": [
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Washington (us-east)",
+                    "value": "us-east"
+                  },
+                  {
+                    "displayname": "Sao Paulo (br-sao)",
+                    "value": "br-sao"
+                  }
+                ]
+              },
+              {
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_resource_group_name",
+                "required": true,
+                "custom_config": {
+                  "type": "resource_group",
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                      "identifier": "rg_name"
+                  }
+                }
+              },
+              {
+                "key": "logs_routing_tenant_regions",
+                "required": true
+              },
+              {
+                "key": "provider_visibility",
+                "options": [
+                  {
+                    "displayname": "private",
+                    "value": "private"
+                  },
+                  {
+                    "displayname": "public",
+                    "value": "public"
+                  },
+                  {
+                    "displayname": "public-and-private",
+                    "value": "public-and-private"
+                  }
+                ]
+              },
+              {
+                "key": "cloud_logs_instance_name"
+              },
+              {
+                "key": "cloud_logs_resource_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "key": "cloud_logs_access_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "key": "cloud_logs_retention_period",
+                "options": [
+                  {
+                    "displayname": "7",
+                    "value": 7
+                  },
+                  {
+                    "displayname": "14",
+                    "value": 14
+                  },
+                  {
+                    "displayname": "30",
+                    "value": 30
+                  },
+                  {
+                    "displayname": "60",
+                    "value": 60
+                  },
+                  {
+                    "displayname": "90",
+                    "value": 90
+                  }
+                ]
+              },
+              {
+                "key": "cloud_logs_data_cos_bucket_name"
+              },
+              {
+                "key": "cloud_logs_metrics_cos_bucket_name"
+              },
+              {
+                "key": "cloud_logs_cos_buckets_class",
+                "options": [
+                  {
+                    "displayname": "Standard",
+                    "value": "standard"
+                  },
+                  {
+                    "displayname": "Smart",
+                    "value": "smart"
+                  }
+                ]
+              },
+              {
+                "key": "management_endpoint_type_for_buckets",
+                "options": [
+                  {
+                    "displayname": "Direct",
+                    "value": "direct"
+                  },
+                  {
+                    "displayname": "Private",
+                    "value": "private"
+                  },
+                  {
+                    "displayname": "Public",
+                    "value": "public"
+                  }
+                ]
+              },
+              {
+                "key": "skip_cos_kms_iam_auth_policy"
+              },
+              {
+                "key": "kms_encryption_enabled_buckets"
+              },
+              {
+                "key": "existing_kms_instance_crn"
+              },
+              {
+                "key": "existing_kms_key_crn"
+              },
+              {
+                "key": "kms_endpoint_type",
+                "options": [
+                  {
+                    "displayname": "Public",
+                    "value": "public"
+                  },
+                  {
+                    "displayname": "Private",
+                    "value": "private"
+                  }
+                ]
+              },
+              {
+                "key": "cloud_logs_cos_key_ring_name"
+              },
+              {
+                "key": "cloud_logs_cos_key_name"
+              },
+              {
+                "key": "ibmcloud_kms_api_key"
+              },
+              {
+                "key": "existing_event_notifications_instances"
+              },
+              {
+                "key": "skip_logs_routing_auth_policy"
+              },
+              {
+                "key": "logs_policies"
+              },
+              {
+                "key": "existing_cloud_logs_crn"
+              },
+              {
+                "key":"existing_monitoring_crn"
+              },
+              {
+                "key":"cloud_logs_cbr_rules"
+              }
+            ],
+            "iam_permissions": [
+              {
+                "service_name": "logs",
+                "role_crns": [
+                    "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                    "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "cloud-object-storage",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              },
+              {
+                "service_name": "kms",
+                "notes": "This role is only required if you are using Key Protect for encryption",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "hs-crypto",
+                "notes": "This role is only required if you are using Hyper Protect for encryption",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "resource-group",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              },
+              {
+                "service_name": "event-notifications",
+                "role_crns": [
+                  "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              }
+            ],
+            "architecture": {
+              "descriptions": "This architecture supports creating and configuring a Cloud Logs instance.",
+              "features": [
+                {
+                  "title": "Cloud Logs instance creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Use existing Cloud Logs instance",
+                  "description": "Yes"
+                },
+                {
+                  "title": "New resource group creation",
+                  "description": "No"
+                },
+                {
+                  "title": "Use existing resource group",
+                  "description": "Yes"
+                },
+                {
+                  "title": "COS instance creation",
+                  "description": "No"
+                },
+                {
+                  "title": "COS bucket creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Enforced KMS encryption",
+                  "description": "No"
+                },
+                {
+                  "title": "KMS instance creation",
+                  "description": "No"
+                },
+                {
+                  "title": "KMS key ring and key creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Use existing KMS key",
+                  "description": "Yes"
+                },
+                {
+                  "title": "IAM s2s auth policies creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Event Notifications integration",
+                  "description": "Yes"
+                }
+              ],
+              "diagrams": [
+                {
+                  "diagram": {
+                    "caption": "Cloud Logs",
+                    "url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/reference-architecture/deployable-architecture-cloud-logs.svg",
+                    "type": "image/svg+xml"
+                  },
+                  "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                }
+              ]
+            }
+          },
+          {
+            "label": "Security-enforced",
+            "name": "security-enforced",
+            "install_type": "fullstack",
+            "working_directory": "solutions/security-enforced",
+            "configuration": [
+              {
+                "key": "ibmcloud_api_key"
+              },
+              {
+                "key": "prefix",
+                "required": true
+              },
+              {
+                "key": "region",
+                "required": true,
+                "options": [
+                  {
+                    "displayname": "Osaka (jp-osa)",
+                    "value": "jp-osa"
+                  },
+                  {
+                    "displayname": "Tokyo (jp-tok)",
+                    "value": "jp-tok"
+                  },
+                  {
+                    "displayname": "Frankfurt (eu-de)",
+                    "value": "eu-de"
+                  },
+                  {
+                    "displayname": "London (eu-gb)",
+                    "value": "eu-gb"
+                  },
+                  {
+                    "displayname": "Madrid (eu-es)",
+                    "value": "eu-es"
+                  },
+                  {
+                    "displayname": "Dallas (us-south)",
+                    "value": "us-south"
+                  },
+                  {
+                    "displayname": "Toronto (ca-tor)",
+                    "value": "ca-tor"
+                  },
+                  {
+                    "displayname": "Washington (us-east)",
+                    "value": "us-east"
+                  },
+                  {
+                    "displayname": "Sao Paulo (br-sao)",
+                    "value": "br-sao"
+                  }
+                ]
+              },
+              {
+                "key": "existing_cos_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_kms_instance_crn",
+                "required": true
+              },
+              {
+                "key": "existing_resource_group_name",
+                "required": true,
+                "custom_config": {
+                  "type": "resource_group",
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                      "identifier": "rg_name"
+                  }
+                }
+              },
+              {
+                "key": "logs_routing_tenant_regions",
+                "required": true
+              },
+              {
+                "key": "cloud_logs_instance_name"
+              },
+              {
+                "key": "cloud_logs_resource_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "key": "cloud_logs_access_tags",
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "key": "cloud_logs_retention_period",
+                "options": [
+                  {
+                    "displayname": "7",
+                    "value": 7
+                  },
+                  {
+                    "displayname": "14",
+                    "value": 14
+                  },
+                  {
+                    "displayname": "30",
+                    "value": 30
+                  },
+                  {
+                    "displayname": "60",
+                    "value": 60
+                  },
+                  {
+                    "displayname": "90",
+                    "value": 90
+                  }
+                ]
+              },
+              {
+                "key": "cloud_logs_data_cos_bucket_name"
+              },
+              {
+                "key": "cloud_logs_metrics_cos_bucket_name"
+              },
+              {
+                "key": "cloud_logs_cos_buckets_class",
+                "options": [
+                  {
+                    "displayname": "Standard",
+                    "value": "standard"
+                  },
+                  {
+                    "displayname": "Vault",
+                    "value": "vault"
+                  },
+                  {
+                    "displayname": "Cold",
+                    "value": "cold"
+                  },
+                  {
+                    "displayname": "Smart",
+                    "value": "smart"
+                  },
+                  {
+                    "displayname": "One-Rate Active",
+                    "value": "onerate_active"
+                  }
+                ]
+              },
+              {
+                "key": "skip_cos_kms_iam_auth_policy"
+              },
+              {
+                "key": "existing_kms_key_crn"
+              },
+              {
+                "key": "cloud_logs_cos_key_ring_name"
+              },
+              {
+                "key": "cloud_logs_cos_key_name"
+              },
+              {
+                "key": "ibmcloud_kms_api_key"
+              },
+              {
+                "key": "existing_event_notifications_instances"
+              },
+              {
+                "key": "skip_logs_routing_auth_policy"
+              },
+              {
+                "key": "logs_policies"
+              },
+              {
+                "key":"existing_monitoring_crn"
+              },
+              {
+                "key":"cloud_logs_cbr_rules"
+              }
+            ],
+            "iam_permissions": [
+              {
+                "service_name": "logs",
+                "role_crns": [
+                    "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                    "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "cloud-object-storage",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              },
+              {
+                "service_name": "kms",
+                "notes": "This role is only required if you are using Key Protect for encryption",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "hs-crypto",
+                "notes": "This role is only required if you are using Hyper Protect for encryption",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                  "crn:v1:bluemix:public:iam::::role:Editor"
+                ]
+              },
+              {
+                "service_name": "resource-group",
+                "role_crns": [
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              },
+              {
+                "service_name": "event-notifications",
+                "role_crns": [
+                  "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
+                  "crn:v1:bluemix:public:iam::::role:Viewer"
+                ]
+              }
+            ],
+            "architecture": {
+              "descriptions": "This architecture supports creating and configuring a Cloud Logs instance.",
+              "features": [
+                {
+                  "title": "Cloud Logs instance creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Use existing Cloud Logs instance",
+                  "description": "No"
+                },
+                {
+                  "title": "New resource group creation",
+                  "description": "No"
+                },
+                {
+                  "title": "Use existing resource group",
+                  "description": "Yes"
+                },
+                {
+                  "title": "COS instance creation",
+                  "description": "No"
+                },
+                {
+                  "title": "COS bucket creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Enforced KMS encryption",
+                  "description": "Yes"
+                },
+                {
+                  "title": "KMS instance creation",
+                  "description": "No"
+                },
+                {
+                  "title": "KMS key ring and key creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Use existing KMS key",
+                  "description": "Yes"
+                },
+                {
+                  "title": "IAM s2s auth policies creation",
+                  "description": "Yes"
+                },
+                {
+                  "title": "Event Notifications integration",
+                  "description": "Yes"
+                }
+              ],
+              "diagrams": [
+                {
+                  "diagram": {
+                    "caption": "Cloud Logs",
+                    "url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/reference-architecture/deployable-architecture-cloud-logs.svg",
+                    "type": "image/svg+xml"
+                  },
+                  "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
