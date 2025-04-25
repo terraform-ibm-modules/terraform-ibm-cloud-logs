@@ -166,9 +166,7 @@ func TestSecurityEnforced(t *testing.T) {
 		}
 
 		err := options.RunSchematicTest()
-		if !options.UpgradeTestSkipped {
-			assert.Nil(t, err, "This should not have errored")
-		}
+		assert.Nil(t, err, "This should not have errored")
 
 	}
 
@@ -257,7 +255,9 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 		}
 
 		err := options.RunSchematicUpgradeTest()
-		assert.Nil(t, err, "This should not have errored")
+		if !options.UpgradeTestSkipped {
+			assert.Nil(t, err, "This should not have errored")
+		}
 
 	}
 
