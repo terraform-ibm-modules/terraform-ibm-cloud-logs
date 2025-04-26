@@ -123,7 +123,14 @@
               },
               {
                 "key": "logs_routing_tenant_regions",
-                "required": true
+                "required": true,
+                "custom_config": {
+                  "grouping": "deployment",
+                  "original_grouping": "deployment",
+                  "config_constraints": {
+                    "type": "string"
+                  }
+                }
               },
               {
                 "key": "provider_visibility",
