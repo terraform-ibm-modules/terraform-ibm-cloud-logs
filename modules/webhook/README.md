@@ -47,9 +47,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_logs_instance_id"></a> [cloud\_logs\_instance\_id](#input\_cloud\_logs\_instance\_id) | The guid of the cloud logs instance. | `string` | n/a | yes |
-| <a name="input_cloud_logs_instance_name"></a> [cloud\_logs\_instance\_name](#input\_cloud\_logs\_instance\_name) | The name of the IBM Cloud Logs instance that is created. | `string` | n/a | yes |
-| <a name="input_cloud_logs_region"></a> [cloud\_logs\_region](#input\_cloud\_logs\_region) | The IBM Cloud region where Cloud logs instance is created. | `string` | `"us-south"` | no |
-| <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    en_instance_id      = string<br/>    en_region           = string<br/>    en_integration_name = optional(string)<br/>    skip_en_auth_policy = optional(bool, false)<br/>  }))</pre> | `[]` | no |
+| <a name="input_cloud_logs_instance_name"></a> [cloud\_logs\_instance\_name](#input\_cloud\_logs\_instance\_name) | The name of the existing IBM Cloud Logs instance. It is used as a prefix for the outgoing webhook name if the existing\_event\_notification\_instances does not set en\_integration\_name. | `string` | n/a | yes |
+| <a name="input_cloud_logs_region"></a> [cloud\_logs\_region](#input\_cloud\_logs\_region) | The IBM Cloud region where the existing Cloud Logs instance is located. | `string` | n/a | yes |
+| <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    en_instance_id      = string<br/>    en_region           = string<br/>    en_integration_name = optional(string)<br/>    skip_en_auth_policy = optional(bool, false)<br/>  }))</pre> | n/a | yes |
 
 ### Outputs
 

@@ -87,6 +87,7 @@ resource "time_sleep" "wait_for_cos_authorization_policy" {
 ##############################################################################
 
 module "en_integration" {
+  count                                  = length(var.existing_event_notifications_instances) > 0 ? 1 : 0
   source                                 = "./modules/webhook"
   cloud_logs_instance_id                 = ibm_resource_instance.cloud_logs.guid
   cloud_logs_instance_name               = local.instance_name
@@ -155,6 +156,7 @@ resource "ibm_logs_router_tenant" "logs_router_tenant_instances" {
 ##############################################################################
 
 module "logs_policies" {
+  count                        = length(var.policies) > 0 ? 1 : 0
   source                       = "./modules/logs_policy"
   cloud_logs_instance_id       = ibm_resource_instance.cloud_logs.guid
   cloud_logs_region            = ibm_resource_instance.cloud_logs.location
