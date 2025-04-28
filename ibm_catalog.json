@@ -24,7 +24,7 @@
         "short_description": "Creates and configures IBM Cloud Logs resources",
         "long_description": "This architecture supports creating and configuring [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs) resources. IBM® Cloud Logs is a scalable logging service that persists logs and provides users with capabilities for querying, tailing, and visualizing logs. \n  Logs are comprised of events that are typically human-readable and have different formats, for example, unstructured text, JSON, delimiter-separated values, key-value pairs, and so on. The IBM Cloud Logs service can manage general purpose application logs, platform logs, or structured audit events. IBM Cloud Logs can be used with logs from both IBM Cloud services and customer applications.",
         "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/README.md",
-        "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-secrets-manager/main/images/observability-icon.svg",
+        "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cloud-logs/refs/heads/main/images/cloud-logs-icon.svg",
         "provider_name": "IBM",
         "features": [
           {
