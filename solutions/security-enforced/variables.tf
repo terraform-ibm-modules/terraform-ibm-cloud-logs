@@ -30,7 +30,7 @@ variable "prefix" {
 }
 
 variable "region" {
-  description = "The IBM Cloud region where Cloud logs instance will be created."
+  description = "The IBM Cloud region where IBM Cloud logs instance will be created."
   type        = string
   default     = "us-south"
 }

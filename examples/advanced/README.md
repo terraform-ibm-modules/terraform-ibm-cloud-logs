@@ -6,7 +6,7 @@
 Example that configures:
 
 - COS instance and KMS encrypted COS buckets
-- Cloud Logs with Event Notifications integration
-- Cloud Logs policies
+- IBM Cloud Logs with Event Notifications integration
+- IBM Cloud Logs policies
 - Key Protect instance and root key
 - A context-based restriction (CBR) rule to only allow cloud logs to be accessible from schematics

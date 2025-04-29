@@ -4,32 +4,32 @@
 
 output "cloud_logs_crn" {
   value       = local.cloud_logs_crn
-  description = "The id of the provisioned Cloud Logs instance."
+  description = "The id of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_guid" {
   value       = local.create_cloud_logs ? module.cloud_logs[0].guid : null
-  description = "The guid of the provisioned Cloud Logs instance."
+  description = "The guid of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_name" {
   value       = local.create_cloud_logs ? module.cloud_logs[0].name : null
-  description = "The name of the provisioned Cloud Logs instance."
+  description = "The name of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_ingress_endpoint" {
   value       = local.create_cloud_logs ? module.cloud_logs[0].ingress_endpoint : null
-  description = "The public ingress endpoint of the provisioned Cloud Logs instance."
+  description = "The public ingress endpoint of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_ingress_private_endpoint" {
   value       = local.create_cloud_logs ? module.cloud_logs[0].ingress_private_endpoint : null
-  description = "The private ingress endpoint of the provisioned Cloud Logs instance."
+  description = "The private ingress endpoint of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_logs_policies_details" {
   value       = local.create_cloud_logs ? module.cloud_logs[0].logs_policies_details : null
-  description = "The details of the Cloud logs policies created."
+  description = "The details of the IBM Cloud logs policies created."
 }
 
 output "logs_bucket_crn" {

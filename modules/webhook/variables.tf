@@ -9,7 +9,7 @@ variable "cloud_logs_region" {
 
 variable "cloud_logs_instance_id" {
   type        = string
-  description = "The guid of the cloud logs instance."
+  description = "The GUID of the existing IBM Cloud Logs instance."
 }
 
 variable "cloud_logs_instance_name" {

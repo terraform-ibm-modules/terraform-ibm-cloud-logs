@@ -121,17 +121,17 @@ variable "policies" {
 
 variable "cloud_logs_instance_id" {
   type        = string
-  description = "The guid of the cloud logs instance."
+  description = "The GUID of the existing IBM Cloud Logs instance."
 }
 
 variable "cloud_logs_region" {
   type        = string
-  description = "The region of cloud logs instance."
+  description = "The IBM Cloud region where the existing IBM Cloud Logs instance is located."
 }
 
 variable "cloud_logs_service_endpoints" {
   type        = string
-  description = "The type of the service endpoint that will be set for the IBM Cloud Logs instance. Allowed values: public-and-private."
+  description = "The type of service endpoints configured for the existing IBM Cloud Logs instance. Allowed values: public-and-private."
   validation {
     condition     = contains(["public-and-private"], var.cloud_logs_service_endpoints)
     error_message = "The specified cloud_logs_service_endpoints is not a valid selection. Allowed values: public-and-private."
