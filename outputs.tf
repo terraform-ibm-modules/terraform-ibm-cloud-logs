@@ -34,6 +34,6 @@ output "ingress_private_endpoint" {
 }
 
 output "logs_policies_details" {
-  value       = length(var.policies) > 0 ? module.logs_policies.logs_policies_details : null
+  value       = length(var.policies) > 0 ? module.logs_policies[0].logs_policies_details : null
   description = "The details of the Cloud logs policies created."
 }
