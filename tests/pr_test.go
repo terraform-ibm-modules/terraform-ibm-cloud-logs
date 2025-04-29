@@ -187,7 +187,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
 	var region = validRegions[rand.Intn(len(validRegions))]
-	prefix := fmt.Sprintf("icl-da-secure-upg-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("iclda-up-%s", strings.ToLower(random.UniqueId()))
 
 	// ------------------------------------------------------------------------------------
 	// Provision COS and EN first
