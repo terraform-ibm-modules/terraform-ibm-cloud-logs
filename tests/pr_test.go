@@ -144,8 +144,8 @@ func TestSecurityEnforced(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
-			"modules/logs_policy" + "/*.tf",
-			"modules/webhook" + "/*.tf",
+				"modules/logs_policy" + "/*.tf",
+				"modules/webhook" + "/*.tf",
 				secureDADir + "/*.tf",
 				configurableDADir + "/*.tf",
 			},
@@ -191,7 +191,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
 	var region = validRegions[rand.Intn(len(validRegions))]
-	prefix := fmt.Sprintf("icl-da-secure-upg-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("iclda-upg-%s", strings.ToLower(random.UniqueId()))
 
 	// ------------------------------------------------------------------------------------
 	// Provision COS and EN first
@@ -235,6 +235,8 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
+				"modules/logs_policy" + "/*.tf",
+				"modules/webhook" + "/*.tf",
 				secureDADir + "/*.tf",
 				configurableDADir + "/*.tf",
 			},
@@ -255,7 +257,6 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 			{Name: "existing_cos_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 			{Name: "existing_event_notifications_instances", Value: terraform.OutputJson(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
-			{Name: "event_notifications_email_list", Value: []string{"Goldeneye.Development@ibm.com"}, DataType: "list(string)"},
 		}
 
 		err := options.RunSchematicUpgradeTest()
