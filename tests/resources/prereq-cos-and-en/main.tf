@@ -4,7 +4,7 @@
 
 module "resource_group1" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.1.6"
+  version             = "1.2.0"
   resource_group_name = "${var.prefix}-resource-group1"
 }
 
@@ -14,7 +14,7 @@ module "resource_group1" {
 
 module "resource_group2" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.1.6"
+  version             = "1.2.0"
   resource_group_name = "${var.prefix}-resource-group2"
 }
 
@@ -24,7 +24,7 @@ module "resource_group2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "8.19.5"
+  version           = "8.21.18"
   resource_group_id = module.resource_group1.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   cos_tags          = var.resource_tags
@@ -37,7 +37,7 @@ module "cos" {
 
 module "event_notifications1" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.18.8"
+  version           = "1.20.0"
   resource_group_id = module.resource_group1.resource_group_id
   name              = "${var.prefix}-en1"
   tags              = var.resource_tags
@@ -51,7 +51,7 @@ module "event_notifications1" {
 
 module "event_notifications2" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.18.8"
+  version           = "1.20.0"
   resource_group_id = module.resource_group2.resource_group_id
   name              = "${var.prefix}-en2"
   tags              = var.resource_tags
