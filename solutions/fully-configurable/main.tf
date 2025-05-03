@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.1.6"
+  version                      = "1.2.0"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -83,7 +83,7 @@ module "buckets" {
   }
   depends_on = [time_sleep.wait_for_authorization_policy[0]]
   source     = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version    = "8.19.3"
+  version    = "8.21.18"
   bucket_configs = [
     {
       bucket_name              = local.data_bucket_name
