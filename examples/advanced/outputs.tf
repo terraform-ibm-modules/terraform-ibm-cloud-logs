@@ -9,32 +9,32 @@
 
 output "cloud_logs_crn" {
   value       = module.cloud_logs.crn
-  description = "The id of the provisioned Cloud Logs instance."
+  description = "The id of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_guid" {
   value       = module.cloud_logs.guid
-  description = "The guid of the provisioned Cloud Logs instance."
+  description = "The guid of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_name" {
   value       = module.cloud_logs.name
-  description = "The name of the provisioned Cloud Logs instance."
+  description = "The name of the provisioned IBM Cloud Logs instance."
 }
 
 output "resource_group_id" {
   value       = module.cloud_logs.resource_group_id
-  description = "The resource group where Cloud Logs instance resides."
+  description = "The resource group where IBM Cloud Logs instance resides."
 }
 
 output "cloud_logs_ingress_endpoint" {
   value       = module.cloud_logs.ingress_endpoint
-  description = "The public ingress endpoint of the provisioned Cloud Logs instance."
+  description = "The public ingress endpoint of the provisioned IBM Cloud Logs instance."
 }
 
 output "cloud_logs_ingress_private_endpoint" {
   value       = module.cloud_logs.ingress_private_endpoint
-  description = "The private ingress endpoint of the provisioned Cloud Logs instance."
+  description = "The private ingress endpoint of the provisioned IBM Cloud Logs instance."
 }
 
 output "cos_crn" {

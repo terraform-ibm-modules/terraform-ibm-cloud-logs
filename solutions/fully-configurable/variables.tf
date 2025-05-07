@@ -41,7 +41,7 @@ variable "provider_visibility" {
 }
 
 variable "region" {
-  description = "The IBM Cloud region where Cloud logs instance will be created."
+  description = "The IBM Cloud region where IBM Cloud logs instance will be created."
   type        = string
   default     = "us-south"
 }
@@ -64,20 +64,20 @@ variable "cloud_logs_data_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-logs-bucket"
-  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for IBM Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
 variable "cloud_logs_metrics_cos_bucket_name" {
   type        = string
   nullable    = true
   default     = "cloud-logs-metrics-bucket"
-  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+  description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for IBM Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
 variable "cloud_logs_cos_buckets_class" {
   type        = string
   default     = "smart"
-  description = "The storage class of the newly provisioned Cloud Logs Object Storage buckets. Possible values: `standard` or `smart`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_cloud_logs_crn` is not provided."
+  description = "The storage class of the newly provisioned IBM Cloud Logs Object Storage buckets. Possible values: `standard` or `smart`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_cloud_logs_crn` is not provided."
   validation {
     condition     = contains(["standard", "smart"], var.cloud_logs_cos_buckets_class)
     error_message = "Allowed values for cos_bucket_class are \"standard\" or \"smart\"."
@@ -105,7 +105,7 @@ variable "existing_monitoring_crn" {
   type        = string
   nullable    = true
   default     = null
-  description = "The CRN of an IBM Cloud Monitoring instance to to send Cloud Logs buckets metrics to. If no value passed, metrics are sent to the instance associated to the container's location unless otherwise specified in the Metrics Router service configuration. Applies only if `existing_cloud_logs_crn` is not provided."
+  description = "The CRN of an IBM Cloud Monitoring instance to to send IBM Cloud Logs buckets metrics to. If no value passed, metrics are sent to the instance associated to the container's location unless otherwise specified in the Metrics Router service configuration. Applies only if `existing_cloud_logs_crn` is not provided."
 }
 
 ########################################################################################################################
@@ -113,7 +113,7 @@ variable "existing_monitoring_crn" {
 ########################################################################################################################
 
 variable "kms_encryption_enabled_buckets" {
-  description = "Set to true to enable KMS encryption on the Object Storage buckets created for the Cloud Logs instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_cloud_logs_crn`."
+  description = "Set to true to enable KMS encryption on the Object Storage buckets created for the IBM Cloud Logs instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_cloud_logs_crn`."
   type        = bool
   default     = false
   nullable    = false
