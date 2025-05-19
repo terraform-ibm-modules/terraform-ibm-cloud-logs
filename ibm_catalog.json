@@ -395,6 +395,37 @@
           },
           "dependencies": [
             {
+              "name": "deploy-arch-ibm-cos",
+              "description": "Cloud automation for Cloud Object Storage supports creating an IBM Cloud Object Storage instance, cross-region and single-region bucket.",
+              "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
+              "version": "v8.21.25",
+              "flavors": [
+                "instance"
+              ],
+              "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
+              "optional": true,
+              "on_by_default": true,
+              "input_mapping": [
+                {
+                  "dependency_output": "cos_instance_crn",
+                  "version_input": "existing_cos_instance_crn"
+                },
+                {
+                  "dependency_input": "prefix",
+                  "version_input": "prefix",
+                  "reference_version": true
+                },
+                {
+                  "dependency_input": "use_existing_resource_group",
+                  "value": true,
+                  "reference_version": true
+                }
+              ],
+              "ignore_auto_referencing": [
+                "*"
+              ]
+            },
+            {
               "name": "deploy-arch-ibm-kms",
               "description": "Enable Cloud Automation for Key Protect when you want services to use your own managed encryption keys. If disabled, it will fall back on IBM Cloud's default service-managed encryption.",
               "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
@@ -409,6 +440,10 @@
                 {
                   "dependency_output": "kms_instance_crn",
                   "version_input": "existing_kms_instance_crn"
+                },
+                {
+                  "version_input": "kms_encryption_enabled_buckets",
+                  "value": true
                 },
                 {
                   "dependency_input": "prefix",
