@@ -198,6 +198,9 @@
               ]
             },
             {
+              "key": "ibmcloud_cos_api_key"
+            },
+            {
               "key": "cloud_logs_data_cos_bucket_name"
             },
             {
@@ -520,6 +523,9 @@
                   "value": 90
                 }
               ]
+            },
+            {
+              "key": "ibmcloud_cos_api_key"
             },
             {
               "key": "cloud_logs_data_cos_bucket_name"

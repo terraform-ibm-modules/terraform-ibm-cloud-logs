@@ -39,6 +39,13 @@ variable "region" {
 # COS
 ########################################################################################################################
 
+variable "ibmcloud_cos_api_key" {
+  type        = string
+  description = "The IBM Cloud API key that can create a Cloud Object Storage (COS) instance. If not specified, the 'ibmcloud_api_key' variable is used. Specify this key if the COS instance is in an account that's different from the one associated with the cloud logs resources. Leave empty if the same account owns all the instances."
+  sensitive   = true
+  default     = null
+}
+
 variable "existing_cos_instance_crn" {
   type        = string
   description = "The CRN of an existing Object Storage instance."
