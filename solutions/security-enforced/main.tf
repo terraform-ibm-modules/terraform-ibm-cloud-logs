@@ -2,6 +2,7 @@ module "security_enforced" {
   source                                 = "../fully-configurable"
   ibmcloud_api_key                       = var.ibmcloud_api_key
   ibmcloud_kms_api_key                   = var.ibmcloud_kms_api_key
+  ibmcloud_cos_api_key                   = var.ibmcloud_cos_api_key
   provider_visibility                    = "private"
   prefix                                 = var.prefix
   region                                 = var.region
