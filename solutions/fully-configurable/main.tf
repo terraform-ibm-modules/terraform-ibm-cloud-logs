@@ -83,7 +83,7 @@ module "buckets" {
   }
   depends_on = [time_sleep.wait_for_authorization_policy[0]]
   source     = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version    = "9.0.3"
+  version    = "9.0.4"
   bucket_configs = [
     {
       bucket_name              = local.data_bucket_name
