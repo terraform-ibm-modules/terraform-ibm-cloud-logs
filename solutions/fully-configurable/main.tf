@@ -16,6 +16,12 @@ locals {
   prefix            = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
   create_cloud_logs = var.existing_cloud_logs_crn == null
   cloud_logs_crn    = local.create_cloud_logs ? module.cloud_logs[0].crn : var.existing_cloud_logs_crn
+  # Even though we're only performing a comparison (var.ibmcloud_cos_api_key != null),
+  # Terraform treats the entire value as "tainted" due to sensitivity.
+  # Later, in the cloud_logs module, where the data_storage input variable is used in a for_each loop,
+  # the loop fails with the error: "Sensitive values, or values derived from sensitive values, cannot be used as for_each arguments."
+  # However, since we use nonsensitive() solely for logical comparison, we are not exposing any secret values to logs and it's safe to use. Issue https://github.ibm.com/GoldenEye/issues/issues/13562.
+  skip_cos_auth_policy = nonsensitive(var.ibmcloud_cos_api_key) != null ? true : var.skip_cloud_logs_cos_auth_policy
 }
 
 module "cloud_logs" {
@@ -33,14 +39,16 @@ module "cloud_logs" {
   cbr_rules                              = var.cloud_logs_cbr_rules
   data_storage = {
     logs_data = {
-      enabled         = true
-      bucket_crn      = module.buckets.buckets[local.data_bucket_name].bucket_crn
-      bucket_endpoint = module.buckets.buckets[local.data_bucket_name].s3_endpoint_direct
+      enabled              = true
+      bucket_crn           = module.buckets.buckets[local.data_bucket_name].bucket_crn
+      bucket_endpoint      = module.buckets.buckets[local.data_bucket_name].s3_endpoint_direct
+      skip_cos_auth_policy = local.skip_cos_auth_policy
     },
     metrics_data = {
-      enabled         = true
-      bucket_crn      = module.buckets.buckets[local.metrics_bucket_name].bucket_crn
-      bucket_endpoint = module.buckets.buckets[local.metrics_bucket_name].s3_endpoint_direct
+      enabled              = true
+      bucket_crn           = module.buckets.buckets[local.metrics_bucket_name].bucket_crn
+      bucket_endpoint      = module.buckets.buckets[local.metrics_bucket_name].s3_endpoint_direct
+      skip_cos_auth_policy = local.skip_cos_auth_policy
     }
   }
   logs_routing_tenant_regions   = var.logs_routing_tenant_regions
@@ -129,6 +137,55 @@ module "buckets" {
       }
     }
   ]
+}
+
+data "ibm_iam_account_settings" "iam_account_settings" {
+}
+
+module "bucket_crns" {
+  for_each = module.buckets.buckets
+  source   = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version  = "1.1.0"
+  crn      = each.value.bucket_id
+}
+
+resource "ibm_iam_authorization_policy" "cos_policy" {
+  provider               = ibm.cos
+  count                  = var.ibmcloud_cos_api_key != null && !var.skip_cloud_logs_cos_auth_policy ? length(module.buckets.bucket_configs) : 0
+  source_service_account = data.ibm_iam_account_settings.iam_account_settings.account_id
+  source_service_name    = "logs"
+  roles                  = ["Writer"]
+  description            = "Allow Cloud logs instances `Writer` access to the COS bucket with ID ${module.bucket_crns[module.buckets.bucket_configs[count.index].bucket_name].resource}, in the COS instance with ID ${module.existing_cos_instance_crn_parser.service_instance}."
+
+  resource_attributes {
+    name     = "serviceName"
+    operator = "stringEquals"
+    value    = "cloud-object-storage"
+  }
+
+  resource_attributes {
+    name     = "accountId"
+    operator = "stringEquals"
+    value    = module.existing_cos_instance_crn_parser.account_id
+  }
+
+  resource_attributes {
+    name     = "serviceInstance"
+    operator = "stringEquals"
+    value    = module.existing_cos_instance_crn_parser.service_instance
+  }
+
+  resource_attributes {
+    name     = "resourceType"
+    operator = "stringEquals"
+    value    = "bucket"
+  }
+
+  resource_attributes {
+    name     = "resource"
+    operator = "stringEquals"
+    value    = module.bucket_crns[module.buckets.bucket_configs[count.index].bucket_name].resource
+  }
 }
 
 module "existing_kms_crn_parser" {

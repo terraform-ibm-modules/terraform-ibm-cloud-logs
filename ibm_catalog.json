@@ -198,6 +198,9 @@
               ]
             },
             {
+              "key": "ibmcloud_cos_api_key"
+            },
+            {
               "key": "cloud_logs_data_cos_bucket_name"
             },
             {
@@ -235,6 +238,9 @@
             },
             {
               "key": "skip_cos_kms_iam_auth_policy"
+            },
+            {
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
               "key": "kms_encryption_enabled_buckets"
@@ -522,6 +528,9 @@
               ]
             },
             {
+              "key": "ibmcloud_cos_api_key"
+            },
+            {
               "key": "cloud_logs_data_cos_bucket_name"
             },
             {
@@ -554,6 +563,9 @@
             },
             {
               "key": "skip_cos_kms_iam_auth_policy"
+            },
+            {
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
               "key": "existing_kms_key_crn"
