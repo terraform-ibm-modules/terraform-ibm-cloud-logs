@@ -91,7 +91,7 @@ module "buckets" {
   }
   depends_on = [time_sleep.wait_for_authorization_policy[0]]
   source     = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version    = "8.21.25"
+  version    = "9.0.4"
   bucket_configs = [
     {
       bucket_name              = local.data_bucket_name
@@ -257,7 +257,7 @@ module "kms" {
   }
   count                       = local.use_kms_module ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.1.5"
+  version                     = "5.1.7"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
