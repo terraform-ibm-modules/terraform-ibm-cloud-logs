@@ -82,6 +82,12 @@ variable "skip_cos_kms_iam_auth_policy" {
   default     = false
 }
 
+variable "skip_cloud_logs_cos_auth_policy" {
+  type        = bool
+  description = "To skip creating an IAM authorization policy that allows the IBM Cloud logs to write to the Cloud Object Storage bucket, set this variable to `true`."
+  default     = false
+}
+
 variable "existing_monitoring_crn" {
   type        = string
   nullable    = true
