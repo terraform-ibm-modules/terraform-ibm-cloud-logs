@@ -237,10 +237,10 @@
               ]
             },
             {
-              "key": "skip_cos_kms_iam_auth_policy"
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
-              "key": "skip_cloud_logs_cos_auth_policy"
+              "key": "skip_cos_kms_iam_auth_policy"
             },
             {
               "key": "kms_encryption_enabled_buckets"
@@ -335,6 +335,13 @@
                 "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
               ]
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "iam-identity",
+              "notes": "[Optional] Required if creating COS buckets in a separate account from the account Cloud Logs is created in."
             }
           ],
           "architecture": {
@@ -562,10 +569,10 @@
               ]
             },
             {
-              "key": "skip_cos_kms_iam_auth_policy"
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
-              "key": "skip_cloud_logs_cos_auth_policy"
+              "key": "skip_cos_kms_iam_auth_policy"
             },
             {
               "key": "existing_kms_key_crn"
@@ -638,6 +645,13 @@
                 "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
               ]
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "iam-identity",
+              "notes": "[Optional] Required if creating COS buckets in a separate account from the account Cloud Logs is created in."
             }
           ],
           "architecture": {

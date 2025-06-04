@@ -25,6 +25,7 @@ locals {
 }
 
 module "cloud_logs" {
+  depends_on                             = [time_sleep.wait_for_cos_authorization_policy[0]]
   count                                  = local.create_cloud_logs ? 1 : 0
   source                                 = "../.."
   resource_group_id                      = module.resource_group.resource_group_id
@@ -76,7 +77,8 @@ locals {
   kms_key_crn   = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
   kms_key_id    = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
 
-  create_cross_account_auth_policy = var.existing_cloud_logs_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : true : false
+  create_cross_account_auth_policy     = var.existing_cloud_logs_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : true : false
+  create_cross_account_cos_auth_policy = var.existing_cloud_logs_crn == null && var.ibmcloud_cos_api_key != null && !var.skip_cloud_logs_cos_auth_policy
 }
 
 module "existing_cos_instance_crn_parser" {
@@ -139,9 +141,6 @@ module "buckets" {
   ]
 }
 
-data "ibm_iam_account_settings" "iam_account_settings" {
-}
-
 module "bucket_crns" {
   for_each = module.buckets.buckets
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
@@ -149,10 +148,14 @@ module "bucket_crns" {
   crn      = each.value.bucket_id
 }
 
+data "ibm_iam_account_settings" "iam_account_settings" {
+  count = local.create_cross_account_cos_auth_policy ? 1 : 0
+}
+
 resource "ibm_iam_authorization_policy" "cos_policy" {
   provider               = ibm.cos
-  count                  = var.ibmcloud_cos_api_key != null && !var.skip_cloud_logs_cos_auth_policy ? length(module.buckets.bucket_configs) : 0
-  source_service_account = data.ibm_iam_account_settings.iam_account_settings.account_id
+  count                  = local.create_cross_account_cos_auth_policy ? length(module.buckets.bucket_configs) : 0
+  source_service_account = data.ibm_iam_account_settings.iam_account_settings[0].account_id
   source_service_name    = "logs"
   roles                  = ["Writer"]
   description            = "Allow Cloud logs instances `Writer` access to the COS bucket with ID ${module.bucket_crns[module.buckets.bucket_configs[count.index].bucket_name].resource}, in the COS instance with ID ${module.existing_cos_instance_crn_parser.service_instance}."
@@ -186,6 +189,12 @@ resource "ibm_iam_authorization_policy" "cos_policy" {
     operator = "stringEquals"
     value    = module.bucket_crns[module.buckets.bucket_configs[count.index].bucket_name].resource
   }
+}
+
+resource "time_sleep" "wait_for_cos_authorization_policy" {
+  depends_on      = [ibm_iam_authorization_policy.cos_policy]
+  count           = var.ibmcloud_cos_api_key != null && !var.skip_cloud_logs_cos_auth_policy ? length(module.buckets.bucket_configs) : 0
+  create_duration = "30s"
 }
 
 module "existing_kms_crn_parser" {
