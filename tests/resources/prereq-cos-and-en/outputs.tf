@@ -26,14 +26,10 @@ output "en_crns" {
   description = "EN crns"
   value = [
     {
-      en_instance_id = module.event_notifications1.guid,
-      en_region      = var.region,
-      email_list     = ["Goldeneye.Development@ibm.com"]
+      en_crn = module.event_notifications1.crn
     },
     {
-      en_instance_id = module.event_notifications2.guid,
-      en_region      = var.region,
-      email_list     = ["Goldeneye.Development@ibm.com"]
+      en_crn = module.event_notifications2.crn
     }
   ]
 }

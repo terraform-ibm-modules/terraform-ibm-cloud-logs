@@ -119,8 +119,7 @@ variable "service_endpoints" {
 
 variable "existing_event_notifications_instances" {
   type = list(object({
-    en_instance_id      = string
-    en_region           = string
+    en_crn              = string
     en_integration_name = optional(string)
     skip_en_auth_policy = optional(bool, false)
   }))
