@@ -24,12 +24,12 @@ output "cos_crn" {
 
 output "en_crns" {
   description = "EN crns"
-  value = [
-    {
-      en_crn = module.event_notifications1.crn
+  value = [{
+    en_crn              = module.event_notifications1.crn,
+    en_integration_name = "en-1"
     },
     {
-      en_crn = module.event_notifications2.crn
-    }
-  ]
+      en_crn              = module.event_notifications2.crn,
+      en_integration_name = "en-2"
+  }]
 }

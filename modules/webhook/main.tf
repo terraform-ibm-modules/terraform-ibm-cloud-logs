@@ -10,7 +10,7 @@ resource "ibm_iam_authorization_policy" "en_policy" {
   target_service_name         = "event-notifications"
   target_resource_instance_id = split(":", each.value.en_crn)[7]
   roles                       = ["Event Source Manager", "Viewer"]
-  description                 = "Allow Cloud Logs with instance ID ${var.cloud_logs_instance_id} 'Event Source Manager' and 'Viewer' role access on the Event Notification instance GUID ${each.value.en_crn}"
+  description                 = "Allow Cloud Logs with instance ID ${var.cloud_logs_instance_id} 'Event Source Manager' and 'Viewer' role access on the Event Notification instance GUID ${split(":", each.value.en_crn)[7]}"
 }
 
 resource "time_sleep" "wait_for_en_authorization_policy" {
