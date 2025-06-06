@@ -177,13 +177,11 @@ module "cloud_logs" {
     }]
   }]
   existing_event_notifications_instances = [{
-    en_instance_id      = module.event_notification_1.guid
-    en_region           = var.region
+    en_crn              = module.event_notification_1.crn
     en_integration_name = "${var.prefix}-en-1"
     },
     {
-      en_instance_id      = module.event_notification_2.guid
-      en_region           = var.region
+      en_crn              = module.event_notification_2.crn
       en_integration_name = "${var.prefix}-en-2"
   }]
 
