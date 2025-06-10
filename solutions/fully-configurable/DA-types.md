@@ -2,19 +2,19 @@
 
 Several optional input variables in the IBM Cloud [Cloud Logs instances deployable architecture](https://cloud.ibm.com/catalog#deployable_architecture) use complex object types. You specify these inputs when you configure deployable architecture.
 
-* Cloud Logs Event Notification Instances (`existing_event_notifications_instances`)
+* Existing Event Notification Instances (`existing_event_notifications_instances`)
 * Cloud Logs policies (`cloud_logs_policies`)
 * Cloud Logs data bucket retention policy(`cloud_log_data_bucket_retention_policy`)
 
-## Cloud Logs Event Notification Instances <a name="cloud_logs_existing_en_instances"></a>
+## Existing Event Notification Instances <a name="existing_event_notifications_instances"></a>
 
-The `cloud_logs_existing_en_instances` input variable allows you to provide a list of existing Event Notification (EN) instances that will be integrated with the Cloud Logging service. For each EN instance, you need to specify its CRN (Cloud Resource Name) and region. You can optionally configure a integration name and control whether to skip the creation of an authentication policy for the instance.
+The `existing_event_notifications_instances` input variable allows you to provide a list of existing Event Notification (EN) instances that will be integrated with the Cloud Logging service. For each EN instance, you need to specify its CRN (Cloud Resource Name) and region. You can optionally configure a integration name and control whether to skip the creation of an authentication policy for the instance.
 
-* Variable name: `cloud_logs_existing_en_instances`.
+* Variable name: `existing_event_notifications_instances`.
 * Type: A list of objects. Each object represents an EN instance.
 * Default value: An empty list (`[]`).
 
-### Options for cloud_logs_existing_en_instances
+### Options for existing_event_notifications_instances
 
 * `crn` (required): The Cloud Resource Name (CRN) of the Event Notification instance.
 
@@ -22,7 +22,7 @@ The `cloud_logs_existing_en_instances` input variable allows you to provide a li
 
 * `skip_iam_auth_policy` (optional): A boolean flag to determine whether to skip the creation of an authentication policy that allows Cloud Logs 'Event Source Manager' role access in the existing event notification instance. Defaults to `false`.
 
-### Example Event Notification Instance Configuration
+### Example Existing Event Notification Instance Configuration
 
 ```hcl
 [
@@ -40,7 +40,7 @@ The `cloud_logs_existing_en_instances` input variable allows you to provide a li
 
 In this example:
 
-* The first EN instance has a integration name `"custom-logging-en-integration"` skips the authentication policy, and sets email notifications.
+* The first EN instance has a integration name `"custom-logging-en-integration"` skips the authentication policy.
 * The second EN instance uses the default integration name and includes the authentication policy.
 
 ## Cloud Logs Policies <a name="cloud_logs_policies"></a>
