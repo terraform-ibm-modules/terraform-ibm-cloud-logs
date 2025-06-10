@@ -19,7 +19,7 @@ The `cloud_logs_existing_en_instances` input variable allows you to provide a li
 * `crn` (required): The Cloud Resource Name (CRN) of the Event Notification instance.
 
 * `integration_name` (optional): The name of the Event Notification integration that gets created. Defaults to `"cloud-logs-en-integration"`.
-  
+
 * `skip_iam_auth_policy` (optional): A boolean flag to determine whether to skip the creation of an authentication policy that allows Cloud Logs 'Event Source Manager' role access in the existing event notification instance. Defaults to `false`.
 
 ### Example Event Notification Instance Configuration
@@ -27,16 +27,13 @@ The `cloud_logs_existing_en_instances` input variable allows you to provide a li
 ```hcl
 [
   {
-    instance_crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
+    crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
     integration_name    = "custom-logging-en-integration"
-    skip_en_auth_policy = true
-    from_email          = "examplefromemail@ibm.com"
-    reply_to_email      = "examplereplyemail@ibm.com"
-    email_list          = ["exampleemail1@ibm.com", "exampleemail2@ibm.com"]
+    skip_iam_auth_policy = true
   },
   {
-    instance_crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
-    skip_en_auth_policy = false
+    crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
+    skip_iam_auth_policy = false
   }
 ]
 ```
