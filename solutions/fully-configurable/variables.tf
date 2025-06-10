@@ -50,6 +50,13 @@ variable "region" {
 # COS
 ########################################################################################################################
 
+variable "ibmcloud_cos_api_key" {
+  type        = string
+  description = "The IBM Cloud API key that can create Cloud Object Storage (COS) buckets. If not specified, the 'ibmcloud_api_key' variable is used. Specify this key if the COS instance is in an account that's different from the one associated with the cloud logs resources. Do not set if the same account owns all the instances."
+  sensitive   = true
+  default     = null
+}
+
 variable "existing_cos_instance_crn" {
   type        = string
   description = "The CRN of an existing Object Storage instance."
@@ -98,6 +105,12 @@ variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account. Applies only if `existing_cloud_logs_crn` is not provided."
   nullable    = false
+  default     = false
+}
+
+variable "skip_cloud_logs_cos_auth_policy" {
+  type        = bool
+  description = "To skip creating an IAM authorization policy that allows the IBM Cloud logs to write to the Cloud Object Storage bucket, set this variable to `true`."
   default     = false
 }
 
