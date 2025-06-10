@@ -17,7 +17,7 @@ provider "ibm" {
 
 provider "ibm" {
   alias            = "cos"
-  ibmcloud_api_key = var.ibmcloud_api_key
+  ibmcloud_api_key = var.ibmcloud_cos_api_key != null ? var.ibmcloud_cos_api_key : var.ibmcloud_api_key
   region           = var.region
   visibility       = var.provider_visibility
 }
