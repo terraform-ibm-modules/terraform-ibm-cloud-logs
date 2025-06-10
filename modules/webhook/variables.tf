@@ -19,9 +19,9 @@ variable "cloud_logs_instance_name" {
 
 variable "existing_event_notifications_instances" {
   type = list(object({
-    en_crn              = string
-    en_integration_name = optional(string)
-    skip_en_auth_policy = optional(bool, false)
+    crn                  = string
+    integration_name     = optional(string)
+    skip_iam_auth_policy = optional(bool, false)
   }))
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
 }
