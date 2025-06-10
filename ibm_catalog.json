@@ -477,7 +477,7 @@
             },
             {
               "name": "deploy-arch-ibm-event-notifications",
-              "description": "Enable Cloud Automation for Event Notifications to configure lifecycle notifications for your Secrets Manager instance.",
+              "description": "Enable Cloud Automation for Event Notifications to configure event notifications for your Cloud Logs instance.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "fully-configurable"
