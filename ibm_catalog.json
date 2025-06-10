@@ -186,6 +186,9 @@
               ]
             },
             {
+              "key": "ibmcloud_cos_api_key"
+            },
+            {
               "key": "cloud_logs_data_cos_bucket_name"
             },
             {
@@ -220,6 +223,9 @@
                   "value": "public"
                 }
               ]
+            },
+            {
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
               "key": "skip_cos_kms_iam_auth_policy"
@@ -317,6 +323,13 @@
                 "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
               ]
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "iam-identity",
+              "notes": "[Optional] Required if creating COS buckets in a separate account from the account Cloud Logs is created in."
             }
           ],
           "architecture": {
@@ -464,7 +477,7 @@
             },
             {
               "name": "deploy-arch-ibm-event-notifications",
-              "description": "Enable Cloud Automation for Event Notifications to configure lifecycle notifications for your Secrets Manager instance.",
+              "description": "Enable Cloud Automation for Event Notifications to configure event notifications for your Cloud Logs instance.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "fully-configurable"
@@ -622,6 +635,9 @@
               ]
             },
             {
+              "key": "ibmcloud_cos_api_key"
+            },
+            {
               "key": "cloud_logs_data_cos_bucket_name"
             },
             {
@@ -651,6 +667,9 @@
                   "value": "onerate_active"
                 }
               ]
+            },
+            {
+              "key": "skip_cloud_logs_cos_auth_policy"
             },
             {
               "key": "skip_cos_kms_iam_auth_policy"
@@ -726,6 +745,13 @@
                 "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
               ]
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "iam-identity",
+              "notes": "[Optional] Required if creating COS buckets in a separate account from the account Cloud Logs is created in."
             }
           ],
           "architecture": {
