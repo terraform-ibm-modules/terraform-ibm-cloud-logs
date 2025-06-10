@@ -135,20 +135,7 @@
             },
             {
               "key": "provider_visibility",
-              "options": [
-                {
-                  "displayname": "private",
-                  "value": "private"
-                },
-                {
-                  "displayname": "public",
-                  "value": "public"
-                },
-                {
-                  "displayname": "public-and-private",
-                  "value": "public-and-private"
-                }
-              ]
+              "hidden": true
             },
             {
               "key": "cloud_logs_instance_name"
@@ -486,7 +473,7 @@
               "input_mapping": [
                 {
                   "dependency_output": "crn_list_object",
-                  "version_input": "existing_event_notifications_instance_crn"
+                  "version_input": "existing_event_notifications_instances"
                 },
                 {
                   "dependency_input": "prefix",
