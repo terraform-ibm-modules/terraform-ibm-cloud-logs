@@ -280,7 +280,7 @@ variable "existing_event_notifications_instances" {
     skip_iam_auth_policy = optional(bool, false)
   }))
   default     = []
-  description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."
+  description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md#existing-event-notification-instances-)."
 }
 
 ##############################################################################
