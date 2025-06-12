@@ -351,52 +351,16 @@
           "architecture": {
             "features": [
               {
-                "title": "Cloud Logs instance creation",
-                "description": "Yes"
+                "title": "cloud logs instance",
+                "description": "Creates and configures an instance of cloud logs."
               },
               {
-                "title": "Use existing Cloud Logs instance",
-                "description": "Yes"
+                "title": "KMS Keys and Key Rings",
+                "description": "Supports the creation of Keys and Key Rings for encrypting object storage bucket."
               },
               {
-                "title": "New resource group creation",
-                "description": "No"
-              },
-              {
-                "title": "Use existing resource group",
-                "description": "Yes"
-              },
-              {
-                "title": "COS instance creation",
-                "description": "No"
-              },
-              {
-                "title": "COS bucket creation",
-                "description": "Yes"
-              },
-              {
-                "title": "Enforced KMS encryption",
-                "description": "No"
-              },
-              {
-                "title": "KMS instance creation",
-                "description": "No"
-              },
-              {
-                "title": "KMS key ring and key creation",
-                "description": "Yes"
-              },
-              {
-                "title": "Use existing KMS key",
-                "description": "Yes"
-              },
-              {
-                "title": "IAM s2s auth policies creation",
-                "description": "Yes"
-              },
-              {
-                "title": "Event Notifications integration",
-                "description": "Yes"
+                "title": "Object Storage buckets",
+                "description": "Creates buckets required for the Cloud Logs instance."
               }
             ],
             "diagrams": [
@@ -475,7 +439,7 @@
               "name": "deploy-arch-ibm-account-infra-base",
               "description": "Enable to create a resource groups by default where all the resources will be provisioned and, when you enable the “with Account Settings” option, it also applies baseline security and governance settings. When disabled, provide your own resource group via the `existing_resource_group_name` input.",
               "id": "63641cec-6093-4b4f-b7b0-98d2f4185cd6-global",
-              "version": "v3.0.7",
+              "version": "v3.0.11",
               "flavors": [
                 "resource-group-only",
                 "resource-groups-with-account-settings"
