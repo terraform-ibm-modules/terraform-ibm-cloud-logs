@@ -54,6 +54,7 @@
         {
           "label": "Fully configurable",
           "name": "fully-configurable",
+          "index": 1,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
           "configuration": [
@@ -406,7 +407,7 @@
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cloud-logs/refs/heads/main/reference-architecture/deployable-architecture-cloud-logs.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                "description": "This solution deploys an IBM Cloud Logs instance on IBM Cloud.<br><br> It creates an IBM Cloud Object Storage instance and provisions a storage bucket required to store logs and metrics data. Alternatively, you can provide details of an existing IBM Cloud Object Storage instance. <br><br> In addition, it enables encryption for the object storage bucket by provisioning an IBM Key Protect service instance, where a Key Ring and associated Key are created to manage encryption through IBM Cloud Key Management Services (KMS). You can also choose to provide an existing KMS instance.<br><br>"
               }
             ]
           },
@@ -498,6 +499,7 @@
         {
           "label": "Security-enforced",
           "name": "security-enforced",
+          "index": 2,
           "install_type": "fullstack",
           "working_directory": "solutions/security-enforced",
           "configuration": [
