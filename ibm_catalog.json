@@ -9,8 +9,7 @@
         "target_terraform",
         "terraform",
         "solution",
-        "logging_monitoring",
-        "support_ibm"
+        "logging_monitoring"
       ],
       "keywords": [
         "IaC",
