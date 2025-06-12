@@ -9,7 +9,8 @@
         "target_terraform",
         "terraform",
         "solution",
-        "logging_monitoring"
+        "logging_monitoring",
+        "support_ibm"
       ],
       "keywords": [
         "IaC",
@@ -21,23 +22,23 @@
         "logging",
         "log"
       ],
-      "short_description": "Creates and configures IBM Cloud Logs resources",
-      "long_description": "This architecture supports creating and configuring [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs) resources. IBM® Cloud Logs is a scalable logging service that persists logs and provides users with capabilities for querying, tailing, and visualizing logs. \n  Logs are comprised of events that are typically human-readable and have different formats, for example, unstructured text, JSON, delimiter-separated values, key-value pairs, and so on. The IBM Cloud Logs service can manage general purpose application logs, platform logs, or structured audit events. IBM Cloud Logs can be used with logs from both IBM Cloud services and customer applications.",
+      "short_description": "Creates and configures an instance of IBM Cloud Logs",
+      "long_description": "This architecture supports creating and configuring [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs) resources. IBM Cloud Logs is a scalable logging service that persists logs and provides users with capabilities for querying, tailing, and visualizing logs. \n  Logs are comprised of events that are typically human-readable and have different formats, for example, unstructured text, JSON, delimiter-separated values, key-value pairs, and so on. The IBM Cloud Logs service can manage general purpose application logs, platform logs, or structured audit events. IBM Cloud Logs can be used with logs from both IBM Cloud services and customer applications.",
       "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/blob/main/README.md",
       "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cloud-logs/refs/heads/main/images/cloud-logs-icon.svg",
       "provider_name": "IBM",
       "features": [
         {
           "title": "Cloud Logs",
-          "description": "Creates and configures a Cloud Logs instance."
+          "description": "Get started with provisioning an instance of IBM Cloud Logs. Explore more about IBM Cloud Logs [here](https://www.ibm.com/products/cloud-logs)."
         },
         {
           "title": "Object Storage buckets for Cloud Logs",
           "description": "Creates buckets required for the Cloud Logs instance."
         },
         {
-          "title": "KMS encryption",
-          "description": "Supports creating a new key, or using an existing one to encrypt the Object Storage bucket."
+          "title": "Enable KMS encryption",
+          "description": "Supports creating a new key, or using an existing one to encrypt the Object Storage bucket. For more details on KMS encryption, refer [this](https://cloud.ibm.com/docs/key-protect?topic=key-protect-about)."
         },
         {
           "title": "Event Notification Integration for Cloud Logs",
@@ -209,6 +210,7 @@
             },
             {
               "key": "management_endpoint_type_for_buckets",
+              "hidden": true,
               "options": [
                 {
                   "displayname": "Direct",
@@ -241,6 +243,7 @@
             },
             {
               "key": "kms_endpoint_type",
+              "hidden": true,
               "options": [
                 {
                   "displayname": "Public",
@@ -262,13 +265,25 @@
               "key": "ibmcloud_kms_api_key"
             },
             {
-              "key": "existing_event_notifications_instances"
+              "key": "existing_event_notifications_instances",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "skip_logs_routing_auth_policy"
             },
             {
-              "key": "logs_policies"
+              "key": "logs_policies",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "existing_cloud_logs_crn"
@@ -277,12 +292,19 @@
               "key": "existing_monitoring_crn"
             },
             {
-              "key": "cloud_logs_cbr_rules"
+              "key": "cloud_logs_cbr_rules",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             }
           ],
           "iam_permissions": [
             {
               "service_name": "logs",
+              "notes": "[Optional] Required for creating a new instance of cloud logs.",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
@@ -290,6 +312,7 @@
             },
             {
               "service_name": "cloud-object-storage",
+              "notes": "[Optional] Required for creating a Object Storage instance to store logs and metrics data.",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
@@ -297,7 +320,7 @@
             },
             {
               "service_name": "kms",
-              "notes": "This role is only required if you are using Key Protect for encryption",
+              "notes": "[Optional] Required if KMS encryption is enabled and Key protect is used for encryption.",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
@@ -305,7 +328,7 @@
             },
             {
               "service_name": "hs-crypto",
-              "notes": "This role is only required if you are using Hyper Protect for encryption",
+              "notes": "[Optional] Required if KMS encryption is enabled and Hyper Protect Crypto Services is used for encryption.",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
@@ -314,13 +337,6 @@
             {
               "service_name": "resource-group",
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Viewer"
-              ]
-            },
-            {
-              "service_name": "event-notifications",
-              "role_crns": [
-                "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
                 "crn:v1:bluemix:public:iam::::role:Viewer"
               ]
             },
@@ -659,19 +675,37 @@
               "key": "ibmcloud_kms_api_key"
             },
             {
-              "key": "existing_event_notifications_instances"
+              "key": "existing_event_notifications_instances",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "skip_logs_routing_auth_policy"
             },
             {
-              "key": "logs_policies"
+              "key": "logs_policies",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "existing_monitoring_crn"
             },
             {
-              "key": "cloud_logs_cbr_rules"
+              "key": "cloud_logs_cbr_rules",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             }
           ],
           "iam_permissions": [
