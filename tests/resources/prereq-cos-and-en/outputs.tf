@@ -24,16 +24,12 @@ output "cos_crn" {
 
 output "en_crns" {
   description = "EN crns"
-  value = [
-    {
-      en_instance_id = module.event_notifications1.guid,
-      en_region      = var.region,
-      email_list     = ["Goldeneye.Development@ibm.com"]
+  value = [{
+    crn              = module.event_notifications1.crn,
+    integration_name = "en-1"
     },
     {
-      en_instance_id = module.event_notifications2.guid,
-      en_region      = var.region,
-      email_list     = ["Goldeneye.Development@ibm.com"]
-    }
-  ]
+      crn              = module.event_notifications2.crn,
+      integration_name = "en-2"
+  }]
 }

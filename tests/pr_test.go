@@ -166,7 +166,6 @@ func TestSecurityEnforced(t *testing.T) {
 			{Name: "existing_cos_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 			{Name: "existing_event_notifications_instances", Value: terraform.OutputJson(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
-			{Name: "management_endpoint_type_for_bucket", Value: "private", DataType: "string"},
 		}
 
 		err := options.RunSchematicTest()
