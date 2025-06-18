@@ -29,7 +29,7 @@
       "features": [
         {
           "title": "Cloud Logs",
-          "description": "Get started with provisioning an instance of IBM Cloud Logs. Explore more about IBM Cloud Logs [here](https://www.ibm.com/products/cloud-logs)."
+          "description": "Get started with provisioning an instance of IBM Cloud Logs. Explore more about IBM Cloud Logs [here](https://cloud.ibm.com/docs/cloud-logs?topic=cloud-logs-getting-started)."
         },
         {
           "title": "Object Storage buckets for Cloud Logs",
@@ -48,7 +48,7 @@
           "description": "Creates and configures policies for the Cloud Logs instance."
         }
       ],
-      "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues). Please note this product is not supported via the IBM Cloud Support Center.",
+      "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [here](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/issues). Please note this product is not supported via the IBM Cloud Support Center.",
       "flavors": [
         {
           "label": "Fully configurable",
@@ -351,7 +351,7 @@
           "architecture": {
             "features": [
               {
-                "title": "cloud logs instance",
+                "title": "Cloud Logs instance",
                 "description": "Creates and configures an instance of cloud logs."
               },
               {
@@ -361,6 +361,10 @@
               {
                 "title": "Object Storage buckets",
                 "description": "Creates buckets required for the Cloud Logs instance."
+              },
+              {
+                "title": "Event Notifications integration",
+                "description": "Supports configuring Event Notifications for routing critical events that occur in your IBM Cloud Logs."
               }
             ],
             "diagrams": [
@@ -734,51 +738,19 @@
             "features": [
               {
                 "title": "Cloud Logs instance creation",
-                "description": "Yes"
+                "description": "Creates and configures an instance of cloud logs."
               },
               {
-                "title": "Use existing Cloud Logs instance",
-                "description": "No"
+                "title": "KMS Keys and Key Rings",
+                "description": "Supports the creation of Keys and Key Rings for encrypting object storage bucket."
               },
               {
-                "title": "New resource group creation",
-                "description": "No"
-              },
-              {
-                "title": "Use existing resource group",
-                "description": "Yes"
-              },
-              {
-                "title": "COS instance creation",
-                "description": "No"
-              },
-              {
-                "title": "COS bucket creation",
-                "description": "Yes"
-              },
-              {
-                "title": "Enforced KMS encryption",
-                "description": "Yes"
-              },
-              {
-                "title": "KMS instance creation",
-                "description": "No"
-              },
-              {
-                "title": "KMS key ring and key creation",
-                "description": "Yes"
-              },
-              {
-                "title": "Use existing KMS key",
-                "description": "Yes"
-              },
-              {
-                "title": "IAM s2s auth policies creation",
-                "description": "Yes"
+                "title": "Object Storage buckets",
+                "description": "Creates KMS encrypted buckets required for the Cloud Logs instance."
               },
               {
                 "title": "Event Notifications integration",
-                "description": "Yes"
+                "description": "Supports configuring Event Notifications for routing critical events that occur in your IBM Cloud Logs."
               }
             ],
             "diagrams": [
