@@ -13,9 +13,10 @@ module "resource_group" {
 #######################################################################################################################
 
 locals {
-  prefix            = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
-  create_cloud_logs = var.existing_cloud_logs_crn == null
-  cloud_logs_crn    = local.create_cloud_logs ? module.cloud_logs[0].crn : var.existing_cloud_logs_crn
+  prefix                   = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
+  cloud_logs_instance_name = "${local.prefix}${var.cloud_logs_instance_name}"
+  create_cloud_logs        = var.existing_cloud_logs_crn == null
+  cloud_logs_crn           = local.create_cloud_logs ? module.cloud_logs[0].crn : var.existing_cloud_logs_crn
   # Even though we're only performing a comparison (var.ibmcloud_cos_api_key != null),
   # Terraform treats the entire value as "tainted" due to sensitivity.
   # Later, in the cloud_logs module, where the data_storage input variable is used in a for_each loop,
@@ -30,7 +31,7 @@ module "cloud_logs" {
   source                                 = "../.."
   resource_group_id                      = module.resource_group.resource_group_id
   region                                 = var.region
-  instance_name                          = var.cloud_logs_instance_name
+  instance_name                          = local.cloud_logs_instance_name
   plan                                   = "standard" # not a variable because there is only one option
   resource_tags                          = var.cloud_logs_resource_tags
   access_tags                            = var.cloud_logs_access_tags
