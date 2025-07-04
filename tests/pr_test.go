@@ -89,7 +89,7 @@ func TestRunFullyConfigurable(t *testing.T) {
 		{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
-		{Name: "management_endpoint_type_for_bucket", Value: "public", DataType: "string"},
+		{Name: "management_endpoint_type_for_buckets", Value: "public", DataType: "string"},
 	}
 
 	err := options.RunSchematicTest()
