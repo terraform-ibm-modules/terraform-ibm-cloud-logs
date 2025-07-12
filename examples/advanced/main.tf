@@ -21,7 +21,7 @@ locals {
 
 module "key_protect" {
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.1.9"
+  version                     = "5.1.10"
   resource_group_id           = module.resource_group.resource_group_id
   region                      = var.region
   resource_tags               = var.resource_tags
@@ -117,7 +117,7 @@ module "buckets" {
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.32.2"
+  version          = "1.32.3"
   name             = "${var.prefix}-schematics-network-zone"
   zone_description = "CBR Network zone for schematics"
   account_id       = module.cloud_logs.account_id
