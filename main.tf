@@ -33,7 +33,7 @@ resource "ibm_resource_tag" "cloud_logs_tag" {
 module "cos_bucket_crn_parser" {
   for_each = { for index, bucket in var.data_storage : index => bucket if bucket.enabled && !bucket.skip_cos_auth_policy }
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version  = "1.1.0"
+  version  = "1.2.0"
   crn      = each.value.bucket_crn
 }
 
@@ -181,7 +181,7 @@ locals {
 module "cbr_rule" {
   count            = length(var.cbr_rules)
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
-  version          = "1.31.0"
+  version          = "1.32.2"
   rule_description = var.cbr_rules[count.index].description
   enforcement_mode = var.cbr_rules[count.index].enforcement_mode
   rule_contexts    = var.cbr_rules[count.index].rule_contexts
