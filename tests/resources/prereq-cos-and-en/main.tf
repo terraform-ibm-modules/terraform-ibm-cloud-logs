@@ -24,7 +24,7 @@ module "resource_group2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.1.9"
+  version           = "10.1.10"
   resource_group_id = module.resource_group1.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   cos_tags          = var.resource_tags
@@ -37,7 +37,7 @@ module "cos" {
 
 module "event_notifications1" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.4.19"
+  version           = "2.4.20"
   resource_group_id = module.resource_group1.resource_group_id
   name              = "${var.prefix}-en1"
   tags              = var.resource_tags
@@ -51,7 +51,7 @@ module "event_notifications1" {
 
 module "event_notifications2" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.4.19"
+  version           = "2.4.20"
   resource_group_id = module.resource_group2.resource_group_id
   name              = "${var.prefix}-en2"
   tags              = var.resource_tags
