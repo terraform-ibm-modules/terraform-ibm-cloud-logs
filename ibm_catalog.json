@@ -800,7 +800,8 @@
                 "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
               }
             ]
-          }
+          },
+          "terraform_version": "1.10.5"
         }
       ]
     }
