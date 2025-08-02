@@ -47,7 +47,7 @@ module "key_protect" {
 
 module "event_notification_1" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.6.0"
+  version           = "2.6.1"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-1"
   tags              = var.resource_tags
@@ -58,7 +58,7 @@ module "event_notification_1" {
 
 module "event_notification_2" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.6.0"
+  version           = "2.6.1"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-2"
   tags              = var.resource_tags
@@ -117,7 +117,7 @@ module "buckets" {
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.32.5"
+  version          = "1.32.6"
   name             = "${var.prefix}-schematics-network-zone"
   zone_description = "CBR Network zone for schematics"
   account_id       = module.cloud_logs.account_id
