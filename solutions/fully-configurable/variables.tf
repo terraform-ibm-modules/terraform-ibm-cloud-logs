@@ -106,7 +106,7 @@ variable "cloud_logs_cos_buckets_class" {
 variable "management_endpoint_type_for_buckets" {
   description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`, `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network."
   type        = string
-  default     = "private"
+  default     = "direct"
   validation {
     condition     = contains(["public", "private", "direct"], var.management_endpoint_type_for_buckets)
     error_message = "The specified management_endpoint_type_for_buckets is not a valid selection!"
