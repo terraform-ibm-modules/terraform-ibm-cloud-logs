@@ -375,7 +375,7 @@
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cloud-logs/refs/heads/main/reference-architecture/deployable-architecture-cloud-logs.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This solution deploys an IBM Cloud Logs instance on IBM Cloud.<br><br> It creates an IBM Cloud Object Storage instance and provisions a storage bucket required to store logs and metrics data. Alternatively, you can provide details of an existing IBM Cloud Object Storage instance. <br><br> In addition, it enables encryption for the object storage bucket by provisioning an IBM Key Protect service instance, where a Key Ring and associated Key are created to manage encryption through IBM Cloud Key Management Services (KMS). You can also choose to provide an existing KMS instance.<br><br>"
+                "description": "This architecture supports the creation and configuration of an IBM Cloud Logs instance.<br><br> A Cloud Object Storage (COS) instance is required for this topology. Within this instance, two Object Storage buckets will be created to store logs and metrics data. The [Cloud automation for Object Storage](https://cloud.ibm.com/catalog/7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3/architecture/deploy-arch-ibm-cos-68921490-2778-4930-ac6d-bae7be6cd958-global) architecture supports the provisioning of a Cloud Object Storage instance. Alternatively, you can provide the details of an existing Cloud Object Storage instance.<br><br> Additionally, the Object Storage buckets can be encrypted using IBM Cloud Key Management Services (KMS) to enhance security. The [Cloud automation for Key Protect](https://cloud.ibm.com/catalog/7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3/architecture/deploy-arch-ibm-kms-2cad4789-fa90-4886-9c9e-857081c273ee-global) architecture supports the provisioning of a KMS instance where a Key Ring and associated Key will be created to manage encryption. Alternatively, you may choose to provide the details of an existing KMS instance."
               }
             ]
           },
@@ -719,12 +719,6 @@
               ]
             },
             {
-              "service_name": "resource-group",
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Viewer"
-              ]
-            },
-            {
               "service_name": "event-notifications",
               "role_crns": [
                 "crn:v1:bluemix:public:event-notifications::::serviceRole:Event-Source-Manager",
@@ -735,16 +729,6 @@
               "role_crns": ["crn:v1:bluemix:public:iam::::role:Viewer"],
               "service_name": "Resource group only",
               "notes": "Viewer access is required in the resource group you want to provision in."
-            },
-            {
-              "role_crns": ["crn:v1:bluemix:public:iam::::role:Administrator"],
-              "service_name": "All Account Management services",
-              "notes": "[Optional] Required for consuming Account Configuration deployable architecture which creates resource group."
-            },
-            {
-              "role_crns": ["crn:v1:bluemix:public:iam::::role:Administrator"],
-              "service_name": "All Identity and Access enabled services",
-              "notes": "[Optional] Required for consuming Account Configuration deployable architecture which creates resource group with account setting."
             }
           ],
           "architecture": {
@@ -761,7 +745,7 @@
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cloud-logs/refs/heads/main/reference-architecture/deployable-architecture-cloud-logs.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture supports creating and configuring IBM Cloud Logs resources"
+                "description": "This architecture supports the creation and configuration of an IBM Cloud Logs instance.<br><br> An existing Cloud Object Storage (COS) instance is required for this topology. Within this instance, two Object Storage buckets will be created to store logs and metrics data. <br><br> By default, both Object Storage buckets will be encrypted to enhance security."
               }
             ]
           },
