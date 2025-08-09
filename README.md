@@ -129,7 +129,7 @@ You need the following permissions to run this module.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.32.6 |
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.32.7 |
 | <a name="module_cos_bucket_crn_parser"></a> [cos\_bucket\_crn\_parser](#module\_cos\_bucket\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.2.0 |
 | <a name="module_en_integration"></a> [en\_integration](#module\_en\_integration) | ./modules/webhook | n/a |
 | <a name="module_logs_policies"></a> [logs\_policies](#module\_logs\_policies) | ./modules/logs_policy | n/a |
