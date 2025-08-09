@@ -466,7 +466,7 @@
             },
             {
               "name": "deploy-arch-ibm-event-notifications",
-              "description": "",
+              "description": "Enable to create an Event Notifications instance to route critical events that occur in your IBM Cloud Logs.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "fully-configurable"
