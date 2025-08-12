@@ -383,7 +383,7 @@
               "name": "deploy-arch-ibm-cos",
               "description": "Enable this to create an IBM Cloud Object Storage(COS) instance. The buckets to store logs and metrics will be created by the Cloud Logs deployable architecture.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "version": "v9.0.2",
+              "version": "v10.2.1",
               "flavors": [
                 "instance"
               ],
@@ -411,7 +411,7 @@
               "name": "deploy-arch-ibm-kms",
               "description": "Enable when you want to create your own root keys to encrypt the buckets.",
               "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
-              "version": "v5.1.4",
+              "version": "v5.1.19",
               "flavors": [
                 "fully-configurable"
               ],
