@@ -97,15 +97,16 @@ module "buckets" {
   version    = "10.2.3"
   bucket_configs = [
     {
-      bucket_name              = local.data_bucket_name
-      kms_key_crn              = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
-      kms_guid                 = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
-      kms_encryption_enabled   = var.kms_encryption_enabled_buckets
-      region_location          = var.region
-      resource_instance_id     = var.existing_cos_instance_crn
-      management_endpoint_type = var.management_endpoint_type_for_buckets
-      storage_class            = var.cloud_logs_cos_buckets_class
-      force_delete             = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
+      bucket_name                   = local.data_bucket_name
+      kms_key_crn                   = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
+      kms_guid                      = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_encryption_enabled        = var.kms_encryption_enabled_buckets
+      region_location               = var.region
+      resource_instance_id          = var.existing_cos_instance_crn
+      management_endpoint_type      = var.management_endpoint_type_for_buckets
+      storage_class                 = var.cloud_logs_cos_buckets_class
+      force_delete                  = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
+      skip_iam_authorization_policy = local.create_cross_account_cos_auth_policy
       activity_tracking = {
         read_data_events  = true
         write_data_events = true
