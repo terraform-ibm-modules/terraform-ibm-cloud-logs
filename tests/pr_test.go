@@ -310,7 +310,7 @@ func TestDependencyPermutations(t *testing.T) {
 
 	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
 		Testing: t,
-		Prefix:  "icm-per",
+		Prefix:  "icl-per",
 		AddonConfig: cloudinfo.AddonConfig{
 			OfferingName:   "deploy-arch-ibm-cloud-logs",
 			OfferingFlavor: "fully-configurable",
