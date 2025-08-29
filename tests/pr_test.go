@@ -306,6 +306,8 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 
 // TestDependencyPermutations runs dependency permutations for Cloud Monitoring and all its dependencies
 func TestDependencyPermutations(t *testing.T) {
+	t.Parallel()
+
 	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
 		Testing: t,
 		Prefix:  "icm-per",
