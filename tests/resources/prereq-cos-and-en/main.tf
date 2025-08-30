@@ -24,7 +24,7 @@ module "resource_group2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.2.10"
+  version           = "10.2.11"
   resource_group_id = module.resource_group1.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   cos_tags          = var.resource_tags
