@@ -304,7 +304,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 	require.NoError(t, err)
 }
 
-// TestDependencyPermutations runs dependency permutations for Cloud Monitoring and all its dependencies
+// TestDependencyPermutations runs dependency permutations for Cloud Logs and all its dependencies
 func TestDependencyPermutations(t *testing.T) {
 	t.Skip() // Skipping untill we do a refactor, see https://github.ibm.com/GoldenEye/issues/issues/15593#issuecomment-130654584
 
