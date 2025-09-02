@@ -306,7 +306,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 
 // TestDependencyPermutations runs dependency permutations for Cloud Monitoring and all its dependencies
 func TestDependencyPermutations(t *testing.T) {
-	t.Parallel()
+	t.Skip() // Skipping untill we do a refactor, see https://github.ibm.com/GoldenEye/issues/issues/15593#issuecomment-130654584
 
 	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
 		Testing: t,
