@@ -213,7 +213,7 @@ variable "kms_endpoint_type" {
   description = "The endpoint for communicating with the KMS instance. Possible values: `public`, `private.`"
   default     = "private"
   validation {
-    condition     = can(regex("public|private", var.kms_endpoint_type))
+    condition     = can(regex("^(public|private)$", var.kms_endpoint_type))
     error_message = "The kms_endpoint_type value must be 'public' or 'private'."
   }
 }
