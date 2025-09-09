@@ -64,22 +64,23 @@ module "cloud_logs" {
 
 locals {
   use_kms_module    = var.kms_encryption_enabled_buckets && var.existing_kms_key_crn == null
-  kms_region        = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].region : null
-  existing_kms_guid = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
-  kms_service_name  = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
-  kms_account_id    = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
+  kms_region        = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].region : module.existing_kms_crn_parser[0].region : null
+  existing_kms_guid = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : module.existing_kms_crn_parser[0].service_instance : null
+  kms_service_name  = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : module.existing_kms_crn_parser[0].service_name : null
+  kms_account_id    = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : module.existing_kms_crn_parser[0].account_id : null
 
   data_bucket_name    = "${local.prefix}${var.cloud_logs_data_cos_bucket_name}"
   metrics_bucket_name = "${local.prefix}${var.cloud_logs_metrics_cos_bucket_name}"
   cos_instance_guid   = module.existing_cos_instance_crn_parser.service_instance
 
-  key_ring_name = "${local.prefix}${var.cloud_logs_cos_key_ring_name}"
-  key_name      = "${local.prefix}${var.cloud_logs_cos_key_name}"
+  key_ring_name = local.use_kms_module ? "${local.prefix}${var.cloud_logs_cos_key_ring_name}" : null
+  key_name      = local.use_kms_module ? "${local.prefix}${var.cloud_logs_cos_key_name}" : null
   kms_key_crn   = var.kms_encryption_enabled_buckets ? var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].crn : null
-  kms_key_id    = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
+  kms_key_id    = var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.key_ring_name, local.key_name)].key_id : null
 
-  create_cross_account_auth_policy     = var.existing_cloud_logs_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : true : false
+  create_cross_account_auth_policy     = var.existing_cloud_logs_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null && var.ibmcloud_cos_api_key == null ? false : true : false
   create_cross_account_cos_auth_policy = var.existing_cloud_logs_crn == null && var.ibmcloud_cos_api_key != null && !var.skip_cloud_logs_cos_auth_policy
+  is_same_cross_account                = var.ibmcloud_kms_api_key == var.ibmcloud_cos_api_key
 }
 
 module "existing_cos_instance_crn_parser" {
@@ -99,7 +100,7 @@ module "buckets" {
     {
       bucket_name              = local.data_bucket_name
       kms_key_crn              = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
-      kms_guid                 = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_guid                 = var.kms_encryption_enabled_buckets ? local.existing_kms_guid : null
       kms_encryption_enabled   = var.kms_encryption_enabled_buckets
       region_location          = var.region
       resource_instance_id     = var.existing_cos_instance_crn
@@ -120,7 +121,7 @@ module "buckets" {
     {
       bucket_name                   = local.metrics_bucket_name
       kms_key_crn                   = var.kms_encryption_enabled_buckets ? local.kms_key_crn : null
-      kms_guid                      = var.kms_encryption_enabled_buckets ? module.existing_kms_crn_parser[0].service_instance : null
+      kms_guid                      = var.kms_encryption_enabled_buckets ? local.existing_kms_guid : null
       kms_encryption_enabled        = var.kms_encryption_enabled_buckets
       region_location               = var.region
       resource_instance_id          = var.existing_cos_instance_crn
@@ -206,16 +207,16 @@ module "existing_kms_crn_parser" {
 }
 
 module "existing_kms_key_crn_parser" {
-  count   = local.use_kms_module ? 1 : 0
+  count   = var.existing_kms_key_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.2.0"
-  crn     = local.kms_key_crn
+  crn     = var.existing_kms_key_crn
 }
 
 # Create IAM Authorization Policy to allow COS to access KMS for the encryption key, if cross account KMS is passed in
 resource "ibm_iam_authorization_policy" "cos_kms_policy" {
   provider                    = ibm.kms
-  count                       = local.create_cross_account_auth_policy ? 1 : 0
+  count                       = local.create_cross_account_auth_policy ? local.is_same_cross_account ? 0 : 1 : 0
   source_service_account      = module.existing_cos_instance_crn_parser.account_id
   source_service_name         = "cloud-object-storage"
   source_resource_instance_id = local.cos_instance_guid
