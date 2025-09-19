@@ -3,7 +3,7 @@
 #
 # logs_policy_name -The name of the IBM Cloud Logs policy to create.
 # logs_policy_description - Description of the IBM Cloud Logs policy to create.
-# logs_policy_priority - Select priority to determine the pipeline for the logs. High (priority value) sent to 'Priority insights' (TCO pipleine), Medium to 'Analyze and alert', Low to 'Store and search', Blocked are not sent to any pipeline.
+# logs_policy_priority - Select priority to determine the pipeline for the logs. High (priority value) sent to 'Priority insights' (TCO pipeline), Medium to 'Analyze and alert', Low to 'Store and search', Blocked are not sent to any pipeline.
 # application_rule - Define rules for matching applications to include in the policy configuration.
 # subsystem_rule - Define subsystem rules for matching applications to include in the policy configuration.
 # log_rules - Define the log severities to include in the policy configuration.
@@ -104,7 +104,7 @@ variable "policies" {
           can(regex("^[\\p{L}\\p{N}\\p{P}\\p{Z}\\p{S}\\p{M}]+$", rule.name)) && length(rule.name) <= 4096 && length(rule.name) > 1]))
         : true)
     ])
-    error_message = "The name of the subsytem_rule does not meet the required criteria."
+    error_message = "The name of the subsystem_rule does not meet the required criteria."
   }
 
   validation {

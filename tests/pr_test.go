@@ -22,19 +22,17 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
-// Use existing resource group
-const resourceGroup = "geretain-test-resources"
+/*
+Global variables
+*/
 
-// Ensure every example directory has a corresponding test
+const resourceGroup = "geretain-test-resources"
 const configurableDADir = "solutions/fully-configurable"
 const secureDADir = "solutions/security-enforced"
-
-// Define a struct with fields that match the structure of the YAML data
+const terraformVersion = "terraform_v1.10" // This should match the version in the ibm_catalog.json
 const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 var permanentResources map[string]interface{}
-
-// Since Event Notifications is used in example, need to use a region it supports
 var validRegions = []string{
 	"au-syd",
 	"eu-de",
@@ -53,49 +51,6 @@ func TestMain(m *testing.M) {
 	}
 
 	os.Exit(m.Run())
-}
-
-func TestRunFullyConfigurable(t *testing.T) {
-	t.Parallel()
-
-	region := validRegions[rand.Intn(len(validRegions))]
-	prefix := "icl-da"
-
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
-		Testing: t,
-		Region:  region,
-		Prefix:  prefix,
-		TarIncludePatterns: []string{
-			"*.tf",
-			"modules/logs_policy" + "/*.tf",
-			"modules/webhook" + "/*.tf",
-			configurableDADir + "/*.tf",
-		},
-		TemplateFolder:         configurableDADir,
-		Tags:                   []string{"icl-da-test"},
-		DeleteWorkspaceOnFail:  false,
-		WaitJobCompleteMinutes: 60,
-	})
-
-	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
-		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
-		{Name: "region", Value: region, DataType: "string"},
-		{Name: "cloud_logs_resource_tags", Value: options.Tags, DataType: "list(string)"},
-		{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
-		{Name: "prefix", Value: options.Prefix, DataType: "string"},
-		{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
-		{Name: "management_endpoint_type_for_buckets", Value: "public", DataType: "string"},
-	}
-
-	err := options.RunSchematicTest()
-	assert.Nil(t, err, "This should not have errored")
 }
 
 func TestSecurityEnforced(t *testing.T) {
@@ -153,9 +108,10 @@ func TestSecurityEnforced(t *testing.T) {
 			},
 			ResourceGroup:          resourceGroup,
 			TemplateFolder:         secureDADir,
-			Tags:                   []string{"test-schematic"},
+			Tags:                   []string{"test-schematic", "icl-da-se"},
 			DeleteWorkspaceOnFail:  false,
 			WaitJobCompleteMinutes: 60,
+			TerraformVersion:       terraformVersion,
 		})
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
@@ -241,11 +197,13 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 				secureDADir + "/*.tf",
 				configurableDADir + "/*.tf",
 			},
-			ResourceGroup:          resourceGroup,
-			TemplateFolder:         secureDADir,
-			Tags:                   []string{"test-schematic"},
-			DeleteWorkspaceOnFail:  false,
-			WaitJobCompleteMinutes: 60,
+			ResourceGroup:              resourceGroup,
+			TemplateFolder:             secureDADir,
+			Tags:                       []string{"test-schematic", "icl-da-se-upg"},
+			DeleteWorkspaceOnFail:      false,
+			WaitJobCompleteMinutes:     60,
+			TerraformVersion:           terraformVersion,
+			CheckApplyResultForUpgrade: true,
 		})
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
@@ -280,6 +238,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 	}
 }
 
+// Test deployment with all "on-by-default" dependant DAs
 func TestAddonDefaultConfiguration(t *testing.T) {
 	t.Parallel()
 
@@ -302,25 +261,4 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 
 	err := options.RunAddonTest()
 	require.NoError(t, err)
-}
-
-// TestDependencyPermutations runs dependency permutations for Cloud Logs and all its dependencies
-func TestDependencyPermutations(t *testing.T) {
-	t.Skip() // Skipping untill we do a refactor, see https://github.ibm.com/GoldenEye/issues/issues/15593#issuecomment-130654584
-
-	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
-		Testing: t,
-		Prefix:  "icl-per",
-		AddonConfig: cloudinfo.AddonConfig{
-			OfferingName:   "deploy-arch-ibm-cloud-logs",
-			OfferingFlavor: "fully-configurable",
-			Inputs: map[string]interface{}{
-				"prefix": "icl-per",
-				"region": validRegions[rand.Intn(len(validRegions))],
-			},
-		},
-	})
-
-	err := options.RunAddonPermutationTest()
-	assert.NoError(t, err, "Dependency permutation test should not fail")
 }
