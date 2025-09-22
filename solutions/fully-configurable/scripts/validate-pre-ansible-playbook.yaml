@@ -1,0 +1,103 @@
+---
+- name: Find IBM Cloud Log Routing Tenants in Specific Regions
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    ibmcloud_api_key: "{{ lookup('env', 'ibmcloud_api_key') }}"
+    logs_routing_tenant_regions: "{{ lookup('env', 'logs_routing_tenant_regions') | default('') }}"
+    target_service_name: "logs-router"
+    
+  tasks:
+    - name: Display environment variable values
+      ansible.builtin.debug:
+        msg:
+          - "ibmcloud_api_key: {{ ibmcloud_api_key }}"
+          - "logs_routing_tenant_regions: {{ logs_routing_tenant_regions }}"
+    
+    - name: Ensure API key and regions are set
+      ansible.builtin.fail:
+        msg: "The ibmcloud_api_key or logs_routing_tenant_regions environment variable is not set."
+      when: ibmcloud_api_key | length == 0 or logs_routing_tenant_regions | length == 0
+
+    - name: Log in to IBM Cloud
+      ansible.builtin.shell: |
+        ibmcloud login --apikey "{{ ibmcloud_api_key }}" --no-region -q >/dev/null 2>&1
+      register: ibmcloud_login_result
+      changed_when: false
+      failed_when: ibmcloud_login_result.rc != 0 or 'FAILED' in ibmcloud_login_result.stderr or 'Error' in ibmcloud_login_result.stderr
+
+    - name: Display IBM Cloud login success message
+      ansible.builtin.debug:
+        msg: "Authentication successful."
+      when: ibmcloud_login_result.rc == 0
+
+    - name: Get IAM token for API calls
+      ansible.builtin.shell: |
+        ibmcloud iam oauth-tokens --output JSON | jq -r '.iam_token'
+      register: iam_token_result
+      changed_when: false
+      failed_when: iam_token_result.rc != 0
+
+    - name: Parse regions from environment variable
+      set_fact:
+        regions_list: "{{ ('[' + logs_routing_tenant_regions | replace('[', '') | replace(']', '') | replace('\"', '') + ']') | from_yaml }}"
+    
+    - name: Loop through each region and find log routing tenants
+      ansible.builtin.uri:
+        url: "https://management.{{ item }}.logs-router.cloud.ibm.com/v1/tenants"
+        method: GET
+        headers:
+          Authorization: "{{ iam_token_result.stdout }}"
+          IBM-API-Version: 2025-08-06
+        return_content: true
+        validate_certs: true
+      register: api_response
+      loop: "{{ regions_list }}"
+      loop_control:
+        loop_var: item
+      ignore_errors: true
+
+    - name: Consolidate and filter all found tenants into a single list
+      set_fact:
+        all_found_tenants: >
+          {{ api_response.results
+             | selectattr('status', 'equalto', 200)
+             | map(attribute='content')
+             | map('from_json')
+             | map(attribute='tenants')
+             | flatten
+             | selectattr('crn', 'search', 'logs-router')
+             | rejectattr('service_name', 'defined')
+             | list }}
+      
+    - name: Format the output for found tenants
+      set_fact:
+        formatted_tenants: |
+          {% for tenant in all_found_tenants %}
+          Tenant Name:     {{ tenant.name }}
+          Tenant ID:       {{ tenant.id }}
+          Region:          {{ tenant.crn.split(':')[5] }}
+          Log Sink CRN:    {{ tenant.targets[0].log_sink_crn | default('N/A') }}
+          Log Router CRN:  {{ tenant.crn }}
+          {% endfor %}
+      when: all_found_tenants | length > 0
+
+    - name: Fail if any tenants were found
+      ansible.builtin.fail:
+        msg: |
+          Active log routing tenants were found.
+          {{ formatted_tenants }}
+      when: all_found_tenants | length > 0
+
+    - name: Inform that no tenants were found
+      ansible.builtin.debug:
+        msg: "No active log routing tenants were found in any specified region. The check passed successfully."
+      when: all_found_tenants | length == 0
+      
+    - name: Log out of IBM Cloud
+      ansible.builtin.shell: |
+        ibmcloud logout >/dev/null 2>&1
+      changed_when: false
+      failed_when: false
