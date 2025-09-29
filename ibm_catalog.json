@@ -428,7 +428,7 @@
             },
             {
               "name": "deploy-arch-ibm-cos",
-              "description": "Sets up a Cloud Object Storage (COS) instance and bucket to serve as the internal registry storage for your OpenShift cluster.",
+              "description": "Enable this to create an IBM Cloud Object Storage (COS) instance. Buckets for logs and metrics will be created automatically.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
               "version": "v10.2.21",
               "flavors": [
