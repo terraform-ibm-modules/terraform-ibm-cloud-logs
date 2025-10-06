@@ -44,12 +44,12 @@ output "metrics_bucket_crn" {
 
 output "logs_bucket_name" {
   description = "Logs Cloud Object Storage bucket name"
-  value       = local.data_bucket_name
+  value       = module.buckets.buckets[local.data_bucket_name].bucket_name
 }
 
 output "metrics_bucket_name" {
   description = "Metrics Cloud Object Storage bucket name"
-  value       = local.metrics_bucket_name
+  value       = module.buckets.buckets[local.metrics_bucket_name].bucket_name
 }
 
 output "kms_key_crn" {
