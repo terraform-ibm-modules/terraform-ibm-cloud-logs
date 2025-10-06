@@ -65,9 +65,9 @@ variable "cloud_logs_metrics_cos_bucket_name" {
   description = "The name of an to be given to a new bucket inside the existing Object Storage instance to use for Cloud Logs. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
-variable "add_bucket_name_suffix" {
+variable "append_random_bucket_name_suffix" {
   type        = bool
-  description = "Add random generated suffix (4 characters long) to the newly provisioned Object Storage bucket name (Optional)."
+  description = "Append random generated suffix (4 characters long) to the newly provisioned IBM Cloud Logs Object Storage bucket names."
   default     = true
 }
 

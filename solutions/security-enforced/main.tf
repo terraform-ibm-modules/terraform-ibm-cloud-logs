@@ -25,7 +25,7 @@ module "security_enforced" {
   kms_endpoint_type                      = "private"
   cloud_logs_cos_key_ring_name           = var.cloud_logs_cos_key_ring_name
   cloud_logs_cos_key_name                = var.cloud_logs_cos_key_name
-  add_bucket_name_suffix                 = var.add_bucket_name_suffix
+  append_random_bucket_name_suffix       = var.append_random_bucket_name_suffix
   existing_event_notifications_instances = var.existing_event_notifications_instances
   skip_logs_routing_auth_policy          = var.skip_logs_routing_auth_policy
   logs_routing_tenant_regions            = var.logs_routing_tenant_regions
