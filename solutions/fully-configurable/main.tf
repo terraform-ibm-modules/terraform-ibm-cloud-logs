@@ -104,6 +104,7 @@ module "buckets" {
       kms_encryption_enabled   = var.kms_encryption_enabled_buckets
       region_location          = var.region
       resource_instance_id     = var.existing_cos_instance_crn
+      add_bucket_name_suffix   = var.append_random_bucket_name_suffix
       management_endpoint_type = var.management_endpoint_type_for_buckets
       storage_class            = var.cloud_logs_cos_buckets_class
       force_delete             = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
@@ -125,6 +126,7 @@ module "buckets" {
       kms_encryption_enabled        = var.kms_encryption_enabled_buckets
       region_location               = var.region
       resource_instance_id          = var.existing_cos_instance_crn
+      add_bucket_name_suffix        = var.append_random_bucket_name_suffix
       management_endpoint_type      = var.management_endpoint_type_for_buckets
       storage_class                 = var.cloud_logs_cos_buckets_class
       skip_iam_authorization_policy = true
