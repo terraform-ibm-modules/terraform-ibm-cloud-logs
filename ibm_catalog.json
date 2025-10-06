@@ -224,6 +224,9 @@
               "key": "cloud_logs_metrics_cos_bucket_name"
             },
             {
+              "key": "append_random_bucket_name_suffix"
+            },
+            {
               "key": "cloud_logs_cos_buckets_class",
               "options": [
                 {
@@ -749,6 +752,9 @@
             },
             {
               "key": "cloud_logs_metrics_cos_bucket_name"
+            },
+            {
+              "key": "append_random_bucket_name_suffix"
             },
             {
               "key": "cloud_logs_cos_buckets_class",

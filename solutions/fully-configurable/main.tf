@@ -95,7 +95,7 @@ module "buckets" {
   }
   depends_on = [time_sleep.wait_for_authorization_policy[0]]
   source     = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version    = "10.2.21"
+  version    = "10.4.0"
   bucket_configs = [
     {
       bucket_name              = local.data_bucket_name
@@ -104,6 +104,7 @@ module "buckets" {
       kms_encryption_enabled   = var.kms_encryption_enabled_buckets
       region_location          = var.region
       resource_instance_id     = var.existing_cos_instance_crn
+      add_bucket_name_suffix   = var.append_random_bucket_name_suffix
       management_endpoint_type = var.management_endpoint_type_for_buckets
       storage_class            = var.cloud_logs_cos_buckets_class
       force_delete             = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
@@ -125,6 +126,7 @@ module "buckets" {
       kms_encryption_enabled        = var.kms_encryption_enabled_buckets
       region_location               = var.region
       resource_instance_id          = var.existing_cos_instance_crn
+      add_bucket_name_suffix        = var.append_random_bucket_name_suffix
       management_endpoint_type      = var.management_endpoint_type_for_buckets
       storage_class                 = var.cloud_logs_cos_buckets_class
       skip_iam_authorization_policy = true
@@ -268,7 +270,7 @@ module "kms" {
   }
   count                       = local.use_kms_module ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.2.0"
+  version                     = "5.3.2"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
