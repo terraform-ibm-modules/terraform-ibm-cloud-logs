@@ -15,7 +15,7 @@ module "security_enforced" {
   cloud_logs_data_cos_bucket_name        = var.cloud_logs_data_cos_bucket_name
   cloud_logs_metrics_cos_bucket_name     = var.cloud_logs_metrics_cos_bucket_name
   cloud_logs_cos_buckets_class           = var.cloud_logs_cos_buckets_class
-  management_endpoint_type_for_buckets   = "private"
+  management_endpoint_type_for_buckets   = "direct"
   skip_cos_kms_iam_auth_policy           = var.skip_cos_kms_iam_auth_policy
   skip_cloud_logs_cos_auth_policy        = var.skip_cloud_logs_cos_auth_policy
   existing_monitoring_crn                = var.existing_monitoring_crn
