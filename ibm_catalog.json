@@ -560,7 +560,7 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v2.8.0"
+              "version": "v2.10.0"
             }
           ],
           "dependency_version_2": true,
