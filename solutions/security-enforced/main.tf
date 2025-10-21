@@ -3,7 +3,7 @@ module "security_enforced" {
   ibmcloud_api_key                       = var.ibmcloud_api_key
   ibmcloud_kms_api_key                   = var.ibmcloud_kms_api_key
   ibmcloud_cos_api_key                   = var.ibmcloud_cos_api_key
-  provider_visibility                    = "private"
+  provider_visibility                    = "public" # use public as temp workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5977
   prefix                                 = var.prefix
   region                                 = var.region
   existing_resource_group_name           = var.existing_resource_group_name
