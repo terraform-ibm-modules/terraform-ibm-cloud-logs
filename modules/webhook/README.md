@@ -39,8 +39,13 @@ No modules.
 | Name | Type |
 |------|------|
 | [ibm_iam_authorization_policy.en_policy](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
+| [ibm_logs_alert.goldeneye_error_alert](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_alert) | resource |
 | [ibm_logs_outgoing_webhook.en_integration](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_outgoing_webhook) | resource |
+| [ibm_logs_outgoing_webhook.goldeneye_slack_integration](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_outgoing_webhook) | resource |
 | [time_sleep.wait_for_en_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [ibm_resource_instance.secrets_manager_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/resource_instance) | data source |
+| [ibm_sm_arbitrary_secret.goldeneye_webhook](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/sm_arbitrary_secret) | data source |
+| [ibm_sm_secrets.webhook_arbitrary_secret](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/sm_secrets) | data source |
 
 ### Inputs
 
