@@ -56,3 +56,18 @@ output "kms_key_crn" {
   description = "The CRN of the KMS key used to encrypt the COS bucket"
   value       = local.kms_key_crn
 }
+
+output "next_steps_text" {
+  value       = "Your Cloud Log Instance is ready."
+  description = "Next steps text"
+}
+
+output "next_step_primary_label" {
+  value       = "Go to Cloud Log Instance"
+  description = "Primary label"
+}
+
+output "next_step_primary_url" {
+  value       = local.create_cloud_logs ? "https://cloud.ibm.com/observability/logging/${module.cloud_logs[0].guid}/overview" : "https://cloud.ibm.com/observability/logging/${element(split(":", var.existing_cloud_logs_crn), 7)}/overview"
+  description = "Primary URL for the IBM Cloud Logs instance"
+}
