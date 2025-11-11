@@ -58,7 +58,7 @@ output "kms_key_crn" {
 }
 
 output "next_steps_text" {
-  value       = "Your Cloud Log Instance is ready."
+  value       = "Your Cloud Logs instance is ready."
   description = "Next steps text"
 }
 
