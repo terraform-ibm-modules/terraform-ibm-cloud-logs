@@ -71,3 +71,13 @@ output "next_step_primary_url" {
   value       = module.security_enforced.next_step_primary_url
   description = "Primary URL for the IBM Cloud Logs instance"
 }
+
+output "next_step_secondary_label" {
+  value       = "Learn more about Cloud Logs"
+  description = "Secondary label"
+}
+
+output "next_step_secondary_url" {
+  value       = "https://cloud.ibm.com/docs/hpc-ibm-spectrumlsf?topic=hpc-ibm-spectrumlsf-cloud-logs-overview"
+  description = "Secondary URL"
+}
