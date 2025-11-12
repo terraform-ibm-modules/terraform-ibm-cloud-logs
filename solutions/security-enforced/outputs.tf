@@ -78,6 +78,6 @@ output "next_step_secondary_label" {
 }
 
 output "next_step_secondary_url" {
-  value       = "https://cloud.ibm.com/docs/hpc-ibm-spectrumlsf?topic=hpc-ibm-spectrumlsf-cloud-logs-overview"
+  value       = "https://cloud.ibm.com/docs/cloud-logs?topic=cloud-logs-getting-started"
   description = "Secondary URL"
 }
