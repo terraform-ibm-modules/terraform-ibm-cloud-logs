@@ -52,8 +52,8 @@ func TestRunBasicExample(t *testing.T) {
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
-		TerraformDir:  "icl-basic",
-		Prefix:        basicExampleDir,
+		TerraformDir:  basicExampleDir,
+		Prefix:        "icl-basic",
 		ResourceGroup: resourceGroup,
 		Region:        validRegions[rand.Intn(len(validRegions))],
 	})
