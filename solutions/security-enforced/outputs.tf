@@ -58,12 +58,12 @@ output "kms_key_crn" {
 }
 
 output "next_steps_text" {
-  value       = "Your Cloud Logs instance is ready."
+  value       = module.security_enforced.next_steps_text
   description = "Next steps text"
 }
 
 output "next_step_primary_label" {
-  value       = "Go to Cloud Logs instance"
+  value       = module.security_enforced.next_step_primary_label
   description = "Primary label"
 }
 
@@ -73,7 +73,7 @@ output "next_step_primary_url" {
 }
 
 output "next_step_secondary_label" {
-  value       = "Learn more about Cloud Logs"
+  value       = module.security_enforced.next_step_secondary_label
   description = "Secondary label"
 }
 
