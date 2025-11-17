@@ -58,12 +58,12 @@ output "kms_key_crn" {
 }
 
 output "next_steps_text" {
-  value       = "Your Cloud Logs instance is ready."
+  value       = "Now, you can use Cloud Logs to store your logs and easily query, tail, and visualize them."
   description = "Next steps text"
 }
 
 output "next_step_primary_label" {
-  value       = "Go to Cloud Logs instance"
+  value       = "Go to Cloud Logs"
   description = "Primary label"
 }
 
