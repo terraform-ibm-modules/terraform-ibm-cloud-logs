@@ -56,3 +56,28 @@ output "kms_key_crn" {
   description = "The CRN of the KMS key used to encrypt the COS bucket"
   value       = local.kms_key_crn
 }
+
+output "next_steps_text" {
+  value       = "Now, you can use Cloud Logs to store your logs and easily query, tail, and visualize them."
+  description = "Next steps text"
+}
+
+output "next_step_primary_label" {
+  value       = "Go to Cloud Logs"
+  description = "Primary label"
+}
+
+output "next_step_primary_url" {
+  value       = local.create_cloud_logs ? "https://cloud.ibm.com/observability/logging/${module.cloud_logs[0].guid}/overview" : "https://cloud.ibm.com/observability/logging/${element(split(":", var.existing_cloud_logs_crn), 7)}/overview"
+  description = "Primary URL for the IBM Cloud Logs instance"
+}
+
+output "next_step_secondary_label" {
+  value       = "Learn more about Cloud Logs"
+  description = "Secondary label"
+}
+
+output "next_step_secondary_url" {
+  value       = "https://cloud.ibm.com/docs/cloud-logs?topic=cloud-logs-getting-started"
+  description = "Secondary URL"
+}
