@@ -63,7 +63,7 @@ output "next_steps_text" {
 }
 
 output "next_step_primary_label" {
-  value       = "Go to Cloud Logs instance"
+  value       = "Go to Cloud Logs"
   description = "Primary label"
 }
 
