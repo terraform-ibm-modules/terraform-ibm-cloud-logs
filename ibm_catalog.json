@@ -58,6 +58,7 @@
         {
           "label": "Fully configurable",
           "name": "fully-configurable",
+          "short_description": "Ideal for users who want flexibility with a reliable starting point.",
           "index": 1,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
@@ -481,13 +482,13 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v1.10.6"
+              "version": "v1.11.0"
             },
             {
               "name": "deploy-arch-ibm-cos",
               "description": "Set up a Cloud Object Storage (COS) instance to store logs and metrics.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "version": "v10.5.5",
+              "version": "v10.7.0",
               "flavors": [
                 "instance"
               ],
@@ -515,7 +516,7 @@
               "name": "deploy-arch-ibm-kms",
               "description": "Enable managed encryption with your own keys via IBM Cloud Key Protect. If disabled, services will default to IBM-managed encryption.",
               "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
-              "version": "v5.4.8",
+              "version": "v5.5.3",
               "flavors": [
                 "fully-configurable"
               ],
@@ -579,7 +580,7 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v2.10.12"
+              "version": "v2.10.16"
             }
           ],
           "dependency_version_2": true,
@@ -589,6 +590,7 @@
         {
           "label": "Security-enforced",
           "name": "security-enforced",
+          "short_description": "Ideal for users who want locked down enforced security.",
           "index": 2,
           "install_type": "fullstack",
           "working_directory": "solutions/security-enforced",
