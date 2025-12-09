@@ -140,7 +140,7 @@ locals {
 
 module "cloud_logs" {
   source = "../../"
-  # delete line above and use below syntax to pull module source from hashicorp when consuming this module
+  # delete line above and use below syntax to pull module source from HashiCorp when consuming this module
   # source    = "terraform-ibm-modules/cloud-logs/ibm"
   # version   = "X.Y.Z" # Replace "X.X.X" with a release version to lock into a specific release
   resource_group_id = module.resource_group.resource_group_id

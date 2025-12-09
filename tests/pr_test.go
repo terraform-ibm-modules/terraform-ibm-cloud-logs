@@ -4,7 +4,6 @@ package test
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"strings"
 	"testing"
@@ -57,7 +56,7 @@ func TestMain(m *testing.M) {
 func TestSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
-	var region = validRegions[rand.Intn(len(validRegions))]
+	region := validRegions[common.CryptoIntn(len(validRegions))]
 	prefix := fmt.Sprintf("iclda-sec-%s", strings.ToLower(random.UniqueId()))
 
 	// ------------------------------------------------------------------------------------
@@ -148,7 +147,7 @@ func TestSecurityEnforced(t *testing.T) {
 func TestUpgradeSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
-	var region = validRegions[rand.Intn(len(validRegions))]
+	region := validRegions[common.CryptoIntn(len(validRegions))]
 	prefix := fmt.Sprintf("iclda-up-%s", strings.ToLower(random.UniqueId()))
 
 	// ------------------------------------------------------------------------------------
@@ -255,7 +254,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 		"deploy-arch-ibm-cloud-logs",
 		"fully-configurable",
 		map[string]interface{}{
-			"region":                  validRegions[rand.Intn(len(validRegions))],
+			"region":                  validRegions[common.CryptoIntn(len(validRegions))],
 			"existing_resource_group": resourceGroup,
 		},
 	)

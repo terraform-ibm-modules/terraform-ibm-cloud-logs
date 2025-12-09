@@ -2,10 +2,10 @@
 package test
 
 import (
-	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
@@ -19,7 +19,7 @@ func TestRunAdvancedExample(t *testing.T) {
 
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing: t,
-		Region:  validRegions[rand.Intn(len(validRegions))],
+		Region:  validRegions[common.CryptoIntn(len(validRegions))],
 		Prefix:  "icl-adv",
 		TarIncludePatterns: []string{
 			"*.tf",
@@ -55,7 +55,7 @@ func TestRunBasicExample(t *testing.T) {
 		TerraformDir:  basicExampleDir,
 		Prefix:        "icl-basic",
 		ResourceGroup: resourceGroup,
-		Region:        validRegions[rand.Intn(len(validRegions))],
+		Region:        validRegions[common.CryptoIntn(len(validRegions))],
 	})
 
 	output, err := options.RunTestConsistency()
