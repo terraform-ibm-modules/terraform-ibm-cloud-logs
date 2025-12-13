@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.4.5"
+  version                      = "1.4.6"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -85,7 +85,7 @@ locals {
 
 module "existing_cos_instance_crn_parser" {
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version = "1.3.4"
+  version = "1.3.5"
   crn     = var.existing_cos_instance_crn
 }
 
@@ -148,7 +148,7 @@ module "buckets" {
 module "bucket_crns" {
   for_each = module.buckets.buckets
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version  = "1.3.4"
+  version  = "1.3.5"
   crn      = each.value.bucket_id
 }
 
@@ -204,14 +204,14 @@ resource "time_sleep" "wait_for_cos_authorization_policy" {
 module "existing_kms_crn_parser" {
   count   = var.existing_kms_instance_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version = "1.3.4"
+  version = "1.3.5"
   crn     = var.existing_kms_instance_crn
 }
 
 module "existing_kms_key_crn_parser" {
   count   = var.existing_kms_key_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version = "1.3.4"
+  version = "1.3.5"
   crn     = var.existing_kms_key_crn
 }
 
