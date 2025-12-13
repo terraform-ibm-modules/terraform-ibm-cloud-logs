@@ -4,7 +4,7 @@
 
 module "resource_group1" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.4.3"
+  version             = "1.4.5"
   resource_group_name = "${var.prefix}-resource-group1"
 }
 
@@ -14,7 +14,7 @@ module "resource_group1" {
 
 module "resource_group2" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.4.3"
+  version             = "1.4.5"
   resource_group_name = "${var.prefix}-resource-group2"
 }
 
