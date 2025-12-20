@@ -4,7 +4,7 @@
 
 module "resource_group1" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.4.6"
+  version             = "1.4.7"
   resource_group_name = "${var.prefix}-resource-group1"
 }
 
@@ -14,7 +14,7 @@ module "resource_group1" {
 
 module "resource_group2" {
   source              = "terraform-ibm-modules/resource-group/ibm"
-  version             = "1.4.6"
+  version             = "1.4.7"
   resource_group_name = "${var.prefix}-resource-group2"
 }
 
@@ -24,7 +24,7 @@ module "resource_group2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.7.2"
+  version           = "10.7.3"
   resource_group_id = module.resource_group1.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   cos_tags          = var.resource_tags
