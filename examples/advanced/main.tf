@@ -117,7 +117,7 @@ module "buckets" {
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.35.8"
+  version          = "1.35.9"
   name             = "${var.prefix}-schematics-network-zone"
   zone_description = "CBR Network zone for schematics"
   account_id       = module.cloud_logs.account_id
