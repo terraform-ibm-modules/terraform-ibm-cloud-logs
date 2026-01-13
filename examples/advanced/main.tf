@@ -25,9 +25,9 @@ module "key_protect" {
   resource_group_id           = module.resource_group.resource_group_id
   region                      = var.region
   resource_tags               = var.resource_tags
-  key_protect_allowed_network = "private-only"
-  key_endpoint_type           = "private"
-  key_ring_endpoint_type      = "private"
+  key_protect_allowed_network = "public-and-private"
+  key_endpoint_type           = "public"
+  key_ring_endpoint_type      = "public"
   keys = [
     {
       key_ring_name = local.key_ring_name

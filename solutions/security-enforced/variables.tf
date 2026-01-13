@@ -174,7 +174,7 @@ variable "cloud_logs_instance_name" {
 
 variable "cloud_logs_resource_tags" {
   type        = list(string)
-  description = "Tags associated with the IBM Cloud Logs instance (Optional, array of strings)."
+  description = "Add user resource tags to the Cloud Logs instance to organize, track, and manage costs. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#tag-types)."
   default     = []
 }
 

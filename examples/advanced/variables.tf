@@ -26,7 +26,7 @@ variable "resource_group" {
 
 variable "resource_tags" {
   type        = list(string)
-  description = "List of resource tag to associate with all resource instances created by this example."
+  description = "Add user resource tags to the Cloud Logs instance to organize, track, and manage costs. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#tag-types)."
   default     = []
 }
 
