@@ -32,6 +32,6 @@ variable "resource_tags" {
 
 variable "access_tags" {
   type        = list(string)
-  description = "Optional list of access management tags to add to resources that are created."
+  description = "Add existing access management tags to the Cloud Logs instance to manage access. Before you can attach your access management tags you need to create them first. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create-access-console)."
   default     = []
 }
