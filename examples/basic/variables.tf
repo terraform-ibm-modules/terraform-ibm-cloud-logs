@@ -34,12 +34,12 @@ variable "resource_group" {
 
 variable "resource_tags" {
   type        = list(string)
-  description = "List of resource tag to associate with all resource instances created by this example."
+  description = "Add user resource tags to the Cloud Logs instance to organize, track, and manage costs. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#tag-types)."
   default     = []
 }
 
 variable "access_tags" {
   type        = list(string)
-  description = "Optional list of access management tags to add to resources that are created."
+  description = "Add existing access management tags to the Cloud Logs instance to manage access. Before you can attach your access management tags you need to create them first. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create-access-console)."
   default     = []
 }
