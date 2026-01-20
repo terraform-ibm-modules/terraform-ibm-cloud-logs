@@ -22,6 +22,11 @@ resource "ibm_resource_instance" "cloud_logs" {
   service_endpoints = var.service_endpoints
 }
 
+data "ibm_iam_access_tag" "access_tag" {
+  for_each = toset(var.access_tags)
+  name     = each.value
+}
+
 resource "ibm_resource_tag" "cloud_logs_tag" {
   count       = length(var.access_tags) == 0 ? 0 : 1
   resource_id = ibm_resource_instance.cloud_logs.crn
