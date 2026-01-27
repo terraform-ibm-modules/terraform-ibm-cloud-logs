@@ -276,6 +276,12 @@
               ]
             },
             {
+              "key": "cloud_logs_endpoint_type"
+            },
+            {
+              "key": "en_integration_endpoint_type"
+            },
+            {
               "key": "cloud_logs_cos_key_ring_name"
             },
             {
@@ -758,6 +764,12 @@
                   ]
                 }
               }
+            },
+            {
+              "key": "cloud_logs_endpoint_type"
+            },
+            {
+              "key": "en_integration_endpoint_type"
             },
             {
               "key": "skip_logs_routing_auth_policy"
