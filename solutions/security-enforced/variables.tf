@@ -118,10 +118,6 @@ variable "existing_kms_instance_crn" {
     error_message = "The provided KMS instance CRN in the input 'existing_kms_instance_crn' in not valid."
   }
 
-  validation {
-    condition     = var.existing_kms_instance_crn == null ? var.existing_kms_instance_crn != null : true
-    error_message = "A value must be passed for either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use existing key) to encrypt the COS bucket."
-  }
 }
 
 variable "existing_kms_key_crn" {
