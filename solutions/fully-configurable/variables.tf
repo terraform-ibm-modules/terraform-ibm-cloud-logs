@@ -77,6 +77,16 @@ variable "existing_cos_instance_crn" {
     condition     = var.existing_cos_instance_crn == null ? var.existing_cloud_logs_crn != null : true
     error_message = "A value must be passed for 'existing_cos_instance_crn' when creating a new instance."
   }
+
+  validation {
+    condition = !(
+      var.existing_cloud_logs_crn != null &&
+      var.existing_cloud_logs_crn != "" &&
+      var.existing_cos_instance_crn != null &&
+      var.existing_cos_instance_crn != ""
+    )
+    error_message = "When using an existing Cloud Logs instance , you must not pass existing_cos_instance_crn."
+  }
 }
 
 variable "cloud_logs_data_cos_bucket_name" {
