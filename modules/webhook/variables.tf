@@ -22,9 +22,9 @@ variable "cloud_logs_instance_name" {
   description = "The name of the existing IBM Cloud Logs instance. It is used as a prefix for the outgoing webhook name if the existing_event_notification_instances does not set en_integration_name."
 }
 
-variable "en_endpoint_type" {
+variable "en_integration_endpoint_type" {
   type        = string
-  description = "The endpoint type of integration. Allowed values: private and public."
+  description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: private and public."
 }
 
 variable "existing_event_notifications_instances" {
