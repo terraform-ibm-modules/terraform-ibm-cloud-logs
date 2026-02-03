@@ -30,6 +30,6 @@ resource "ibm_logs_outgoing_webhook" "en_integration" {
   ibm_event_notifications {
     event_notifications_instance_id = split(":", each.value.crn)[7]
     region_id                       = split(":", each.value.crn)[5]
-    endpoint_type                   = var.en_endpoint_type
+    endpoint_type                   = var.en_integration_endpoint_type
   }
 }

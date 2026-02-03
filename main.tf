@@ -99,7 +99,7 @@ module "en_integration" {
   cloud_logs_instance_name               = local.instance_name
   cloud_logs_region                      = var.region
   cloud_logs_endpoint_type               = var.cloud_logs_endpoint_type
-  en_endpoint_type                       = var.en_integration_endpoint_type
+  en_integration_endpoint_type           = var.en_integration_endpoint_type
   existing_event_notifications_instances = var.existing_event_notifications_instances
 }
 
