@@ -24,7 +24,7 @@ variable "cloud_logs_instance_name" {
 
 variable "en_integration_endpoint_type" {
   type        = string
-  description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: private and public."
+  description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: `private` and `public`."
 }
 
 variable "existing_event_notifications_instances" {
