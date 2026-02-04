@@ -74,10 +74,16 @@ variable "existing_cos_instance_crn" {
   description = "The CRN of an existing Object Storage instance."
 
   validation {
-    condition     = var.existing_cos_instance_crn == null ? var.existing_cloud_logs_crn != null : true
-    error_message = "A value must be passed for 'existing_cos_instance_crn' when creating a new instance."
+    condition     = var.existing_cloud_logs_crn == null ? (var.existing_cos_instance_crn != null && var.existing_cos_instance_crn != "") : true
+    error_message = "A value should be passed for 'existing_cos_instance_crn' when 'existing_cloud_logs_crn' is not provided."
+  }
+
+  validation {
+    condition     = var.existing_cloud_logs_crn != null ? var.existing_cos_instance_crn == null : true
+    error_message = "A value should not be passed for 'existing_cos_instance_crn' when passing an existing Cloud Logs instance using the 'existing_cloud_logs_crn' input."
   }
 }
+
 
 variable "cloud_logs_data_cos_bucket_name" {
   type        = string
