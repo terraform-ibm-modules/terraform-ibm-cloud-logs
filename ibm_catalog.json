@@ -639,7 +639,7 @@
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_cos_instance_crn' is not valid.",
-                  "value": "^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
+                  "value": "^__NULL__$|^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
               ],
               "custom_config": {
@@ -829,7 +829,17 @@
                   "description": "The value provided for 'existing_cloud_logs_crn' is not valid.",
                   "value": "^__NULL__$|^crn:(.*:){3}logs:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+                "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "logs",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "existing_monitoring_crn",
