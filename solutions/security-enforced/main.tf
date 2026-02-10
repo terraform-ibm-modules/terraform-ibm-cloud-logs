@@ -7,6 +7,7 @@ module "security_enforced" {
   prefix                                 = var.prefix
   region                                 = var.region
   existing_resource_group_name           = var.existing_resource_group_name
+  existing_cloud_logs_crn                = var.existing_cloud_logs_crn
   cloud_logs_instance_name               = var.cloud_logs_instance_name
   cloud_logs_resource_tags               = var.cloud_logs_resource_tags
   cloud_logs_access_tags                 = var.cloud_logs_access_tags

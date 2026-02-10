@@ -822,6 +822,16 @@
               }
             },
             {
+              "key": "existing_cloud_logs_crn",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "The value provided for 'existing_cloud_logs_crn' is not valid.",
+                  "value": "^__NULL__$|^crn:(.*:){3}logs:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
+                }
+              ]
+            },
+            {
               "key": "existing_monitoring_crn",
               "display_name": "existing_monitoring_instance",
               "value_constraints": [
