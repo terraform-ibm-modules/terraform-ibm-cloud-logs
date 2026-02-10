@@ -485,13 +485,13 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v1.11.0"
+              "version": "v1.13.3"
             },
             {
               "name": "deploy-arch-ibm-cos",
               "description": "Set up a Cloud Object Storage (COS) instance to store logs and metrics.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "version": "v10.7.0",
+              "version": "v10.13.1",
               "flavors": [
                 "instance"
               ],
@@ -519,7 +519,7 @@
               "name": "deploy-arch-ibm-kms",
               "description": "Enable managed encryption with your own keys via IBM Cloud Key Protect. If disabled, services will default to IBM-managed encryption.",
               "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
-              "version": "v5.5.3",
+              "version": "v5.5.27",
               "flavors": [
                 "fully-configurable"
               ],
@@ -583,7 +583,7 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v2.10.16"
+              "version": "v2.11.12"
             }
           ],
           "dependency_version_2": true,
