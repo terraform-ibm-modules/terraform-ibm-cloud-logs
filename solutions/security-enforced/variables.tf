@@ -211,6 +211,18 @@ variable "existing_event_notifications_instances" {
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cloud-logs/tree/main/solutions/fully-configurable/DA-types.md)."
 }
 
+variable "cloud_logs_endpoint_type" {
+  type        = string
+  description = "The Cloud Logs instance endpoint type. Allowed values `public` and `private`."
+  default     = "private"
+}
+
+variable "en_integration_endpoint_type" {
+  type        = string
+  description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: `private` and `public`. Default is `private`."
+  default     = "private"
+}
+
 ##############################################################################
 # Logs Routing
 ##############################################################################
