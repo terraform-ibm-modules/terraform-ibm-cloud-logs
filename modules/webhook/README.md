@@ -46,12 +46,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cloud_logs_endpoint_type"></a> [cloud\_logs\_endpoint\_type](#input\_cloud\_logs\_endpoint\_type) | The Cloud Logs instance endpoint type. Allowed values `public` and `private`. | `string` | n/a | yes |
 | <a name="input_cloud_logs_instance_id"></a> [cloud\_logs\_instance\_id](#input\_cloud\_logs\_instance\_id) | The GUID of the existing IBM Cloud Logs instance. | `string` | n/a | yes |
 | <a name="input_cloud_logs_instance_name"></a> [cloud\_logs\_instance\_name](#input\_cloud\_logs\_instance\_name) | The name of the existing IBM Cloud Logs instance. It is used as a prefix for the outgoing webhook name if the existing\_event\_notification\_instances does not set en\_integration\_name. | `string` | n/a | yes |
 | <a name="input_cloud_logs_region"></a> [cloud\_logs\_region](#input\_cloud\_logs\_region) | The IBM Cloud region where the existing Cloud Logs instance is located. | `string` | n/a | yes |
-| <a name="input_en_integration_endpoint_type"></a> [en\_integration\_endpoint\_type](#input\_en\_integration\_endpoint\_type) | The Event Notifications instance endpoint type for cloud logs integration. Allowed values: `private` and `public`. | `string` | n/a | yes |
-| <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    crn                  = string<br/>    integration_name     = optional(string)<br/>    skip_iam_auth_policy = optional(bool, false)<br/>  }))</pre> | n/a | yes |
+| <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    crn                       = string<br/>    integration_name          = optional(string)<br/>    integration_endpoint_type = optional(string, "public")<br/>    skip_iam_auth_policy      = optional(bool, false)<br/>    cloud_logs_endpoint_type  = optional(string, "public")<br/>  }))</pre> | n/a | yes |
 
 ### Outputs
 

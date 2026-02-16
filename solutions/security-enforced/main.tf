@@ -28,8 +28,6 @@ module "security_enforced" {
   cloud_logs_cos_key_name                = var.cloud_logs_cos_key_name
   append_random_bucket_name_suffix       = var.append_random_bucket_name_suffix
   existing_event_notifications_instances = var.existing_event_notifications_instances
-  cloud_logs_endpoint_type               = var.cloud_logs_endpoint_type
-  en_integration_endpoint_type           = var.en_integration_endpoint_type
   skip_logs_routing_auth_policy          = var.skip_logs_routing_auth_policy
   logs_routing_tenant_regions            = var.logs_routing_tenant_regions
   logs_policies                          = var.logs_policies

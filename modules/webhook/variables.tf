@@ -12,26 +12,28 @@ variable "cloud_logs_instance_id" {
   description = "The GUID of the existing IBM Cloud Logs instance."
 }
 
-variable "cloud_logs_endpoint_type" {
-  type        = string
-  description = "The Cloud Logs instance endpoint type. Allowed values `public` and `private`."
-}
+# variable "cloud_logs_endpoint_type" {
+#   type        = string
+#   description = "The Cloud Logs instance endpoint type. Allowed values `public` and `private`."
+# }
 
 variable "cloud_logs_instance_name" {
   type        = string
   description = "The name of the existing IBM Cloud Logs instance. It is used as a prefix for the outgoing webhook name if the existing_event_notification_instances does not set en_integration_name."
 }
-
-variable "en_integration_endpoint_type" {
-  type        = string
-  description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: `private` and `public`."
-}
+#
+# variable "en_integration_endpoint_type" {
+#   type        = string
+#   description = "The Event Notifications instance endpoint type for cloud logs integration. Allowed values: `private` and `public`."
+# }
 
 variable "existing_event_notifications_instances" {
   type = list(object({
-    crn                  = string
-    integration_name     = optional(string)
-    skip_iam_auth_policy = optional(bool, false)
+    crn                       = string
+    integration_name          = optional(string)
+    integration_endpoint_type = optional(string, "public")
+    skip_iam_auth_policy      = optional(bool, false)
+    cloud_logs_endpoint_type  = optional(string, "public")
   }))
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
 }
