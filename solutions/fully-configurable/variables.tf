@@ -306,6 +306,7 @@ variable "existing_event_notifications_instances" {
     cloud_logs_endpoint_type  = optional(string, "public")
   }))
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
+  default     = []
 }
 
 ##############################################################################

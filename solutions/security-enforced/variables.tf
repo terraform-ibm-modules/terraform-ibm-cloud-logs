@@ -209,6 +209,7 @@ variable "existing_event_notifications_instances" {
     skip_iam_auth_policy      = optional(bool, false)
     cloud_logs_endpoint_type  = optional(string, "public")
   }))
+  default     = []
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
 }
 
