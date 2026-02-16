@@ -98,14 +98,25 @@
             },
             {
               "key": "existing_cos_instance_crn",
+              "display_name": "existing_cos_instance",
               "required": true,
               "value_constraints": [
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_cos_instance_crn' is not valid.",
-                  "value": "^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
+                  "value": "^__NULL__$|^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "cloud-object-storage",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "existing_resource_group_name",
@@ -343,23 +354,45 @@
             },
             {
               "key": "existing_cloud_logs_crn",
+              "display_name": "existing_cloud_logs",
               "value_constraints": [
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_cloud_logs_crn' is not valid.",
                   "value": "^__NULL__$|^crn:(.*:){3}logs:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "logs",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "existing_monitoring_crn",
+              "display_name": "existing_monitoring_instance",
               "value_constraints": [
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_monitoring_crn' is not valid.",
                   "value": "^__NULL__$|^crn:(.*:){3}sysdig-monitor:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "sysdig-monitor",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "cloud_logs_cbr_rules",
@@ -478,13 +511,13 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v1.11.0"
+              "version": "v1.13.3"
             },
             {
               "name": "deploy-arch-ibm-cos",
               "description": "Set up a Cloud Object Storage (COS) instance to store logs and metrics.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "version": "v10.7.0",
+              "version": "v10.13.1",
               "flavors": [
                 "instance"
               ],
@@ -512,7 +545,7 @@
               "name": "deploy-arch-ibm-kms",
               "description": "Enable managed encryption with your own keys via IBM Cloud Key Protect. If disabled, services will default to IBM-managed encryption.",
               "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
-              "version": "v5.5.3",
+              "version": "v5.5.27",
               "flavors": [
                 "fully-configurable"
               ],
@@ -576,7 +609,7 @@
               ],
               "optional": true,
               "on_by_default": true,
-              "version": "v2.10.16"
+              "version": "v2.11.14"
             }
           ],
           "dependency_version_2": true,
@@ -626,14 +659,25 @@
             },
             {
               "key": "existing_cos_instance_crn",
+              "display_name": "existing_cos_instance",
               "required": true,
               "value_constraints": [
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_cos_instance_crn' is not valid.",
-                  "value": "^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
+                  "value": "^__NULL__$|^crn:(.*:){3}cloud-object-storage:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "cloud-object-storage",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "existing_kms_instance_crn",
@@ -830,14 +874,45 @@
               }
             },
             {
+              "key": "existing_cloud_logs_crn",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "The value provided for 'existing_cloud_logs_crn' is not valid.",
+                  "value": "^__NULL__$|^crn:(.*:){3}logs:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
+                }
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "logs",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
+            },
+            {
               "key": "existing_monitoring_crn",
+              "display_name": "existing_monitoring_instance",
               "value_constraints": [
                 {
                   "type": "regex",
                   "description": "The value provided for 'existing_monitoring_crn' is not valid.",
                   "value": "^__NULL__$|^crn:(.*:){3}sysdig-monitor:(.*:){2}[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}::$"
                 }
-              ]
+              ],
+              "custom_config": {
+                "type": "platform_resource",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "resourceType": "sysdig-monitor",
+                  "selection": "single_select",
+                  "valueType": "crn"
+                }
+              }
             },
             {
               "key": "cloud_logs_cbr_rules",
