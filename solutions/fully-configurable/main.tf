@@ -38,8 +38,7 @@ module "cloud_logs" {
   retention_period                       = var.cloud_logs_retention_period
   service_endpoints                      = "public-and-private" # not a variable because there is only one option
   existing_event_notifications_instances = var.existing_event_notifications_instances
-
-  cbr_rules = var.cloud_logs_cbr_rules
+  cbr_rules                              = var.cloud_logs_cbr_rules
   data_storage = {
     logs_data = {
       enabled              = true

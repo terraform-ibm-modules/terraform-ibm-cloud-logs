@@ -22,18 +22,26 @@ The `existing_event_notifications_instances` input variable allows you to provid
 
 * `skip_iam_auth_policy` (optional): A boolean flag to determine whether to skip the creation of an authentication policy that allows Cloud Logs 'Event Source Manager' role access in the existing event notification instance. Defaults to `false`.
 
+* `integration_endpoint_type` (optional):
+
+* `cloud_logs_endpoint_type` (optional):
+
 ### Example Existing Event Notification Instance Configuration
 
 ```hcl
 [
   {
-    crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
-    integration_name    = "custom-logging-en-integration"
-    skip_iam_auth_policy = true
+    crn                       = "crn:v1:bluemix:public:...:event-notifications:instance"
+    integration_name          = "custom-logging-en-integration"
+    skip_iam_auth_policy      = true
+    cloud_logs_endpoint_type  = "public"
+    integration_endpoint_type = "default_or_public"
   },
   {
-    crn        = "crn:v1:bluemix:public:...:event-notifications:instance"
-    skip_iam_auth_policy = false
+    crn                       = "crn:v1:bluemix:public:...:event-notifications:instance"
+    skip_iam_auth_policy      = false
+    cloud_logs_endpoint_type  = "private"
+    integration_endpoint_type = "private"
   }
 ]
 ```
