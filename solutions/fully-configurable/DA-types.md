@@ -22,9 +22,9 @@ The `existing_event_notifications_instances` input variable allows you to provid
 
 * `skip_iam_auth_policy` (optional): A boolean flag to determine whether to skip the creation of an authentication policy that allows Cloud Logs 'Event Source Manager' role access in the existing event notification instance. Defaults to `false`.
 
-* `integration_endpoint_type` (optional):
+* `integration_endpoint_type` (optional): The endpoint type of the Event Notification integration. Defaults to `private`.
 
-* `cloud_logs_endpoint_type` (optional):
+* `cloud_logs_endpoint_type` (optional): Specifies the Cloud Logs endpoint type used for Event Notifications integration.
 
 ### Example Existing Event Notification Instance Configuration
 
