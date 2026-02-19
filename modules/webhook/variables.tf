@@ -19,9 +19,27 @@ variable "cloud_logs_instance_name" {
 
 variable "existing_event_notifications_instances" {
   type = list(object({
-    crn                  = string
-    integration_name     = optional(string)
-    skip_iam_auth_policy = optional(bool, false)
+    crn                       = string
+    integration_name          = optional(string)
+    integration_endpoint_type = optional(string, "default_or_public") # https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6673
+    skip_iam_auth_policy      = optional(bool, false)
+    cloud_logs_endpoint_type  = optional(string, "public")
   }))
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
+
+  validation {
+    condition = alltrue([
+      for en in var.existing_event_notifications_instances :
+      contains(["private", "default_or_public"], en.integration_endpoint_type)
+    ])
+    error_message = "The integration_endpoint_type value must be 'private' or 'default_or_public'."
+  }
+
+  validation {
+    condition = alltrue([
+      for en in var.existing_event_notifications_instances :
+      contains(["private", "public"], en.cloud_logs_endpoint_type)
+    ])
+    error_message = "The cloud_logs_endpoint_type value must be 'private' or 'public'."
+  }
 }
