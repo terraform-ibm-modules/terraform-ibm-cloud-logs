@@ -21,7 +21,7 @@ variable "existing_event_notifications_instances" {
   type = list(object({
     crn                       = string
     integration_name          = optional(string)
-    integration_endpoint_type = optional(string, "default_or_public")
+    integration_endpoint_type = optional(string, "default_or_public") # https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6673
     skip_iam_auth_policy      = optional(bool, false)
     cloud_logs_endpoint_type  = optional(string, "public")
   }))
