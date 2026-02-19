@@ -22,9 +22,9 @@ The `existing_event_notifications_instances` input variable allows you to provid
 
 * `skip_iam_auth_policy` (optional): A boolean flag to determine whether to skip the creation of an authentication policy that allows Cloud Logs 'Event Source Manager' role access in the existing event notification instance. Defaults to `false`.
 
-* `integration_endpoint_type` (optional): The endpoint type of the Event Notification integration. Defaults to `private`.
+* `integration_endpoint_type` (optional): The endpoint type of the Event Notification integration. Allowed values: `private` and `default_or_public`. Defaults to `private`.
 
-* `cloud_logs_endpoint_type` (optional): Specifies the Cloud Logs endpoint type used for Event Notifications integration.
+* `cloud_logs_endpoint_type` (optional): The Cloud Logs endpoint Terraform uses for the API call that creates the Event Notifications integration. Allowed values: `private` and `public`. Defaults to `private`.
 
 ### Example Existing Event Notification Instance Configuration
 

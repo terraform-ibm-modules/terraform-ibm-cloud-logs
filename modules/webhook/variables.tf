@@ -26,4 +26,20 @@ variable "existing_event_notifications_instances" {
     cloud_logs_endpoint_type  = optional(string, "public")
   }))
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
+
+  validation {
+    condition = alltrue([
+      for en in var.existing_event_notifications_instances :
+      contains(["private", "default_or_public"], en.integration_endpoint_type)
+    ])
+    error_message = "The integration_endpoint_type value must be 'private' or 'default_or_public'."
+  }
+
+  validation {
+    condition = alltrue([
+      for en in var.existing_event_notifications_instances :
+      contains(["private", "public"], en.cloud_logs_endpoint_type)
+    ])
+    error_message = "The cloud_logs_endpoint_type value must be 'private' or 'public'."
+  }
 }
