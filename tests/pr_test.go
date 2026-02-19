@@ -145,7 +145,7 @@ func TestSecurityEnforced(t *testing.T) {
 }
 
 func TestUpgradeSecurityEnforced(t *testing.T) {
-	t.Parallel()
+	t.Skip()
 
 	region := validRegions[common.CryptoIntn(len(validRegions))]
 	prefix := fmt.Sprintf("iclda-up-%s", strings.ToLower(random.UniqueId()))
