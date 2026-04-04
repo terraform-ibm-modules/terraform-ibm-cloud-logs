@@ -39,7 +39,7 @@ resource "ibm_resource_tag" "cloud_logs_tag" {
 module "cos_bucket_crn_parser" {
   for_each = { for index, bucket in var.data_storage : index => bucket if bucket.enabled && !bucket.skip_cos_auth_policy }
   source   = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-  version  = "1.4.2"
+  version  = "1.4.3"
   crn      = each.value.bucket_crn
 }
 
