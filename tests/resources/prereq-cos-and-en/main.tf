@@ -40,7 +40,7 @@ module "event_notifications1" {
   version           = "2.12.9"
   resource_group_id = module.resource_group1.resource_group_id
   name              = "${var.prefix}-en1"
-  tags              = var.resource_tags
+  resource_tags     = var.resource_tags
   plan              = "lite"
   region            = var.region
 }
@@ -54,7 +54,7 @@ module "event_notifications2" {
   version           = "2.12.9"
   resource_group_id = module.resource_group2.resource_group_id
   name              = "${var.prefix}-en2"
-  tags              = var.resource_tags
+  resource_tags     = var.resource_tags
   plan              = "lite"
   region            = var.region
 }
