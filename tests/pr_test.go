@@ -2,6 +2,7 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -57,7 +58,7 @@ func TestSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
 	region := validRegions[common.CryptoIntn(len(validRegions))]
-	prefix := fmt.Sprintf("iclda-sec-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("iclda-sec-%s", strings.ToLower(random.UniqueID()))
 
 	// ------------------------------------------------------------------------------------
 	// Provision COS and EN first
@@ -65,7 +66,7 @@ func TestSecurityEnforced(t *testing.T) {
 
 	var preReqDir = "./resources/prereq-cos-and-en"
 	realTerraformDir := preReqDir
-	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
+	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueID())))
 	tags := common.GetTagsFromTravis()
 
 	// Verify ibmcloud_api_key variable is set
@@ -86,8 +87,8 @@ func TestSecurityEnforced(t *testing.T) {
 		// This is the same as setting the -upgrade=true flag with terraform.
 		Upgrade: true,
 	})
-	terraform.WorkspaceSelectOrNew(t, existingTerraformOptions, prefix)
-	_, existErr := terraform.InitAndApplyE(t, existingTerraformOptions)
+	terraform.WorkspaceSelectOrNewContext(t, context.Background(), existingTerraformOptions, prefix)
+	_, existErr := terraform.InitAndApplyContextE(t, context.Background(), existingTerraformOptions)
 	if existErr != nil {
 		assert.True(t, existErr == nil, "Init and Apply of pre-req resources failed in TestRunFullyConfigurable test")
 	} else {
@@ -116,14 +117,14 @@ func TestSecurityEnforced(t *testing.T) {
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-			{Name: "existing_resource_group_name", Value: terraform.Output(t, existingTerraformOptions, "resource_group_name"), DataType: "string"},
+			{Name: "existing_resource_group_name", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "resource_group_name"), DataType: "string"},
 			{Name: "region", Value: region, DataType: "string"},
 			{Name: "prefix", Value: prefix, DataType: "string"},
 			{Name: "cloud_logs_resource_tags", Value: options.Tags, DataType: "list(string)"},
 			{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
-			{Name: "existing_cos_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "cos_crn"), DataType: "string"},
+			{Name: "existing_cos_instance_crn", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-			{Name: "existing_event_notifications_instances", Value: terraform.OutputJson(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
+			{Name: "existing_event_notifications_instances", Value: terraform.OutputJSONContext(t, context.Background(), existingTerraformOptions, "en_crns"), DataType: "list(object)"},
 		}
 
 		err := options.RunSchematicTest()
@@ -138,8 +139,8 @@ func TestSecurityEnforced(t *testing.T) {
 		fmt.Println("Terratest failed. Debug the test and delete resources manually.")
 	} else {
 		logger.Log(t, "START: Destroy (prereq resources)")
-		terraform.Destroy(t, existingTerraformOptions)
-		terraform.WorkspaceDelete(t, existingTerraformOptions, prefix)
+		terraform.DestroyContext(t, context.Background(), existingTerraformOptions)
+		terraform.WorkspaceDeleteContext(t, context.Background(), existingTerraformOptions, prefix)
 		logger.Log(t, "END: Destroy (prereq resources)")
 	}
 }
@@ -148,7 +149,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 	t.Parallel()
 
 	region := validRegions[common.CryptoIntn(len(validRegions))]
-	prefix := fmt.Sprintf("iclda-up-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("iclda-up-%s", strings.ToLower(random.UniqueID()))
 
 	// ------------------------------------------------------------------------------------
 	// Provision COS and EN first
@@ -156,7 +157,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 
 	var preReqDir = "./resources/prereq-cos-and-en"
 	realTerraformDir := preReqDir
-	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
+	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueID())))
 	tags := common.GetTagsFromTravis()
 
 	// Verify ibmcloud_api_key variable is set
@@ -177,8 +178,8 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 		// This is the same as setting the -upgrade=true flag with terraform.
 		Upgrade: true,
 	})
-	terraform.WorkspaceSelectOrNew(t, existingTerraformOptions, prefix)
-	_, existErr := terraform.InitAndApplyE(t, existingTerraformOptions)
+	terraform.WorkspaceSelectOrNewContext(t, context.Background(), existingTerraformOptions, prefix)
+	_, existErr := terraform.InitAndApplyContextE(t, context.Background(), existingTerraformOptions)
 	if existErr != nil {
 		assert.True(t, existErr == nil, "Init and Apply of pre-req resources failed in TestRunFullyConfigurable test")
 	} else {
@@ -208,14 +209,14 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 
 		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-			{Name: "existing_resource_group_name", Value: terraform.Output(t, existingTerraformOptions, "resource_group_name"), DataType: "string"},
+			{Name: "existing_resource_group_name", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "resource_group_name"), DataType: "string"},
 			{Name: "region", Value: region, DataType: "string"},
 			{Name: "prefix", Value: prefix, DataType: "string"},
 			{Name: "cloud_logs_resource_tags", Value: options.Tags, DataType: "list(string)"},
 			{Name: "cloud_logs_access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
-			{Name: "existing_cos_instance_crn", Value: terraform.Output(t, existingTerraformOptions, "cos_crn"), DataType: "string"},
+			{Name: "existing_cos_instance_crn", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
-			{Name: "existing_event_notifications_instances", Value: terraform.OutputJson(t, existingTerraformOptions, "en_crns"), DataType: "list(object)"},
+			{Name: "existing_event_notifications_instances", Value: terraform.OutputJSONContext(t, context.Background(), existingTerraformOptions, "en_crns"), DataType: "list(object)"},
 		}
 
 		err := options.RunSchematicUpgradeTest()
@@ -232,8 +233,8 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 		fmt.Println("Terratest failed. Debug the test and delete resources manually.")
 	} else {
 		logger.Log(t, "START: Destroy (prereq resources)")
-		terraform.Destroy(t, existingTerraformOptions)
-		terraform.WorkspaceDelete(t, existingTerraformOptions, prefix)
+		terraform.DestroyContext(t, context.Background(), existingTerraformOptions)
+		terraform.WorkspaceDeleteContext(t, context.Background(), existingTerraformOptions, prefix)
 		logger.Log(t, "END: Destroy (prereq resources)")
 	}
 }
