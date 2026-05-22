@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.6.0"
+  version = "1.6.1"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -73,7 +73,7 @@ module "event_notification_2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.16.0"
+  version           = "10.16.1"
   resource_group_id = module.resource_group.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   resource_tags     = var.resource_tags
@@ -87,7 +87,7 @@ locals {
 
 module "buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.16.0"
+  version = "10.16.1"
   bucket_configs = [
     {
       bucket_name                   = local.logs_bucket_name
@@ -117,7 +117,7 @@ module "buckets" {
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.36.2"
+  version          = "1.36.3"
   name             = "${var.prefix}-schematics-network-zone"
   zone_description = "CBR Network zone for schematics"
   account_id       = module.cloud_logs.account_id
