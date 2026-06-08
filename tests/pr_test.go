@@ -29,7 +29,6 @@ Global variables
 
 const resourceGroup = "geretain-test-resources"
 const configurableDADir = "solutions/fully-configurable"
-const secureDADir = "solutions/security-enforced"
 const terraformVersion = "terraform_v1.12.2" // This should match the version in the ibm_catalog.json
 const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
@@ -54,7 +53,7 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestSecurityEnforced(t *testing.T) {
+func TestFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 	t.Parallel()
 
 	region := validRegions[common.CryptoIntn(len(validRegions))]
@@ -104,12 +103,11 @@ func TestSecurityEnforced(t *testing.T) {
 				"*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
-				secureDADir + "/*.tf",
 				configurableDADir + "/*.tf",
 			},
 			ResourceGroup:          resourceGroup,
-			TemplateFolder:         secureDADir,
-			Tags:                   []string{"test-schematic", "icl-da-se"},
+			TemplateFolder:         configurableDADir,
+			Tags:                   []string{"test-schematic", "icl-da-fc-priv"},
 			DeleteWorkspaceOnFail:  false,
 			WaitJobCompleteMinutes: 60,
 			TerraformVersion:       terraformVersion,
@@ -125,6 +123,10 @@ func TestSecurityEnforced(t *testing.T) {
 			{Name: "existing_cos_instance_crn", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 			{Name: "existing_event_notifications_instances", Value: terraform.OutputJSONContext(t, context.Background(), existingTerraformOptions, "en_crns"), DataType: "list(object)"},
+			{Name: "provider_visibility", Value: "private", DataType: "string"},
+			{Name: "management_endpoint_type_for_buckets", Value: "direct", DataType: "string"},
+			{Name: "kms_encryption_enabled_buckets", Value: true, DataType: "bool"},
+			{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		}
 
 		err := options.RunSchematicTest()
@@ -145,7 +147,7 @@ func TestSecurityEnforced(t *testing.T) {
 	}
 }
 
-func TestUpgradeSecurityEnforced(t *testing.T) {
+func TestUpgradeFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 	t.Parallel()
 
 	region := validRegions[common.CryptoIntn(len(validRegions))]
@@ -195,12 +197,11 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 				"*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
-				secureDADir + "/*.tf",
 				configurableDADir + "/*.tf",
 			},
 			ResourceGroup:              resourceGroup,
-			TemplateFolder:             secureDADir,
-			Tags:                       []string{"test-schematic", "icl-da-se-upg"},
+			TemplateFolder:             configurableDADir,
+			Tags:                       []string{"test-schematic", "icl-da-fc-priv-upg"},
 			DeleteWorkspaceOnFail:      false,
 			WaitJobCompleteMinutes:     60,
 			TerraformVersion:           terraformVersion,
@@ -217,6 +218,10 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 			{Name: "existing_cos_instance_crn", Value: terraform.OutputContext(t, context.Background(), existingTerraformOptions, "cos_crn"), DataType: "string"},
 			{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 			{Name: "existing_event_notifications_instances", Value: terraform.OutputJSONContext(t, context.Background(), existingTerraformOptions, "en_crns"), DataType: "list(object)"},
+			{Name: "provider_visibility", Value: "private", DataType: "string"},
+			{Name: "management_endpoint_type_for_buckets", Value: "direct", DataType: "string"},
+			{Name: "kms_encryption_enabled_buckets", Value: true, DataType: "bool"},
+			{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
 		}
 
 		err := options.RunSchematicUpgradeTest()
