@@ -47,7 +47,7 @@ module "key_protect" {
 
 module "event_notification_1" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.12.16"
+  version           = "2.12.18"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-1"
   resource_tags     = var.resource_tags
@@ -58,7 +58,7 @@ module "event_notification_1" {
 
 module "event_notification_2" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.12.16"
+  version           = "2.12.18"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-2"
   resource_tags     = var.resource_tags
@@ -73,7 +73,7 @@ module "event_notification_2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.16.6"
+  version           = "10.16.7"
   resource_group_id = module.resource_group.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   resource_tags     = var.resource_tags
@@ -87,7 +87,7 @@ locals {
 
 module "buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.16.6"
+  version = "10.16.7"
   bucket_configs = [
     {
       bucket_name                   = local.logs_bucket_name
