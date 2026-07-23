@@ -327,6 +327,20 @@
               }
             },
             {
+              "key": "logs_parsing_rules",
+              "type": "array",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
+            },
+            {
               "key": "existing_cloud_logs_crn",
               "display_name": "existing_cloud_logs",
               "value_constraints": [

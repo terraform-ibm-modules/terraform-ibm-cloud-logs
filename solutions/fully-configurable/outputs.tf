@@ -32,6 +32,11 @@ output "cloud_logs_logs_policies_details" {
   description = "The details of the IBM Cloud logs policies created."
 }
 
+output "cloud_logs_parsing_rule_groups_details" {
+  value       = local.create_cloud_logs ? module.cloud_logs[0].parsing_rule_groups_details : null
+  description = "The details of the IBM Cloud Logs parsing rule groups created."
+}
+
 output "logs_bucket_crn" {
   description = "Logs Cloud Object Storage bucket CRN"
   value       = module.buckets.buckets[local.data_bucket_name].bucket_crn

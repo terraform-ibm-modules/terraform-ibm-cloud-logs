@@ -37,3 +37,8 @@ output "logs_policies_details" {
   value       = length(var.policies) > 0 ? module.logs_policies[0].logs_policies_details : null
   description = "The details of the IBM Cloud logs policies created."
 }
+
+output "parsing_rule_groups_details" {
+  value       = length(var.parsing_rules) > 0 ? module.parsing_rules[0].parsing_rule_groups_details : null
+  description = "The details of the IBM Cloud Logs parsing rule groups created."
+}

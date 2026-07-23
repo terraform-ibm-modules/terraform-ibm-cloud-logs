@@ -56,6 +56,7 @@ module "cloud_logs" {
   logs_routing_tenant_regions   = var.logs_routing_tenant_regions
   skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
   policies                      = var.logs_policies
+  parsing_rules                 = var.logs_parsing_rules
 }
 
 #######################################################################################################################

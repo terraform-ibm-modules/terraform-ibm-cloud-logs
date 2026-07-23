@@ -25,9 +25,9 @@ module "key_protect" {
   resource_group_id           = module.resource_group.resource_group_id
   region                      = var.region
   resource_tags               = var.resource_tags
-  key_protect_allowed_network = "private-only"
-  key_endpoint_type           = "private"
-  key_ring_endpoint_type      = "private"
+  key_protect_allowed_network = "public-and-private"
+  key_endpoint_type           = "public"
+  key_ring_endpoint_type      = "public"
   keys = [
     {
       key_ring_name = local.key_ring_name
@@ -176,6 +176,33 @@ module "cloud_logs" {
       rule_type_id = "start_with"
     }]
   }]
+  parsing_rules = [{
+    name        = "${var.prefix}-mysql-parse"
+    description = "Parse MySQL audit log fields"
+    enabled     = true
+    order       = 1
+    rule_matchers = [{
+      subsystem_name = {
+        value = "mysql"
+      }
+    }]
+    rule_subgroups = [{
+      enabled = true
+      order   = 1
+      rules = [{
+        name         = "mysql-parse"
+        source_field = "text"
+        enabled      = true
+        order        = 1
+        parameters = {
+          parse_parameters = {
+            destination_field = "text"
+            rule              = "(?P<timestamp>[^,]+),(?P<hostname>[^,]+),(?P<username>[^,]+),(?P<ip>[^,]+),(?P<connectionId>[0-9]+),(?P<queryId>[0-9]+),(?P<operation>[^,]+),(?P<database>[^,]+),'?(?P<object>.*)'?,(?P<returnCode>[0-9]+)"
+          }
+        }
+      }]
+    }]
+  }]
   existing_event_notifications_instances = [{
     crn              = module.event_notification_1.crn
     integration_name = "${var.prefix}-en-1"
@@ -193,7 +220,7 @@ module "cloud_logs" {
       attributes = [
         {
           "name" : "endpointType",
-          "value" : "private"
+          "value" : "public"
         },
         {
           name  = "networkZoneId"
