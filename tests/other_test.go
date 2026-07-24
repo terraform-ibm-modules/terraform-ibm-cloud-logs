@@ -23,6 +23,7 @@ func TestRunAdvancedExample(t *testing.T) {
 		Prefix:  "icl-adv",
 		TarIncludePatterns: []string{
 			"*.tf",
+			"modules/parsing_rules" + "/*.tf",
 			"modules/logs_policy" + "/*.tf",
 			"modules/webhook" + "/*.tf",
 			advancedExampleDir + "/*.tf",

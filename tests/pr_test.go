@@ -101,6 +101,7 @@ func TestFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
+				"modules/parsing_rules" + "/*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
 				configurableDADir + "/*.tf",
@@ -195,6 +196,7 @@ func TestUpgradeFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
+				"modules/parsing_rules" + "/*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
 				configurableDADir + "/*.tf",

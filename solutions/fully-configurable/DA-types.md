@@ -126,6 +126,85 @@ The `cloud_log_data_bucket_retention_policy` input variable allows you to provid
 }
 ```
 
+## Cloud Logs Parsing Rules <a name="logs_parsing_rules"></a>
+
+The `logs_parsing_rules` input variable allows you to provide a list of parsing rule groups that will be configured in the Cloud Logs instance. Parsing rules let you extract, parse, block, or otherwise transform log records before they are stored. Refer [here](https://cloud.ibm.com/docs/cloud-logs?topic=cloud-logs-rules_groups) for more information.
+
+* Variable name: `logs_parsing_rules`.
+* Type: A list of objects. Each object represents a rule group (`ibm_logs_rule_group`).
+* Default value: An empty list (`[]`).
+
+### Options for logs_parsing_rules
+
+* `name` (required): The unique name of the rule group.
+* `description` (optional): A description of the rule group.
+* `enabled` (optional): Whether the rule group is enabled. Defaults to `true`.
+* `order` (optional): The priority order of the rule group. Lower values are evaluated first.
+* `rule_matchers` (optional): A list of matchers that determine which logs this rule group applies to. Each matcher may specify one of:
+  * `application_name`: Match by application name (`value`).
+  * `subsystem_name`: Match by subsystem name (`value`).
+  * `severity`: Match by severity level (`value`).
+* `rule_subgroups` (required): A list of rule subgroups, each containing:
+  * `enabled` (optional): Whether the subgroup is enabled. Defaults to `true`.
+  * `order` (optional): The priority order of the subgroup.
+  * `rules` (required): A list of rules in the subgroup. Each rule has:
+    * `name` (required): The name of the rule.
+    * `description` (optional): A description of the rule.
+    * `source_field` (required): The log field this rule is applied to (e.g. `"text"`).
+    * `enabled` (optional): Whether the rule is enabled. Defaults to `true`.
+    * `order` (optional): The priority order of the rule.
+    * `parameters` (required): Exactly one parameter block describing the rule type:
+      * `parse_parameters`: Extract named capture groups from a log field using a regex.
+      * `block_parameters`: Block logs matching a regex.
+      * `extract_parameters`: Extract a value from a log field using a regex.
+      * `json_extract_parameters`: Extract a value from a JSON log field.
+      * `replace_parameters`: Replace a value in a log field using a regex.
+      * `allow_parameters`: Allow only logs matching a regex.
+      * `extract_timestamp_parameters`: Extract a timestamp from a log field.
+      * `remove_fields_parameters`: Remove fields from a log record.
+      * `json_stringify_parameters`: Stringify a JSON log field.
+      * `json_parse_parameters`: Parse a stringified JSON value in a log field.
+
+### Example logs_parsing_rules
+
+```hcl
+[
+  {
+    name        = "mysql-parse"
+    description = "Parse MySQL audit log fields"
+    enabled     = true
+    order       = 4294967
+    rule_matchers = [
+      {
+        subsystem_name = {
+          value = "mysql"
+        }
+      }
+    ]
+    rule_subgroups = [
+      {
+        enabled = true
+        order   = 1
+        rules = [
+          {
+            name         = "mysql-parse"
+            source_field = "text"
+            enabled      = true
+            order        = 1
+            parameters = {
+              parse_parameters = {
+                destination_field = "text"
+                rule              = "(?P<timestamp>[^,]+),(?P<hostname>[^,]+),(?P<username>[^,]+),(?P<ip>[^,]+),(?P<connectionId>[0-9]+),(?P<queryId>[0-9]+),(?P<operation>[^,]+),(?P<database>[^,]+),'?(?P<object>.*)'?,(?P<returnCode>[0-9]+)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
 ## Configuring Context-Based Restrictions (CBRs) <a name="cloud_logs_cbr_rules"></a>
 
 The `cloud_logs_cbr_rules` input variable allows you to provide a rule for the target service to enforce access restrictions for the service based on the context of access requests. Contexts are criteria that include the network location of access requests, the endpoint type from where the request is sent, etc.
