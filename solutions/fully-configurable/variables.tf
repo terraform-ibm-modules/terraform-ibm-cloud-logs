@@ -258,6 +258,17 @@ variable "ibmcloud_kms_api_key" {
 # Cloud Logs
 ########################################################################################################################
 
+variable "cloud_logs_plan" {
+  type        = string
+  description = "The IBM Cloud Logs plan to provision. Available plans: `standard`, `standard-plus-metrics`. Note: `standard-plus-metrics` is not a GAed plan."
+  default     = "standard"
+
+  validation {
+    condition     = contains(["standard", "standard-plus-metrics"], var.cloud_logs_plan)
+    error_message = "The plan value must be one of the following: standard, standard-plus-metrics."
+  }
+}
+
 variable "existing_cloud_logs_crn" {
   type        = string
   default     = null

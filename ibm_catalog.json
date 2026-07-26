@@ -202,6 +202,19 @@
               ]
             },
             {
+              "key": "cloud_logs_plan",
+              "options": [
+                {
+                  "displayname": "Standard",
+                  "value": "standard"
+                },
+                {
+                  "displayname": "Standard Plus Metrics",
+                  "value": "standard-plus-metrics"
+                }
+              ]
+            },
+            {
               "key": "ibmcloud_cos_api_key"
             },
             {
