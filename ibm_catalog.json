@@ -211,6 +211,10 @@
                 {
                   "displayname": "Standard Plus Metrics",
                   "value": "standard-plus-metrics"
+                },
+                {
+                  "displayname": "Lite",
+                  "value": "lite"
                 }
               ]
             },
