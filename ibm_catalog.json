@@ -205,10 +205,6 @@
               "key": "cloud_logs_plan",
               "options": [
                 {
-                  "displayname": "Standard",
-                  "value": "standard"
-              "options": [
-                {
                   "displayname": "Lite",
                   "value": "lite"
                 },
