@@ -207,14 +207,18 @@
                 {
                   "displayname": "Standard",
                   "value": "standard"
+              "options": [
+                {
+                  "displayname": "Lite",
+                  "value": "lite"
+                },
+                {
+                  "displayname": "Standard",
+                  "value": "standard"
                 },
                 {
                   "displayname": "Standard Plus Metrics",
                   "value": "standard-plus-metrics"
-                },
-                {
-                  "displayname": "Lite",
-                  "value": "lite"
                 }
               ]
             },

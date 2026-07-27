@@ -18,7 +18,7 @@ variable "instance_name" {
 
 variable "plan" {
   type        = string
-  description = "The IBM Cloud Logs plan to provision. Available: standard, standard-plus-metrics, lite. Note: standard-plus-metrics is not a GAed plan."
+  description = "The IBM Cloud Logs plan to provision. Available plans: `lite`,`standard`, `standard-plus-metrics`. Currently,`standard-plus-metrics` is available for allowlisted accounts only."
   default     = "standard"
 
   validation {
