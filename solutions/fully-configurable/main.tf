@@ -32,7 +32,7 @@ module "cloud_logs" {
   resource_group_id                      = module.resource_group.resource_group_id
   region                                 = var.region
   instance_name                          = local.cloud_logs_instance_name
-  plan                                   = "standard" # not a variable because there is only one option
+  plan                                   = var.cloud_logs_plan
   resource_tags                          = var.cloud_logs_resource_tags
   access_tags                            = var.cloud_logs_access_tags
   retention_period                       = var.cloud_logs_retention_period
