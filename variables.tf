@@ -18,14 +18,16 @@ variable "instance_name" {
 
 variable "plan" {
   type        = string
-  description = "The IBM Cloud Logs plan to provision. Available: standard"
+  description = "The IBM Cloud Logs plan to provision. Available plans: `lite`,`standard`, `standard-plus-metrics`. Currently,`lite` and `standard-plus-metrics` are available for allowlisted accounts only."
   default     = "standard"
 
   validation {
     condition = anytrue([
       var.plan == "standard",
+      var.plan == "standard-plus-metrics",
+      var.plan == "lite",
     ])
-    error_message = "The plan value must be one of the following: standard."
+    error_message = "The plan value must be one of the following: standard, standard-plus-metrics, lite."
   }
 }
 
