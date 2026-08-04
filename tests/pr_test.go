@@ -43,13 +43,16 @@ var validRegions = []string{
 
 var parsingRulesTestInput = []map[string]interface{}{
 	{
-		"name": "new-rule-parse",
+		"name":  "new-rule-parse",
+		"order": 1,
 		"rule_subgroups": []map[string]interface{}{
 			{
+				"order": 1,
 				"rules": []map[string]interface{}{
 					{
 						"name":         "new-rule-parse",
 						"source_field": "text",
+						"order":        1,
 						"parameters": map[string]interface{}{
 							"parse_parameters": map[string]interface{}{
 								"destination_field": "text",
