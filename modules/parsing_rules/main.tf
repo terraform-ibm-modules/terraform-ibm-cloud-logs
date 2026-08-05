@@ -10,7 +10,7 @@ resource "ibm_logs_rule_group" "parsing_rule_groups" {
 
   instance_id   = var.cloud_logs_instance_id
   region        = var.cloud_logs_region
-  endpoint_type = var.cloud_logs_service_endpoints
+  endpoint_type = var.cloud_logs_endpoint_type
   name          = each.value.name
   description   = each.value.description
   enabled       = each.value.enabled

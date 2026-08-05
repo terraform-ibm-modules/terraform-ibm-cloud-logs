@@ -76,6 +76,58 @@ variable "parsing_rules" {
   }))
   description = "Configuration of IBM Cloud Logs parsing rule groups."
   default     = []
+  validation {
+    condition     = alltrue([for rule_group in var.parsing_rules : can(regex("^[\\p{L}\\p{N}\\p{P}\\p{Z}\\p{S}\\p{M}]+$", rule_group.name)) && length(rule_group.name) >= 1 && length(rule_group.name) <= 255])
+    error_message = "Each parsing rule group name must be between 1 and 255 characters and match the pattern ^[\\p{L}\\p{N}\\p{P}\\p{Z}\\p{S}\\p{M}]+$."
+  }
+
+  validation {
+    condition     = alltrue([for rule_group in var.parsing_rules : rule_group.order == null || (rule_group.order >= 0 && rule_group.order <= 4294967295)])
+    error_message = "Each parsing rule group order must be between 0 and 4294967295."
+  }
+
+  validation {
+    condition = alltrue([
+      for rule_group in var.parsing_rules :
+      alltrue([
+        for matcher in rule_group.rule_matchers :
+        matcher.severity == null || contains(["debug_or_unspecified", "verbose", "info", "warning", "error", "critical"], matcher.severity.value)
+      ])
+    ])
+    error_message = "Each rule matcher severity value must be one of: debug_or_unspecified, verbose, info, warning, error, critical."
+  }
+
+  validation {
+    condition = alltrue([
+      for rule_group in var.parsing_rules :
+      alltrue([
+        for subgroup in rule_group.rule_subgroups :
+        alltrue([
+          for rule in subgroup.rules :
+          rule.parameters.json_extract_parameters == null || contains(["category_or_unspecified", "classname", "methodname", "threadid", "severity"], rule.parameters.json_extract_parameters.destination_field)
+        ])
+      ])
+    ])
+    error_message = "Each json_extract_parameters destination_field must be one of: category_or_unspecified, classname, methodname, threadid, severity."
+  }
+
+  validation {
+    condition = alltrue([
+      for rule_group in var.parsing_rules :
+      alltrue([
+        for subgroup in rule_group.rule_subgroups :
+        alltrue([
+          for rule in subgroup.rules :
+          rule.parameters.extract_timestamp_parameters == null || (
+            length(rule.parameters.extract_timestamp_parameters.format) >= 1 &&
+            length(rule.parameters.extract_timestamp_parameters.format) <= 4096 &&
+            contains(["strftime_or_unspecified", "javasdf", "golang", "secondsts", "millits", "microts", "nanots"], rule.parameters.extract_timestamp_parameters.standard)
+          )
+        ])
+      ])
+    ])
+    error_message = "Each extract_timestamp_parameters format must be 1–4096 characters, and standard must be one of: strftime_or_unspecified, javasdf, golang, secondsts, millits, microts, nanots."
+  }
 }
 
 variable "cloud_logs_instance_id" {
@@ -88,11 +140,11 @@ variable "cloud_logs_region" {
   description = "The IBM Cloud region where the existing IBM Cloud Logs instance is located."
 }
 
-variable "cloud_logs_service_endpoints" {
+variable "cloud_logs_endpoint_type" {
   type        = string
-  description = "The type of service endpoints configured for the existing IBM Cloud Logs instance. Allowed values: public-and-private."
+  description = "The endpoint type to use to communicate with the existing IBM Cloud Logs instance. Allowed values: public, private."
   validation {
-    condition     = contains(["public-and-private"], var.cloud_logs_service_endpoints)
-    error_message = "The specified cloud_logs_service_endpoints is not a valid selection. Allowed values: public-and-private."
+    condition     = contains(["public", "private"], var.cloud_logs_endpoint_type)
+    error_message = "The specified cloud_logs_endpoint_type is not a valid selection. Allowed values: public, private."
   }
 }

@@ -243,6 +243,16 @@ variable "parsing_rules" {
   default     = []
 }
 
+variable "parsing_rules_endpoint_type" {
+  type        = string
+  description = "The endpoint type to use to communicate with the IBM Cloud Logs instance when creating parsing rules. Allowed values: public, private."
+  default     = "public"
+  validation {
+    condition     = contains(["public", "private"], var.parsing_rules_endpoint_type)
+    error_message = "The specified parsing_rules_endpoint_type is not a valid selection. Allowed values: public, private."
+  }
+}
+
 variable "policies" {
   type = list(object({
     logs_policy_name        = string
