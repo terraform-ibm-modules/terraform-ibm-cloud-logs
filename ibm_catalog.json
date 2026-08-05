@@ -358,6 +358,19 @@
               }
             },
             {
+              "key": "logs_parsing_rules_endpoint_type",
+              "options": [
+                {
+                  "displayname": "Public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "Private",
+                  "value": "private"
+                }
+              ]
+            },
+            {
               "key": "existing_cloud_logs_crn",
               "display_name": "existing_cloud_logs",
               "value_constraints": [

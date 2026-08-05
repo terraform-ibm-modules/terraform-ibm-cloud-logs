@@ -536,6 +536,12 @@ variable "logs_parsing_rules" {
   default     = []
 }
 
+variable "logs_parsing_rules_endpoint_type" {
+  type        = string
+  description = "The endpoint type to use to communicate with the IBM Cloud Logs instance when creating parsing rules. Allowed values: `public`, `private`."
+  default     = "private"
+}
+
 ##############################################################
 # Context-based restriction (CBR)
 ##############################################################
