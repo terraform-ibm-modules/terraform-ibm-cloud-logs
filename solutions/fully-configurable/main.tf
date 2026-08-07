@@ -53,8 +53,9 @@ module "cloud_logs" {
       skip_cos_auth_policy = local.skip_cos_auth_policy
     }
   }
-  logs_routing_tenant_regions   = var.logs_routing_tenant_regions
   skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
+  logs_router_target_name       = var.logs_router_target_name
+  logs_router_routes            = var.logs_router_routes
   policies                      = var.logs_policies
 }
 

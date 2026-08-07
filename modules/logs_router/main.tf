@@ -2,27 +2,24 @@
 # IBM Cloud Log Router v3
 ##############################################################################
 
-resource "ibm_iam_authorization_policy" "logs_routing_policy" {
-  count               = var.skip_logs_routing_auth_policy ? 0 : 1
-  source_service_name = "logs-router"
-  roles               = ["Sender"]
-  description         = "Allow Logs Routing 'Sender' access to the IBM Cloud Logs instance ${var.cloud_logs_instance_crn}."
-
-  resource_attributes {
-    name     = "serviceName"
-    operator = "stringEquals"
-    value    = "logs"
-  }
-
-  resource_attributes {
-    name     = "serviceInstance"
-    operator = "stringEquals"
-    value    = regex(".*:(.*)::", var.cloud_logs_instance_crn)[0]
+module "logs_routing_policy" {
+  count      = var.skip_logs_routing_auth_policy ? 0 : 1
+  source     = "terraform-ibm-modules/s2s-auth/ibm"
+  version    = "2.3.1"
+  enable_cbr = false
+  service_map = {
+    "logs_router_to_cloud_logs" = {
+      source_service_name         = "logs-router"
+      target_service_name         = "logs"
+      roles                       = ["Sender"]
+      description                 = "Allow Logs Routing 'Sender' access to the IBM Cloud Logs instance ${var.cloud_logs_instance_crn}."
+      target_resource_instance_id = regex(".*:(.*)::", var.cloud_logs_instance_crn)[0]
+    }
   }
 }
 
 resource "time_sleep" "wait_for_auth_policy" {
-  depends_on      = [ibm_iam_authorization_policy.logs_routing_policy]
+  depends_on      = [module.logs_routing_policy]
   count           = var.skip_logs_routing_auth_policy ? 0 : 1
   create_duration = "30s"
 }

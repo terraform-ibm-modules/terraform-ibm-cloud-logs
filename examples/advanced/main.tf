@@ -136,6 +136,7 @@ module "cbr_schematics_zone" {
 
 locals {
   cloud_logs_instance_name = "${var.prefix}-cloud-logs"
+  log_router_target_name   = "${var.prefix}-log-router-target"
 }
 
 module "cloud_logs" {
@@ -202,39 +203,20 @@ module "cloud_logs" {
       ]
     }]
   }]
-}
 
-##############################################################################
-# IBM Cloud Log Router v3
-##############################################################################
-locals {
-  log_router_target_name = "${var.prefix}-log-router-target"
-}
-module "log_router" {
-  source = "../../modules/log_router"
-  # delete line above and use below syntax to pull module source from HashiCorp when consuming this module
-  # source  = "terraform-ibm-modules/cloud-logs/ibm//modules/log_router"
-  # version = "X.Y.Z" # Replace "X.Y.Z" with a release version to lock into a specific release
-
-  cloud_logs_instance_crn = module.cloud_logs.crn
-  target_name             = local.log_router_target_name
-
-  # Configure global account-level settings for Logs Routing. primary_metadata_region
-  # determines where routing metadata is stored and must be set before targets and routes
-  # are created (the module enforces this via depends_on).
+  logs_router_target_name = local.log_router_target_name
   global_log_routing_settings = {
     primary_metadata_region  = var.region
     permitted_target_regions = ["us-south", "eu-de", "us-east", "eu-es", "eu-gb", "au-syd", "br-sao", "ca-tor", "ca-mon", "eu-es", "jp-tok", "jp-osa", "in-che", "in-mum", "eu-fr2"]
   }
-
-  routes = [
+  logs_router_routes = [
     {
       name       = "${var.prefix}-route"
       managed_by = "account"
       rules = [
         {
           action  = "send"
-          targets = [{ id = module.log_router.target_id }]
+          targets = [{ id = module.cloud_logs.log_router_target_id }]
           inclusion_filters = [
             {
               operand  = "location"

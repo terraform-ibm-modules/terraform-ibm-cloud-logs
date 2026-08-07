@@ -103,9 +103,9 @@ variable "routes" {
 variable "global_log_routing_settings" {
   type = object({
     default_targets           = optional(list(string), [])
-    primary_metadata_region   = string
+    primary_metadata_region   = optional(string)
     backup_metadata_region    = optional(string)
-    permitted_target_regions  = list(string)
+    permitted_target_regions  = optional(list(string), [])
     private_api_endpoint_only = optional(bool, false)
   })
   description = "Global account settings for logs routing. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-settings&interface=ui)"

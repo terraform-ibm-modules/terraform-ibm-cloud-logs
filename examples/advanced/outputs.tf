@@ -73,16 +73,16 @@ output "event_notification_2_crn" {
 }
 
 output "log_router_target_id" {
-  value       = module.log_router.target_id
+  value       = module.cloud_logs.log_router_target_id
   description = "The UUID of the IBM Cloud Log Router v3 target."
 }
 
 output "log_router_target_crn" {
-  value       = module.log_router.target_crn
+  value       = module.cloud_logs.log_router_target_crn
   description = "The CRN of the IBM Cloud Log Router v3 target."
 }
 
 output "log_router_route_ids" {
-  value       = module.log_router.route_ids
+  value       = module.cloud_logs.log_router_route_ids
   description = "Map of route name to route id for the IBM Cloud Log Router v3 routes."
 }

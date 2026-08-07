@@ -123,7 +123,6 @@ You need the following permissions to run this module.
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.80.2, < 3.0.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5.1, < 4.0.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9.1, < 1.0.0 |
 
 ### Modules
@@ -134,17 +133,15 @@ You need the following permissions to run this module.
 | <a name="module_cos_bucket_crn_parser"></a> [cos\_bucket\_crn\_parser](#module\_cos\_bucket\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.9.0 |
 | <a name="module_en_integration"></a> [en\_integration](#module\_en\_integration) | ./modules/webhook | n/a |
 | <a name="module_logs_policies"></a> [logs\_policies](#module\_logs\_policies) | ./modules/logs_policy | n/a |
+| <a name="module_logs_router"></a> [logs\_router](#module\_logs\_router) | ./modules/logs_router | n/a |
 
 ### Resources
 
 | Name | Type |
 |------|------|
 | [ibm_iam_authorization_policy.cos_policy](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
-| [ibm_iam_authorization_policy.logs_routing_policy](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
-| [ibm_logs_router_tenant.logs_router_tenant_instances](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/logs_router_tenant) | resource |
 | [ibm_resource_instance.cloud_logs](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/resource_instance) | resource |
 | [ibm_resource_tag.cloud_logs_tag](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/resources/resource_tag) | resource |
-| [random_string.random_tenant_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [time_sleep.wait_for_cos_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [ibm_iam_access_tag.access_tag](https://registry.terraform.io/providers/ibm-cloud/ibm/latest/docs/data-sources/iam_access_tag) | data source |
 
@@ -156,8 +153,10 @@ You need the following permissions to run this module.
 | <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | The context-based restrictions rule to create. Only one rule is allowed. | <pre>list(object({<br/>    description = string<br/>    account_id  = string<br/>    rule_contexts = list(object({<br/>      attributes = optional(list(object({<br/>        name  = string<br/>        value = string<br/>    }))) }))<br/>    enforcement_mode = string<br/>    operations = optional(list(object({<br/>      api_types = list(object({<br/>        api_type_id = string<br/>      }))<br/>    })))<br/>  }))</pre> | `[]` | no |
 | <a name="input_data_storage"></a> [data\_storage](#input\_data\_storage) | A logs data bucket and a metrics bucket in IBM Cloud Object Storage to store your IBM Cloud Logs data for long term storage, search, analysis and alerting. | <pre>object({<br/>    logs_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    metrics_data = optional(object({<br/>      enabled              = optional(bool, false)<br/>      bucket_crn           = optional(string)<br/>      bucket_endpoint      = optional(string)<br/>      skip_cos_auth_policy = optional(bool, false)<br/>    }), {})<br/>    }<br/>  )</pre> | <pre>{<br/>  "logs_data": null,<br/>  "metrics_data": null<br/>}</pre> | no |
 | <a name="input_existing_event_notifications_instances"></a> [existing\_event\_notifications\_instances](#input\_existing\_event\_notifications\_instances) | List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs. | <pre>list(object({<br/>    crn                       = string<br/>    integration_name          = optional(string)<br/>    integration_endpoint_type = optional(string, "private")<br/>    skip_iam_auth_policy      = optional(bool, false)<br/>    cloud_logs_endpoint_type  = optional(string, "public")<br/>  }))</pre> | `[]` | no |
+| <a name="input_global_log_routing_settings"></a> [global\_log\_routing\_settings](#input\_global\_log\_routing\_settings) | Global account settings for logs routing. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-settings&interface=ui) | <pre>object({<br/>    default_targets           = optional(list(string), [])<br/>    primary_metadata_region   = optional(string)<br/>    backup_metadata_region    = optional(string)<br/>    permitted_target_regions  = optional(list(string), [])<br/>    private_api_endpoint_only = optional(bool, false)<br/>  })</pre> | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | The name of the IBM Cloud Logs instance to create. Defaults to 'cloud-logs-<region>' | `string` | `null` | no |
-| <a name="input_logs_routing_tenant_regions"></a> [logs\_routing\_tenant\_regions](#input\_logs\_routing\_tenant\_regions) | Pass a list of regions to create a tenant for that is targeted to the IBM Cloud Logs instance created by this module. To manage platform logs that are generated by IBM Cloud® services in a region of IBM Cloud, you must create a tenant in each region that you operate. Leave the list empty if you don't want to create any tenants. NOTE: You can only have 1 tenant per region in an account. | `list(any)` | `[]` | no |
+| <a name="input_logs_router_routes"></a> [logs\_router\_routes](#input\_logs\_router\_routes) | List of log router routes to create. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped. | <pre>list(object({<br/>    name       = string<br/>    managed_by = optional(string)<br/>    rules = list(object({<br/>      action = optional(string, "send")<br/>      targets = list(object({<br/>        id = string<br/>      }))<br/>      inclusion_filters = list(object({<br/>        operand  = string<br/>        operator = string<br/>        values   = list(string)<br/>      }))<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_logs_router_target_name"></a> [logs\_router\_target\_name](#input\_logs\_router\_target\_name) | The name to assign to the IBM Cloud Log Router v3 target. Set to null to skip creating the log router resources. | `string` | `null` | no |
 | <a name="input_plan"></a> [plan](#input\_plan) | The IBM Cloud Logs plan to provision. Available plans: `lite`,`standard`, `standard-plus-metrics`. Currently,`lite` and `standard-plus-metrics` are available for allowlisted accounts only. | `string` | `"standard"` | no |
 | <a name="input_policies"></a> [policies](#input\_policies) | Configuration of IBM Cloud Logs policies. | <pre>list(object({<br/>    logs_policy_name        = string<br/>    logs_policy_description = optional(string, null)<br/>    logs_policy_priority    = string<br/>    application_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    subsystem_rule = optional(list(object({<br/>      name         = string<br/>      rule_type_id = string<br/>    })))<br/>    log_rules = optional(list(object({<br/>      severities = list(string)<br/>    })))<br/>    archive_retention = optional(list(object({<br/>      id = string<br/>    })))<br/>  }))</pre> | `[]` | no |
 | <a name="input_region"></a> [region](#input\_region) | The IBM Cloud region where IBM Cloud logs instance will be created. | `string` | `"us-south"` | no |
@@ -176,6 +175,9 @@ You need the following permissions to run this module.
 | <a name="output_guid"></a> [guid](#output\_guid) | The guid of the provisioned IBM Cloud Logs instance. |
 | <a name="output_ingress_endpoint"></a> [ingress\_endpoint](#output\_ingress\_endpoint) | The public ingress endpoint of the provisioned IBM Cloud Logs instance. |
 | <a name="output_ingress_private_endpoint"></a> [ingress\_private\_endpoint](#output\_ingress\_private\_endpoint) | The private ingress endpoint of the provisioned IBM Cloud Logs instance. |
+| <a name="output_log_router_route_ids"></a> [log\_router\_route\_ids](#output\_log\_router\_route\_ids) | Map of route name to route UUID for the IBM Cloud Log Router v3 routes. |
+| <a name="output_log_router_target_crn"></a> [log\_router\_target\_crn](#output\_log\_router\_target\_crn) | The CRN of the IBM Cloud Log Router v3 target. |
+| <a name="output_log_router_target_id"></a> [log\_router\_target\_id](#output\_log\_router\_target\_id) | The UUID of the IBM Cloud Log Router v3 target. |
 | <a name="output_logs_policies_details"></a> [logs\_policies\_details](#output\_logs\_policies\_details) | The details of the IBM Cloud logs policies created. |
 | <a name="output_name"></a> [name](#output\_name) | The name of the provisioned IBM Cloud Logs instance. |
 | <a name="output_resource_group_id"></a> [resource\_group\_id](#output\_resource\_group\_id) | The resource group where IBM Cloud Logs instance resides. |

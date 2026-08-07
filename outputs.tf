@@ -37,3 +37,18 @@ output "logs_policies_details" {
   value       = length(var.policies) > 0 ? module.logs_policies[0].logs_policies_details : null
   description = "The details of the IBM Cloud logs policies created."
 }
+
+output "log_router_target_id" {
+  value       = var.logs_router_target_name != null ? module.logs_router[0].target_id : null
+  description = "The UUID of the IBM Cloud Log Router v3 target."
+}
+
+output "log_router_target_crn" {
+  value       = var.logs_router_target_name != null ? module.logs_router[0].target_crn : null
+  description = "The CRN of the IBM Cloud Log Router v3 target."
+}
+
+output "log_router_route_ids" {
+  value       = var.logs_router_target_name != null ? module.logs_router[0].route_ids : null
+  description = "Map of route name to route UUID for the IBM Cloud Log Router v3 routes."
+}
