@@ -47,7 +47,7 @@ module "key_protect" {
 
 module "event_notification_1" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.12.25"
+  version           = "2.12.28"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-1"
   resource_tags     = var.resource_tags
@@ -58,7 +58,7 @@ module "event_notification_1" {
 
 module "event_notification_2" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.12.25"
+  version           = "2.12.28"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en-2"
   resource_tags     = var.resource_tags
@@ -73,7 +73,7 @@ module "event_notification_2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "10.17.5"
+  version           = "10.17.7"
   resource_group_id = module.resource_group.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   resource_tags     = var.resource_tags
@@ -87,7 +87,7 @@ locals {
 
 module "buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.17.5"
+  version = "10.17.7"
   bucket_configs = [
     {
       bucket_name                   = local.logs_bucket_name
@@ -117,7 +117,7 @@ module "buckets" {
 # A network zone with service reference to schematics
 module "cbr_schematics_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.36.7"
+  version          = "1.36.8"
   name             = "${var.prefix}-schematics-network-zone"
   zone_description = "CBR Network zone for schematics"
   account_id       = module.cloud_logs.account_id
