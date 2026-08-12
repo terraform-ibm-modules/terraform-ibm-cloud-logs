@@ -91,7 +91,7 @@ variable "parsing_rules" {
       for rule_group in var.parsing_rules :
       alltrue([
         for matcher in rule_group.rule_matchers :
-        matcher.severity == null || contains(["debug_or_unspecified", "verbose", "info", "warning", "error", "critical"], matcher.severity.value)
+        try(matcher.severity, null) == null || contains(["debug_or_unspecified", "verbose", "info", "warning", "error", "critical"], try(matcher.severity.value, ""))
       ])
     ])
     error_message = "Each rule matcher severity value must be one of: debug_or_unspecified, verbose, info, warning, error, critical."
@@ -104,7 +104,7 @@ variable "parsing_rules" {
         for subgroup in rule_group.rule_subgroups :
         alltrue([
           for rule in subgroup.rules :
-          rule.parameters.json_extract_parameters == null || contains(["category_or_unspecified", "classname", "methodname", "threadid", "severity"], rule.parameters.json_extract_parameters.destination_field)
+          try(rule.parameters.json_extract_parameters, null) == null || contains(["category_or_unspecified", "classname", "methodname", "threadid", "severity"], try(rule.parameters.json_extract_parameters.destination_field, ""))
         ])
       ])
     ])
@@ -118,10 +118,10 @@ variable "parsing_rules" {
         for subgroup in rule_group.rule_subgroups :
         alltrue([
           for rule in subgroup.rules :
-          rule.parameters.extract_timestamp_parameters == null || (
-            length(rule.parameters.extract_timestamp_parameters.format) >= 1 &&
-            length(rule.parameters.extract_timestamp_parameters.format) <= 4096 &&
-            contains(["strftime_or_unspecified", "javasdf", "golang", "secondsts", "millits", "microts", "nanots"], rule.parameters.extract_timestamp_parameters.standard)
+          try(rule.parameters.extract_timestamp_parameters, null) == null || (
+            length(try(rule.parameters.extract_timestamp_parameters.format, "")) >= 1 &&
+            length(try(rule.parameters.extract_timestamp_parameters.format, "")) <= 4096 &&
+            contains(["strftime_or_unspecified", "javasdf", "golang", "secondsts", "millits", "microts", "nanots"], try(rule.parameters.extract_timestamp_parameters.standard, ""))
           )
         ])
       ])
