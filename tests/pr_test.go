@@ -41,6 +41,31 @@ var validRegions = []string{
 	"us-south",
 }
 
+var parsingRulesTestInput = []map[string]interface{}{
+	{
+		"name":  "new-rule-parse",
+		"order": 1,
+		"rule_subgroups": []map[string]interface{}{
+			{
+				"order": 1,
+				"rules": []map[string]interface{}{
+					{
+						"name":         "new-rule-parse",
+						"source_field": "text",
+						"order":        1,
+						"parameters": map[string]interface{}{
+							"parse_parameters": map[string]interface{}{
+								"destination_field": "text",
+								"rule":              `(?P<timestamp>[^,]+),(?P<hostname>[^,]+),(?P<username>[^,]+),(?P<ip>[^,]+),(?P<connectionId>[0-9]+),(?P<queryId>[0-9]+),(?P<operation>[^,]+),(?P<database>[^,]+),'?(?P<object>.*)'?,(?P<returnCode>[0-9]+)`,
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+}
+
 // TestMain will be run before any parallel tests, used to read data from yaml for use with tests
 func TestMain(m *testing.M) {
 
@@ -101,6 +126,7 @@ func TestFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
+				"modules/parsing_rules" + "/*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
 				configurableDADir + "/*.tf",
@@ -127,6 +153,7 @@ func TestFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 			{Name: "management_endpoint_type_for_buckets", Value: "direct", DataType: "string"},
 			{Name: "kms_encryption_enabled_buckets", Value: true, DataType: "bool"},
 			{Name: "kms_endpoint_type", Value: "private", DataType: "string"},
+			{Name: "logs_parsing_rules", Value: parsingRulesTestInput, DataType: "list(object)"},
 		}
 
 		err := options.RunSchematicTest()
@@ -195,6 +222,7 @@ func TestUpgradeFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 			Prefix:  prefix,
 			TarIncludePatterns: []string{
 				"*.tf",
+				"modules/parsing_rules" + "/*.tf",
 				"modules/logs_policy" + "/*.tf",
 				"modules/webhook" + "/*.tf",
 				configurableDADir + "/*.tf",

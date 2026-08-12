@@ -344,6 +344,33 @@
               }
             },
             {
+              "key": "logs_parsing_rules",
+              "type": "array",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
+            },
+            {
+              "key": "logs_parsing_rules_endpoint_type",
+              "options": [
+                {
+                  "displayname": "Public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "Private",
+                  "value": "private"
+                }
+              ]
+            },
+            {
               "key": "existing_cloud_logs_crn",
               "display_name": "existing_cloud_logs",
               "value_constraints": [
