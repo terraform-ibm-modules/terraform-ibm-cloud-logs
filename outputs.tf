@@ -52,3 +52,8 @@ output "log_router_route_ids" {
   value       = var.logs_router_target_name != null ? module.logs_router[0].route_ids : null
   description = "Map of route name to route UUID for the IBM Cloud Log Router v3 routes."
 }
+
+output "parsing_rule_groups_details" {
+  value       = length(var.parsing_rules) > 0 ? module.parsing_rules[0].parsing_rule_groups_details : null
+  description = "The details of the IBM Cloud Logs parsing rule groups created."
+}

@@ -57,6 +57,8 @@ module "cloud_logs" {
   logs_router_target_name       = var.logs_router_target_name
   logs_router_routes            = var.logs_router_routes
   policies                      = var.logs_policies
+  parsing_rules                 = var.logs_parsing_rules
+  parsing_rules_endpoint_type   = var.logs_parsing_rules_endpoint_type
 }
 
 #######################################################################################################################

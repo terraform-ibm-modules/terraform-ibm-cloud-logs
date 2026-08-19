@@ -129,6 +129,19 @@ module "logs_policies" {
 }
 
 ##############################################################################
+# Configure Parsing Rules
+##############################################################################
+
+module "parsing_rules" {
+  count                    = length(var.parsing_rules) > 0 ? 1 : 0
+  source                   = "./modules/parsing_rules"
+  cloud_logs_instance_id   = ibm_resource_instance.cloud_logs.guid
+  cloud_logs_region        = ibm_resource_instance.cloud_logs.location
+  cloud_logs_endpoint_type = var.parsing_rules_endpoint_type
+  parsing_rules            = var.parsing_rules
+}
+
+##############################################################################
 # CBR
 ##############################################################################
 
