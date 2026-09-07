@@ -25,6 +25,7 @@ func TestRunAdvancedExample(t *testing.T) {
 			"*.tf",
 			"modules/parsing_rules" + "/*.tf",
 			"modules/logs_policy" + "/*.tf",
+			"modules/logs_router" + "/*.tf",
 			"modules/webhook" + "/*.tf",
 			advancedExampleDir + "/*.tf",
 		},
