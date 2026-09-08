@@ -29,7 +29,7 @@ Global variables
 
 const resourceGroup = "geretain-test-resources"
 const configurableDADir = "solutions/fully-configurable"
-const terraformVersion = "terraform_v1.14.0" // This should match the version in the ibm_catalog.json
+const terraformVersion = "terraform_v1.14" // This should match the version in the ibm_catalog.json
 const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 var permanentResources map[string]interface{}
