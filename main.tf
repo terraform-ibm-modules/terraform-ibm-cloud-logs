@@ -102,59 +102,17 @@ module "en_integration" {
 }
 
 ##############################################################################
-# Logs Routing
+# Logs Routing (v3)
 ##############################################################################
 
-# Create required auth policy to allow log routing service to send logs to the cloud logs instance
-resource "ibm_iam_authorization_policy" "logs_routing_policy" {
-  count               = !var.skip_logs_routing_auth_policy ? 1 : 0
-  source_service_name = "logs-router"
-  roles               = ["Sender"]
-  description         = "Allow Logs Routing `Sender` access to the IBM Cloud Logs with ID ${ibm_resource_instance.cloud_logs.guid}."
-
-  resource_attributes {
-    name     = "serviceName"
-    operator = "stringEquals"
-    value    = "logs"
-  }
-
-  resource_attributes {
-    name     = "accountId"
-    operator = "stringEquals"
-    value    = ibm_resource_instance.cloud_logs.account_id
-  }
-
-  resource_attributes {
-    name     = "serviceInstance"
-    operator = "stringEquals"
-    value    = ibm_resource_instance.cloud_logs.guid
-  }
-}
-
-resource "random_string" "random_tenant_suffix" {
-  length  = 4
-  numeric = true
-  upper   = false
-  lower   = false
-  special = false
-}
-
-locals {
-  logs_routing_tenant_target_name = replace(substr(local.instance_name, 0, 32), "/[^a-zA-Z0-9]+$/", "")
-}
-
-resource "ibm_logs_router_tenant" "logs_router_tenant_instances" {
-  for_each = toset(var.logs_routing_tenant_regions)
-  name     = "${each.key}-${random_string.random_tenant_suffix.result}"
-  region   = each.key
-  targets {
-    log_sink_crn = ibm_resource_instance.cloud_logs.crn
-    name         = local.logs_routing_tenant_target_name
-    parameters {
-      host = ibm_resource_instance.cloud_logs.extensions.external_ingress
-      port = 443
-    }
-  }
+module "logs_router" {
+  count                         = var.logs_router_target_name != null ? 1 : 0
+  source                        = "./modules/logs_router"
+  cloud_logs_instance_crn       = ibm_resource_instance.cloud_logs.crn
+  target_name                   = var.logs_router_target_name
+  skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
+  routes                        = var.logs_router_routes
+  global_log_routing_settings   = var.global_log_routing_settings
 }
 
 ##############################################################################

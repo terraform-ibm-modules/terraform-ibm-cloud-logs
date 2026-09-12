@@ -136,6 +136,7 @@ module "cbr_schematics_zone" {
 
 locals {
   cloud_logs_instance_name = "${var.prefix}-cloud-logs"
+  log_router_target_name   = "${var.prefix}-log-router-target"
 }
 
 module "cloud_logs" {
@@ -229,4 +230,29 @@ module "cloud_logs" {
       ]
     }]
   }]
+
+  logs_router_target_name = local.log_router_target_name
+  global_log_routing_settings = {
+    primary_metadata_region  = var.region
+    permitted_target_regions = ["us-south", "eu-de", "us-east", "eu-es", "eu-gb", "au-syd", "br-sao", "ca-tor", "ca-mon", "eu-es", "jp-tok", "jp-osa", "in-che", "in-mum", "eu-fr2"]
+  }
+  logs_router_routes = [
+    {
+      name       = "${var.prefix}-route"
+      managed_by = "account"
+      rules = [
+        {
+          action  = "send"
+          targets = [{ id = module.cloud_logs.log_router_target_id }]
+          inclusion_filters = [
+            {
+              operand  = "location"
+              operator = "is"
+              values   = [var.region]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

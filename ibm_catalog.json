@@ -131,13 +131,30 @@
               }
             },
             {
-              "key": "logs_routing_tenant_regions",
+              "key": "logs_router_target_name",
               "required": true,
               "custom_config": {
+                "type": "code_editor",
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
-                  "type": "string"
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
+            },
+            {
+              "key": "logs_router_routes",
+              "required": true,
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
                 }
               }
             },
