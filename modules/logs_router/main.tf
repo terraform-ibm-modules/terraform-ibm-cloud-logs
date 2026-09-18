@@ -25,7 +25,7 @@ resource "time_sleep" "wait_for_auth_policy" {
 }
 
 resource "ibm_logs_router_target" "target" {
-  depends_on      = [time_sleep.wait_for_auth_policy, ibm_logs_router_settings.settings, ibm_logs_router_route.routes]
+  depends_on      = [time_sleep.wait_for_auth_policy, ibm_logs_router_settings.settings]
   name            = var.target_name
   destination_crn = var.cloud_logs_instance_crn
   region          = var.region
