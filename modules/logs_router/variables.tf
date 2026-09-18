@@ -2,6 +2,11 @@
 # variables
 ##############################################################################
 
+variable "region" {
+  type        = string
+  description = "The region where the IBM Cloud Logs Router target will be created."
+}
+
 variable "cloud_logs_instance_crn" {
   type        = string
   description = "The CRN of the IBM Cloud Logs instance that log router targets will forward platform logs to."

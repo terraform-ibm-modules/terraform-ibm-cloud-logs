@@ -108,6 +108,7 @@ module "en_integration" {
 module "logs_router" {
   count                         = var.logs_router_target_name != null ? 1 : 0
   source                        = "./modules/logs_router"
+  region                        = var.region
   cloud_logs_instance_crn       = ibm_resource_instance.cloud_logs.crn
   target_name                   = var.logs_router_target_name
   skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
