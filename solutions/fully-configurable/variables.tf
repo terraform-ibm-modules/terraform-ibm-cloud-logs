@@ -324,22 +324,40 @@ variable "existing_event_notifications_instances" {
 # Logs Routing (v3)
 ##############################################################################
 
+variable "use_private_endpoint" {
+  type        = bool
+  description = "Set to true to use the private endpoints instead of public endpoints for IBM Cloud Logs Router service. When true, the script queries the private Logs Router endpoint to check whether `primary_metadata_region` is already configured. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-endpoints)"
+  default     = true
+}
+
+variable "enable_logs_routing" {
+  type        = bool
+  description = "Whether to enable IBM Cloud Logs Routing to route platform logs to the Cloud Logs instance created by this Deployable Architecture."
+  default     = true
+}
+
 variable "logs_router_target_name" {
   type        = string
-  description = "The name to assign to the IBM Cloud Log Router v3 target. Set to null to skip creating the log router resources."
-  default     = null
+  description = "The name of the IBM Cloud Logs Router target. If the prefix variable is passed, the name of the target is prefixed to the value in the `<prefix>-value` format."
+  default     = "cloud-logs-router-target"
+}
+
+variable "logs_router_route_name" {
+  type        = string
+  description = "The name of the IBM Cloud Logs Router route for the default route. If the prefix variable is passed, the name of the route is prefixed to the value in the `<prefix>-value` format."
+  default     = "cloud-logs-router-route"
 }
 
 variable "skip_logs_routing_auth_policy" {
-  description = "Whether to create an IAM authorization policy that permits the Logs Routing server 'Sender' access to the IBM Cloud Logs instance created by this Deployable Architecture."
   type        = bool
+  description = "Whether to skip creating the IAM service-to-service authorization policy that permits the Logs Routing service 'Sender' access to the IBM Cloud Logs instance. Set to true only when the policy already exists."
   default     = false
 }
 
 variable "logs_router_routes" {
   type = list(object({
     name       = string
-    managed_by = optional(string)
+    managed_by = optional(string, "account")
     rules = list(object({
       action = optional(string, "send")
       targets = list(object({
@@ -352,7 +370,7 @@ variable "logs_router_routes" {
       }))
     }))
   }))
-  description = "List of log router routes to create. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped."
+  description = "List of log router routes to create. If empty, a default route is created that sends all platform logs from the deployment region to the Cloud Logs instance. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped."
   default     = []
 }
 

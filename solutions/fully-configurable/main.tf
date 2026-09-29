@@ -23,6 +23,21 @@ locals {
   # the loop fails with the error: "Sensitive values, or values derived from sensitive values, cannot be used as for_each arguments."
   # However, since we use nonsensitive() solely for logical comparison, we are not exposing any secret values to logs and it's safe to use. Issue https://github.ibm.com/GoldenEye/issues/issues/13562.
   skip_cos_auth_policy = nonsensitive(var.ibmcloud_cos_api_key) != null ? true : var.skip_cloud_logs_cos_auth_policy
+
+  logs_router_target_name = "${local.prefix}${var.logs_router_target_name}"
+  logs_router_route_name  = "${local.prefix}${var.logs_router_route_name}"
+
+  default_logs_router_route = var.enable_logs_routing ? [{
+    name       = local.logs_router_route_name
+    managed_by = "account"
+    rules = [{
+      action = "send"
+      targets = [{
+        id = module.logs_router[0].logs_router_targets[local.logs_router_target_name].id
+      }]
+      inclusion_filters = []
+    }]
+  }] : []
 }
 
 module "cloud_logs" {
@@ -53,12 +68,29 @@ module "cloud_logs" {
       skip_cos_auth_policy = local.skip_cos_auth_policy
     }
   }
-  skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
-  logs_router_target_name       = var.logs_router_target_name
-  logs_router_routes            = var.logs_router_routes
-  policies                      = var.logs_policies
-  parsing_rules                 = var.logs_parsing_rules
-  parsing_rules_endpoint_type   = var.logs_parsing_rules_endpoint_type
+  policies                    = var.logs_policies
+  parsing_rules               = var.logs_parsing_rules
+  parsing_rules_endpoint_type = var.logs_parsing_rules_endpoint_type
+}
+
+module "logs_router" {
+  count  = var.enable_logs_routing ? 1 : 0
+  source = "../../modules/logs_router"
+  targets = [
+    {
+      destination_crn               = local.cloud_logs_crn
+      target_name                   = local.logs_router_target_name
+      target_region                 = var.region
+      skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
+    }
+  ]
+  routes                      = length(var.logs_router_routes) != 0 ? var.logs_router_routes : local.default_logs_router_route
+  global_log_routing_settings = length(module.primary_metadata_region.primary_metadata_region) != 0 ? null : { primary_metadata_region = var.region }
+}
+
+module "primary_metadata_region" {
+  source               = "../../modules/get_primary_metadata_region"
+  use_private_endpoint = var.use_private_endpoint
 }
 
 #######################################################################################################################

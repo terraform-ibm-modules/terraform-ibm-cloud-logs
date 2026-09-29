@@ -27,6 +27,8 @@ func TestRunAdvancedExample(t *testing.T) {
 			"modules/logs_policy" + "/*.tf",
 			"modules/logs_router" + "/*.tf",
 			"modules/webhook" + "/*.tf",
+			"modules/get_primary_metadata_region" + "/*.tf",
+			"modules/get_primary_metadata_region/scripts" + "/*.py",
 			advancedExampleDir + "/*.tf",
 		},
 		TemplateFolder:         advancedExampleDir,

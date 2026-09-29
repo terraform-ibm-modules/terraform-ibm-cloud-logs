@@ -70,28 +70,22 @@ module "logs_router" {
 |------|------|
 | [ibm_logs_router_route.routes](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_router_route) | resource |
 | [ibm_logs_router_settings.settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_router_settings) | resource |
-| [ibm_logs_router_target.target](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_router_target) | resource |
+| [ibm_logs_router_target.targets](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_router_target) | resource |
 | [time_sleep.wait_for_auth_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cloud_logs_instance_crn"></a> [cloud\_logs\_instance\_crn](#input\_cloud\_logs\_instance\_crn) | The CRN of the IBM Cloud Logs instance that log router targets will forward platform logs to. | `string` | n/a | yes |
 | <a name="input_global_log_routing_settings"></a> [global\_log\_routing\_settings](#input\_global\_log\_routing\_settings) | Global account settings for logs routing. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-settings&interface=ui) | <pre>object({<br/>    default_targets           = optional(list(string), [])<br/>    primary_metadata_region   = optional(string)<br/>    backup_metadata_region    = optional(string)<br/>    permitted_target_regions  = optional(list(string), [])<br/>    private_api_endpoint_only = optional(bool, false)<br/>  })</pre> | `null` | no |
-| <a name="input_region"></a> [region](#input\_region) | The region where the IBM Cloud Logs Router target will be created. | `string` | n/a | yes |
-| <a name="input_routes"></a> [routes](#input\_routes) | List of log router routes to create. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped. | <pre>list(object({<br/>    name       = string<br/>    managed_by = optional(string)<br/>    rules = list(object({<br/>      action = optional(string, "send")<br/>      targets = list(object({<br/>        id = string<br/>      }))<br/>      inclusion_filters = list(object({<br/>        operand  = string<br/>        operator = string<br/>        values   = list(string)<br/>      }))<br/>    }))<br/>  }))</pre> | `[]` | no |
-| <a name="input_skip_logs_routing_auth_policy"></a> [skip\_logs\_routing\_auth\_policy](#input\_skip\_logs\_routing\_auth\_policy) | Set to true to skip creating the IAM service-to-service authorization policy that grants Logs Routing 'Sender' access to the Cloud Logs instance. Set to true only when the policy already exists. | `bool` | `false` | no |
-| <a name="input_target_name"></a> [target\_name](#input\_target\_name) | The name to assign to the ibm\_logs\_router\_target resource. | `string` | n/a | yes |
+| <a name="input_routes"></a> [routes](#input\_routes) | List of log router routes to create. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped. | <pre>list(object({<br/>    name       = string<br/>    managed_by = optional(string, "account")<br/>    rules = list(object({<br/>      action = optional(string, "send")<br/>      targets = list(object({<br/>        id = string<br/>      }))<br/>      inclusion_filters = list(object({<br/>        operand  = string<br/>        operator = string<br/>        values   = list(string)<br/>      }))<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_targets"></a> [targets](#input\_targets) | List of IBM Cloud Logs Router targets to create. Each target is a named, account-global pointer to a Cloud Logs instance CRN. | <pre>list(object({<br/>    destination_crn               = string<br/>    target_name                   = string<br/>    target_region                 = optional(string)<br/>    skip_logs_routing_auth_policy = optional(bool, false)<br/>  }))</pre> | `[]` | no |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_route_crns"></a> [route\_crns](#output\_route\_crns) | Map of route name to route CRN. |
-| <a name="output_route_ids"></a> [route\_ids](#output\_route\_ids) | Map of route name to route UUID. |
-| <a name="output_routes"></a> [routes](#output\_routes) | Full details of all IBM Cloud Log Router v3 routes created by this module. |
-| <a name="output_target"></a> [target](#output\_target) | The full IBM Cloud Log Router v3 target resource. |
-| <a name="output_target_crn"></a> [target\_crn](#output\_target\_crn) | The CRN of the IBM Cloud Log Router v3 target. |
-| <a name="output_target_id"></a> [target\_id](#output\_target\_id) | The UUID of the IBM Cloud Log Router v3 target. |
+| <a name="output_logs_router_routes"></a> [logs\_router\_routes](#output\_logs\_router\_routes) | The created IBM Cloud Log Router v3 routes. |
+| <a name="output_logs_router_settings"></a> [logs\_router\_settings](#output\_logs\_router\_settings) | The global IBM Cloud Log Router v3 settings. |
+| <a name="output_logs_router_targets"></a> [logs\_router\_targets](#output\_logs\_router\_targets) | The created IBM Cloud Log Router v3 targets. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

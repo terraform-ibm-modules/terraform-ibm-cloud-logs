@@ -2,36 +2,27 @@
 # variables
 ##############################################################################
 
-variable "region" {
-  type        = string
-  description = "The region where the IBM Cloud Logs Router target will be created."
-}
-
-variable "cloud_logs_instance_crn" {
-  type        = string
-  description = "The CRN of the IBM Cloud Logs instance that log router targets will forward platform logs to."
-}
-
-variable "target_name" {
-  type        = string
-  description = "The name to assign to the ibm_logs_router_target resource."
+variable "targets" {
+  type = list(object({
+    destination_crn               = string
+    target_name                   = string
+    target_region                 = optional(string)
+    skip_logs_routing_auth_policy = optional(bool, false)
+  }))
+  default     = []
+  nullable    = false
+  description = "List of IBM Cloud Logs Router targets to create. Each target is a named, account-global pointer to a Cloud Logs instance CRN."
 
   validation {
-    condition     = length(var.target_name) >= 1 && length(var.target_name) <= 1000
-    error_message = "target_name must be between 1 and 1000 characters."
+    condition     = alltrue([for t in var.targets : length(t.target_name) >= 1 && length(t.target_name) <= 1000])
+    error_message = "Each target_name must be between 1 and 1000 characters."
   }
-}
-
-variable "skip_logs_routing_auth_policy" {
-  type        = bool
-  description = "Set to true to skip creating the IAM service-to-service authorization policy that grants Logs Routing 'Sender' access to the Cloud Logs instance. Set to true only when the policy already exists."
-  default     = false
 }
 
 variable "routes" {
   type = list(object({
     name       = string
-    managed_by = optional(string)
+    managed_by = optional(string, "account")
     rules = list(object({
       action = optional(string, "send")
       targets = list(object({

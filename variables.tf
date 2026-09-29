@@ -136,54 +136,6 @@ variable "existing_event_notifications_instances" {
   description = "List of Event Notifications instance details for routing critical events that occur in your IBM Cloud Logs."
 }
 
-##############################################################################
-# Logs Routing (v3)
-##############################################################################
-
-variable "logs_router_target_name" {
-  type        = string
-  description = "The name to assign to the IBM Cloud Log Router v3 target. Set to null to skip creating the log router resources."
-  default     = null
-}
-
-variable "skip_logs_routing_auth_policy" {
-  description = "Whether to create an IAM authorization policy that permits the Logs Routing server 'Sender' access to the IBM Cloud Logs instance created by this module."
-  type        = bool
-  default     = false
-}
-
-variable "logs_router_routes" {
-  type = list(object({
-    name       = string
-    managed_by = optional(string)
-    rules = list(object({
-      action = optional(string, "send")
-      targets = list(object({
-        id = string
-      }))
-      inclusion_filters = list(object({
-        operand  = string
-        operator = string
-        values   = list(string)
-      }))
-    }))
-  }))
-  description = "List of log router routes to create. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped."
-  default     = []
-}
-
-variable "global_log_routing_settings" {
-  type = object({
-    default_targets           = optional(list(string), [])
-    primary_metadata_region   = optional(string)
-    backup_metadata_region    = optional(string)
-    permitted_target_regions  = optional(list(string), [])
-    private_api_endpoint_only = optional(bool, false)
-  })
-  description = "Global account settings for logs routing. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-settings&interface=ui)"
-  default     = null
-}
-
 #############################################################################################################
 # Logs Policies Configuration
 #
