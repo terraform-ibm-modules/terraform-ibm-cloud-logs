@@ -333,7 +333,7 @@ variable "use_private_endpoint" {
 variable "enable_logs_routing" {
   type        = bool
   description = "Whether to enable IBM Cloud Logs Routing to route platform logs to the Cloud Logs instance created by this Deployable Architecture."
-  default     = true
+  default     = false
 }
 
 variable "logs_router_target_name" {
