@@ -252,9 +252,7 @@ module "logs_router" {
       target_region   = var.region
     }
   ]
-  routes                      = local.default_log_router_route
-  global_log_routing_settings = length(module.primary_metadata_region.primary_metadata_region) != 0 ? null : { primary_metadata_region = var.region }
-}
-module "primary_metadata_region" {
-  source = "../../modules/get_primary_metadata_region"
+  routes = local.default_log_router_route
+  # Need to add the condition for setting primary_metadata_region, once the development account is migrated to v3
+  global_log_routing_settings = { primary_metadata_region = var.region }
 }
