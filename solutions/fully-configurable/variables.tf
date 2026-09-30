@@ -324,12 +324,6 @@ variable "existing_event_notifications_instances" {
 # Logs Routing (v3)
 ##############################################################################
 
-variable "use_private_endpoint" {
-  type        = bool
-  description = "Set to true to use the private endpoints instead of public endpoints for IBM Cloud Logs Router service. When true, the script queries the private Logs Router endpoint to check whether `primary_metadata_region` is already configured. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-endpoints)"
-  default     = true
-}
-
 variable "enable_logs_routing" {
   type        = bool
   description = "Whether to enable IBM Cloud Logs Routing to route platform logs to the Cloud Logs instance created by this Deployable Architecture."

@@ -84,14 +84,9 @@ module "logs_router" {
       skip_logs_routing_auth_policy = var.skip_logs_routing_auth_policy
     }
   ]
-  routes                      = length(var.logs_router_routes) != 0 ? var.logs_router_routes : local.default_logs_router_route
-  global_log_routing_settings = length(module.primary_metadata_region[0].primary_metadata_region) != 0 ? null : { primary_metadata_region = var.region }
-}
-
-module "primary_metadata_region" {
-  count                = var.enable_logs_routing ? 1 : 0
-  source               = "../../modules/get_primary_metadata_region"
-  use_private_endpoint = var.use_private_endpoint
+  routes = length(var.logs_router_routes) != 0 ? var.logs_router_routes : local.default_logs_router_route
+  # IBM Cloud Logs Router v3 requires an account-level primary metadata region to be configured. Defaults to the target deployment region.
+  global_log_routing_settings = { primary_metadata_region = var.region }
 }
 
 #######################################################################################################################

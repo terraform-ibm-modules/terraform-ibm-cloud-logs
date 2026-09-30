@@ -353,9 +353,6 @@
               "key": "logs_router_route_name"
             },
             {
-              "key": "use_private_endpoint"
-            },
-            {
               "key": "logs_policies",
               "type": "array",
               "custom_config": {
