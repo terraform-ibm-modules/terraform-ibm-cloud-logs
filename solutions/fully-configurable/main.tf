@@ -64,17 +64,13 @@ module "cloud_logs" {
 # Check Blocks
 ##############################################################################
 
-check "warn_hs_crypto_instance" {
+check "warn_hpcs_deprecation" {
   assert {
-    condition     = !(var.existing_kms_instance_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_instance_crn)))
-    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) instance CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
-  }
-}
-
-check "warn_hs_crypto_key" {
-  assert {
-    condition     = !(var.existing_kms_key_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_key_crn)))
-    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) key CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
+    condition = !(
+      (var.existing_kms_key_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_key_crn))) ||
+      (var.existing_kms_instance_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_instance_crn)))
+    )
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) instance or key CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative such as IBM Cloud Key Protect."
   }
 }
 
