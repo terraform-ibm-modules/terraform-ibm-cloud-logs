@@ -47,7 +47,7 @@ module "parsing_rules" {
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.80.2, < 3.0.0 |
 
@@ -58,13 +58,13 @@ No modules.
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_logs_rule_group.parsing_rule_groups](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/logs_rule_group) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cloud_logs_endpoint_type"></a> [cloud\_logs\_endpoint\_type](#input\_cloud\_logs\_endpoint\_type) | The endpoint type to use to communicate with the existing IBM Cloud Logs instance. Allowed values: public, private. | `string` | n/a | yes |
 | <a name="input_cloud_logs_instance_id"></a> [cloud\_logs\_instance\_id](#input\_cloud\_logs\_instance\_id) | The GUID of the existing IBM Cloud Logs instance. | `string` | n/a | yes |
 | <a name="input_cloud_logs_region"></a> [cloud\_logs\_region](#input\_cloud\_logs\_region) | The IBM Cloud region where the existing IBM Cloud Logs instance is located. | `string` | n/a | yes |
@@ -73,6 +73,6 @@ No modules.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_parsing_rule_groups_details"></a> [parsing\_rule\_groups\_details](#output\_parsing\_rule\_groups\_details) | The details of the IBM Cloud Logs parsing rule groups created. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

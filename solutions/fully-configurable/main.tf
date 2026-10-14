@@ -89,6 +89,20 @@ module "logs_router" {
   global_log_routing_settings = { primary_metadata_region = var.region }
 }
 
+##############################################################################
+# Check Blocks
+##############################################################################
+
+check "warn_hpcs_deprecation" {
+  assert {
+    condition = !(
+      (var.existing_kms_key_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_key_crn))) ||
+      (var.existing_kms_instance_crn != null && can(regex(".*hs-crypto.*", var.existing_kms_instance_crn)))
+    )
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) instance or key CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
+  }
+}
+
 #######################################################################################################################
 # COS
 #######################################################################################################################
@@ -126,7 +140,7 @@ module "buckets" {
   }
   depends_on = [time_sleep.wait_for_authorization_policy[0]]
   source     = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version    = "10.17.19"
+  version    = "11.0.0"
   bucket_configs = [
     {
       bucket_name              = local.data_bucket_name
@@ -301,7 +315,7 @@ module "kms" {
   }
   count                       = local.use_kms_module ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.6.10"
+  version                     = "5.6.11"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
