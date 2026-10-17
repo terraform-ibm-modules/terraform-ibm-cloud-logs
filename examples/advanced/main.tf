@@ -21,7 +21,7 @@ locals {
 
 module "key_protect" {
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "5.6.13"
+  version                     = "5.6.14"
   resource_group_id           = module.resource_group.resource_group_id
   region                      = var.region
   resource_tags               = var.resource_tags
@@ -73,7 +73,7 @@ module "event_notification_2" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "11.1.2"
+  version           = "11.1.3"
   resource_group_id = module.resource_group.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   resource_tags     = var.resource_tags
@@ -87,7 +87,7 @@ locals {
 
 module "buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "11.1.2"
+  version = "11.1.3"
   bucket_configs = [
     {
       bucket_name                   = local.logs_bucket_name
