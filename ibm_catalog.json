@@ -535,7 +535,7 @@
               "name": "deploy-arch-ibm-cos",
               "description": "Set up a Cloud Object Storage (COS) instance to store logs and metrics.",
               "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "version": ">= v10.14.0",
+              "version": "v11.2.0",
               "flavors": [
                 "instance"
               ],
