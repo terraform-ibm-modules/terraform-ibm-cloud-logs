@@ -131,13 +131,30 @@
               }
             },
             {
-              "key": "logs_routing_tenant_regions",
+              "key": "logs_router_target_name",
               "required": true,
               "custom_config": {
+                "type": "code_editor",
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
-                  "type": "string"
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
+            },
+            {
+              "key": "logs_router_routes",
+              "required": true,
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
                 }
               }
             },
@@ -328,6 +345,12 @@
             },
             {
               "key": "skip_logs_routing_auth_policy"
+            },
+            {
+              "key": "enable_logs_routing"
+            },
+            {
+              "key": "logs_router_route_name"
             },
             {
               "key": "logs_policies",
