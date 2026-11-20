@@ -364,7 +364,7 @@ variable "logs_router_routes" {
       }))
     }))
   }))
-  description = "List of log router routes to create. If empty, a default route is created that sends all platform logs from the deployment region to the Cloud Logs instance. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped."
+  description = "List of log router routes to create. If empty, a default route is created with one rule that has no inclusion filters and sends platform logs to the Cloud Logs instance. Each route contains an ordered list of rules that are evaluated in sequence; the first matching rule is applied and the rest are skipped."
   default     = []
 }
 

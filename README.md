@@ -7,7 +7,7 @@
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![Terraform Registry](https://img.shields.io/badge/terraform-registry-623CE4?logo=terraform)](https://registry.terraform.io/modules/terraform-ibm-modules/cloud-logs/ibm/latest)
 
-This module supports configuring an IBM Cloud Logs instance, log routing tenants to enable platform logs and cloud logs policies.
+This module supports configuring an IBM Cloud Logs instance and cloud logs policies. To route platform logs to the instance, use the [logs_router submodule](./modules/logs_router).
 
 ## Usage
 
@@ -108,9 +108,6 @@ You need the following permissions to run this module.
   - **Resource group only**
     - `Viewer` access on the specific resource group
   - **Cloud Logs**
-    - `Editor` platform access
-    - `Manager` service access
-  - **IBM Cloud Logs Routing** (Required if creating tenants, which are required to enable platform logs)
     - `Editor` platform access
     - `Manager` service access
   - **Tagging service** (Required if attaching access tags to the ICL instance)

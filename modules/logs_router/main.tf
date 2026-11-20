@@ -12,7 +12,7 @@ module "logs_routing_policy" {
       source_service_name         = "logs-router"
       target_service_name         = "logs"
       roles                       = ["Sender"]
-      description                 = "Allow Logs Routing 'Sender' access to the IBM Cloud Logs instance ${each.value.destination_crn}."
+      description                 = "Allow Logs Routing `Sender` access to the IBM Cloud Logs with ID ${regex(".*:(.*)::", each.value.destination_crn)[0]}."
       target_resource_instance_id = regex(".*:(.*)::", each.value.destination_crn)[0]
     }
   }

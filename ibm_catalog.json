@@ -131,22 +131,11 @@
               }
             },
             {
-              "key": "logs_router_target_name",
-              "required": true,
-              "custom_config": {
-                "type": "code_editor",
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "supportedLanguages": [
-                    "hcl"
-                  ]
-                }
-              }
+              "key": "logs_router_target_name"
             },
             {
               "key": "logs_router_routes",
-              "required": true,
+              "type": "array",
               "custom_config": {
                 "type": "code_editor",
                 "grouping": "deployment",
