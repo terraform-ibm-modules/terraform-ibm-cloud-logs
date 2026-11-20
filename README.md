@@ -110,6 +110,9 @@ You need the following permissions to run this module.
   - **Cloud Logs**
     - `Editor` platform access
     - `Manager` service access
+  - **Logs Routing** (Required if creating Log routes and targets)
+    - `Editor` platform access
+    - `Manager` service access
   - **Tagging service** (Required if attaching access tags to the ICL instance)
     - `Editor` platform access
 
