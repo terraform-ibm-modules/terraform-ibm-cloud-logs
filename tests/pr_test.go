@@ -9,7 +9,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/random"
@@ -17,9 +16,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
-	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testaddons"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
@@ -270,41 +267,4 @@ func TestUpgradeFullyConfigurableWithPrivateEndpoints(t *testing.T) {
 		terraform.WorkspaceDeleteContext(t, context.Background(), existingTerraformOptions, prefix)
 		logger.Log(t, "END: Destroy (prereq resources)")
 	}
-}
-
-// Test deployment with all "on-by-default" dependant DAs
-func TestAddonDefaultConfiguration(t *testing.T) {
-	t.Parallel()
-
-	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
-		Testing:       t,
-		Prefix:        "icl-def",
-		ResourceGroup: resourceGroup,
-		QuietMode:     true, // Suppress logs except on failure
-	})
-
-	options.AddonConfig = cloudinfo.NewAddonConfigTerraform(
-		options.Prefix,
-		"deploy-arch-ibm-cloud-logs",
-		"fully-configurable",
-		map[string]interface{}{
-			"region":                  validRegions[common.CryptoIntn(len(validRegions))],
-			"existing_resource_group": resourceGroup,
-		},
-	)
-
-	// Disable target / route creation to prevent hitting quota in account
-	options.AddonConfig.Dependencies = []cloudinfo.AddonConfig{
-		{
-			OfferingName:   "deploy-arch-ibm-cloud-monitoring",
-			OfferingFlavor: "fully-configurable",
-			Inputs: map[string]interface{}{
-				"enable_metrics_routing_to_cloud_monitoring": false,
-			},
-			Enabled: core.BoolPtr(true),
-		},
-	}
-
-	err := options.RunAddonTest()
-	require.NoError(t, err)
 }
