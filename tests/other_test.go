@@ -76,7 +76,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 		Testing:       t,
 		Prefix:        "icl-def",
 		ResourceGroup: resourceGroup,
-		QuietMode:     true, // Suppress logs except on failure
+		QuietMode:     false, // Suppress logs except on failure
 	})
 
 	options.AddonConfig = cloudinfo.NewAddonConfigTerraform(
