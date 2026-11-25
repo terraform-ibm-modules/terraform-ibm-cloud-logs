@@ -136,6 +136,18 @@ module "cbr_schematics_zone" {
 
 locals {
   cloud_logs_instance_name = "${var.prefix}-cloud-logs"
+  log_router_target_name   = "${var.prefix}-log-router-target"
+  log_router_route_name    = "${var.prefix}-log-router-route"
+  default_log_router_route = [{
+    name = local.log_router_route_name
+    rules = [{
+      action = "send"
+      targets = [{
+        id = module.logs_router.logs_router_targets[local.log_router_target_name].id
+      }]
+      inclusion_filters = []
+    }]
+  }]
 }
 
 module "cloud_logs" {
@@ -229,4 +241,18 @@ module "cloud_logs" {
       ]
     }]
   }]
+}
+
+module "logs_router" {
+  source = "../../modules/logs_router"
+  targets = [
+    {
+      destination_crn = module.cloud_logs.crn
+      target_name     = local.log_router_target_name
+      target_region   = var.region
+    }
+  ]
+  routes = local.default_log_router_route
+  # Need to add the condition for setting primary_metadata_region, once the development account is migrated to v3
+  global_log_routing_settings = { primary_metadata_region = var.region }
 }

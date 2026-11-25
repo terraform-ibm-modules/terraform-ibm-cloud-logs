@@ -71,3 +71,13 @@ output "event_notification_2_crn" {
   value       = module.event_notification_2.crn
   description = "The id of the provisioned Event Notifications 2 instance."
 }
+
+output "logs_router_targets" {
+  value       = module.logs_router.logs_router_targets
+  description = "The created IBM Cloud Log Router v3 targets."
+}
+
+output "logs_router_routes" {
+  value       = module.logs_router.logs_router_routes
+  description = "The created IBM Cloud Log Router v3 routes."
+}
