@@ -108,12 +108,12 @@ variable "global_log_routing_settings" {
   default     = null
 
   validation {
-    error_message = "Valid regions for `permitted_target_regions` to control where targets collecting platform logs can be located are: us-south, eu-de, us-east, eu-es, eu-gb, au-syd, br-sao, ca-tor, ca-mon, eu-es, jp-tok, jp-osa, in-che, in-mum, eu-fr2"
+    error_message = "Valid regions for `permitted_target_regions` to control where targets collecting platform logs can be located are: us-south, eu-de, us-east, eu-gb, au-syd, br-sao, ca-tor, ca-mon, eu-es, jp-tok, jp-osa, in-che, in-mum, eu-fr2"
     condition = (var.global_log_routing_settings == null ?
       true :
       alltrue([
         for region in var.global_log_routing_settings.permitted_target_regions :
-        contains(["us-south", "eu-de", "us-east", "eu-es", "eu-gb", "au-syd", "br-sao", "ca-tor", "ca-mon", "eu-es", "jp-tok", "jp-osa", "in-che", "in-mum", "eu-fr2"], region)
+        contains(["us-south", "eu-de", "us-east", "eu-es", "eu-gb", "au-syd", "br-sao", "ca-tor", "ca-mon", "jp-tok", "jp-osa", "in-che", "in-mum", "eu-fr2"], region)
       ])
     )
   }

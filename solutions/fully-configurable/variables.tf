@@ -344,7 +344,7 @@ variable "logs_router_route_name" {
 
 variable "skip_logs_routing_auth_policy" {
   type        = bool
-  description = "Whether to skip creating the IAM service-to-service authorization policy that permits the Logs Routing service 'Sender' access to the IBM Cloud Logs instance. Set to true only when the policy already exists."
+  description = "Whether to skip creating the IAM service-to-service authorization policy that permits the Logs Routing service 'Sender' access to the IBM Cloud Logs instance. Set to true if the policy already exists — for example, when pointing at an existing Cloud Logs instance (`existing_cloud_logs_crn`) that was previously configured with logs routing, to avoid a 409 conflict."
   default     = false
 }
 
